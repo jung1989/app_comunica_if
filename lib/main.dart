@@ -10,11 +10,7 @@ class Inicial extends StatefulWidget {
 class _InicialState extends State<Inicial> {
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: <Widget>[
-        Text("Modificação na branch teste 01")
-      ],
-    );
+    return Row();
   }
 }
 
