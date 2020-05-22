@@ -10,7 +10,7 @@ class Inicial extends StatefulWidget {
 class _InicialState extends State<Inicial> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Column();
   }
 }
 
