@@ -10,7 +10,11 @@ class Inicial extends StatefulWidget {
 class _InicialState extends State<Inicial> {
   @override
   Widget build(BuildContext context) {
-    return Row();
+    return Row(
+      children: <Widget>[
+        Text("Branch master")
+      ],
+    );
   }
 }
 
