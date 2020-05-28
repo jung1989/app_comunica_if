@@ -10,6 +10,7 @@ class Mensagem {
   String        conteudo;
   DateTime      dataHoraPublicacao;
   bool          lida;
+  bool          favorita;
 
 
 }

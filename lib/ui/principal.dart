@@ -1,8 +1,12 @@
 import 'package:app_comunica_if/model/mensagem.dart';
-import 'package:app_comunica_if/ui/lerMensagem.dart';
+import 'package:app_comunica_if/model/noticia.dart';
+import 'package:app_comunica_if/testes/banco_ficticio.dart';
+import 'package:app_comunica_if/ui/ler_mensagem.dart';
 import 'package:flutter/material.dart';
 
-import '../main.dart';
+import 'card_mensagem.dart';
+import 'card_noticia.dart';
+import 'ler_noticia.dart';
 
 class Principal extends StatefulWidget {
   @override
@@ -10,78 +14,113 @@ class Principal extends StatefulWidget {
 }
 
 class _PrincipalState extends State<Principal> {
-
-  List<Mensagem> mensagens = List();
+  List<Mensagem> mensagens;
 
   @override
   Widget build(BuildContext context) {
-    mensagens = mensagensBanco;
-    return Scaffold(
-      appBar: AppBar (
-        centerTitle: true,
-        title: Text("Principal"),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.sort),
+    mensagens = BancoFiciticio.mensagensBanco;
+    return DefaultTabController(
+        length: 4,
+        child: Scaffold(
+          appBar: AppBar(
+            bottom: TabBar(
+              tabs: [
+                Tab(
+                    icon: BancoFiciticio.mensagensNaoLidas().length>0
+                        ? Icon(Icons.chat)
+                        : Icon(Icons.chat_bubble_outline)
+                    ),
+                Tab(icon: Icon(Icons.description)),
+                Tab(icon: Icon(Icons.star)),
+                Tab(icon: Icon(Icons.archive )),
+
+              ],
+            ),
+            centerTitle: true,
+            title: Text("Principal"),
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(Icons.settings),
+              )
+            ],
           ),
-          IconButton(
-            icon: Icon(Icons.markunread),
+          body: TabBarView(
+            children: [
+              listaMensagensNaoLidas(),
+              listaNoticias(),
+              listaMensagensFavoritas(),
+              listaMensagensLidas(),
+
+            ],
           ),
-          IconButton(
-            icon: Icon(Icons.settings),
-          )
-        ],
-      ),
-      body: listaMensagens(),
+        ));
+  }
 
-
-
-    );
+  Widget listaNoticias() {
+    return ListView.builder(
+        padding: EdgeInsets.all(15.0),
+        itemCount: BancoFiciticio.noticiasBanco.length,
+        itemBuilder: (context, index) {
+          return noticiaCard(context, index);
+        });
   }
 
   Widget listaMensagens() {
+    print("Tamanho ${BancoFiciticio.mensagensBanco.length}");
     return ListView.builder(
         padding: EdgeInsets.all(15.0),
         itemCount: mensagens.length,
         itemBuilder: (context, index) {
-          return _mensagemCard(context, index);
+          return mensagemCard(context, index, 0);
         });
   }
 
-  Widget _mensagemCard(BuildContext context, int index) {
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          mensagens[index].lida = true;
-          print("tap ${mensagens[index].lida}");
+  Widget listaMensagensLidas() {
+    return ListView.builder(
+        padding: EdgeInsets.all(15.0),
+        itemCount: BancoFiciticio.mensagensLidas().length,
+        itemBuilder: (
+          context,
+          index,
+        ) {
+          return mensagemCard(context, index, 1);
         });
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => LerMensagem(mensagens[index])));
-      },
-      child: Card(
-        child: Padding(
-          padding: EdgeInsets.all(10),
-          child: Row(
-            children: <Widget>[
-              Icon(mensagens[index].lida?Icons.drafts:Icons.email, size: 50, color: Colors.green,),
-              SizedBox(
-                width: 10,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(mensagens[index].titulo,
-                    style: TextStyle(fontSize: 25),),
-                  Text("${mensagens[index].conteudo.substring(0,20)}...",
-                    style: TextStyle(fontSize: 20, color: Colors.black12),),
-                ],
-              )
-            ],
-          ),
-        ),
-      ),
-    );
   }
+
+  Widget listaMensagensNaoLidas() {
+    return ListView.builder(
+        padding: EdgeInsets.all(15.0),
+        itemCount: BancoFiciticio.mensagensNaoLidas().length,
+        itemBuilder: (
+          context,
+          index,
+        ) {
+          return mensagemCard(context, index, 2);
+        });
+  }
+
+  Widget listaMensagensFavoritas() {
+    return ListView.builder(
+        padding: EdgeInsets.all(15.0),
+        itemCount: BancoFiciticio.mensagensFavoritas().length,
+        itemBuilder: (
+            context,
+            index,
+            ) {
+          return mensagemCard(context, index, 3);
+        });
+  }
+
+
+
+
+
+
+
+
+
+
 
 
 }
+

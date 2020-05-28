@@ -2,15 +2,14 @@ import 'package:app_comunica_if/ui/principal.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'model/mensagem.dart';
 
-List<Mensagem> mensagensBanco = List();
 
 void main() {
-  carregarMensagens();
+
   runApp(MaterialApp(
     home: Inicial(),
     theme: ThemeData(
+      fontFamily: "Raleway",
         primarySwatch: Colors.green
     ),
     title: "Bem vindo!",
@@ -73,31 +72,6 @@ class _InicialState extends State<Inicial> {
   }
 }
 
-void carregarMensagens() {
-  mensagensBanco.clear();
 
-  Mensagem m1 = Mensagem();
-  m1.titulo = "Título 1";
-  m1.conteudo = "Conteúdo da mensagem inserida manualmente";
-  m1.lida = true;
-  m1.dataHoraPublicacao = DateTime.now();
-  mensagensBanco.add(m1);
 
-  Mensagem m2 = Mensagem();
-  m2.titulo = "Título 2";
-  m2.conteudo = "Mensagem inserida manualmente";
-  m2.lida = false;
-  m2.dataHoraPublicacao = DateTime.now();
-  mensagensBanco.add(m2);
 
-  Mensagem m3;
-  for(int c = 3; c < 10; c++) {
-    m3 = Mensagem();
-    m3.titulo = "Título $c";
-    m3.conteudo = "Mensagem inserida manualmente";
-    m3.lida = false;
-    m3.dataHoraPublicacao = DateTime.now();
-    mensagensBanco.add(m3);
-  }
-
-}
