@@ -1,4 +1,5 @@
 
+import 'package:app_comunica_if/model/grupo.dart';
 import 'package:app_comunica_if/model/mensagem.dart';
 import 'package:app_comunica_if/model/noticia.dart';
 
@@ -7,12 +8,20 @@ class BancoFiciticio {
 
   static List<Mensagem> _mensagensBanco;
   static List<Noticia> _noticiasBanco;
+  static List<Grupo> _gruposBanco;
 
   static List<Mensagem>  get mensagensBanco {
     if(_mensagensBanco == null) {
       _carregarMensagens();
     }
     return _mensagensBanco;
+  }
+
+  static List<Grupo>  get gruposBanco {
+    if(_gruposBanco == null) {
+      _carregarGrupos();
+    }
+    return _gruposBanco;
   }
 
   static List<Noticia>  get noticiasBanco {
@@ -64,7 +73,7 @@ class BancoFiciticio {
     _mensagensBanco.add(m2);
 
     Mensagem m3;
-    for (int c = 3; c < 10; c++) {
+    for (int c = 3; c < 5; c++) {
       m3 = Mensagem();
       m3.titulo = "Título $c";
       m3.conteudo = "Mensagem inserida manualmente";
@@ -83,7 +92,7 @@ class BancoFiciticio {
 
 
     Noticia n;
-    for (int c = 1; c < 11; c++) {
+    for (int c = 1; c < 5; c++) {
       n = Noticia();
       n.titulo = "Título $c iu bb ib iub ibib ib ib iub iubiubiub ";
       n.dataHoraPublicacao = DateTime.now();
@@ -126,6 +135,23 @@ class BancoFiciticio {
     }
   }
 
+  static bool inserirMensagem(Mensagem m) {
+    mensagensBanco.add(m);
+    return true;
+  }
+
+  static void _carregarGrupos() {
+    _gruposBanco = List();
+
+    Grupo g;
+    for(int c = 0; c < 10; c++) {
+      g = Grupo();
+      g.selecionado = false;
+      g.nome = "Grupo $c";
+
+      _gruposBanco.add(g);
+    }
+  }
 }
 
 

@@ -1,4 +1,5 @@
 import 'package:app_comunica_if/ui/principal.dart';
+import 'package:app_comunica_if/ui/tela_administrador.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -36,9 +37,16 @@ class _InicialState extends State<Inicial> {
                 botaoSentimento(2, "T"),
                 botaoSentimento(3, "N"),
                 botaoSentimento(4, "F"),
-                botaoSentimento(5, "MF")
+                botaoSentimento(5, "MF"),
+
               ],
-            )
+            ),
+            RaisedButton(
+                child: Text("Administrador"),
+                onPressed: () {
+                  Navigator.push(
+                      context, MaterialPageRoute(builder: (context) => TelaAdministrador()));
+                })
           ],
         )
     );

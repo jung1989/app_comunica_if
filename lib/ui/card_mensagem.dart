@@ -55,7 +55,7 @@ Widget mensagemCard(BuildContext context, int index, int filtro) {
                   ),
                 ),
                 Text(
-                  "${listaTemporaria[index].conteudo.substring(0, 20)}...",
+                  previaConteudo(listaTemporaria[index].conteudo),
                   style: TextStyle(fontSize: 16, color: Colors.black54),
                 ),
               ],
@@ -65,4 +65,13 @@ Widget mensagemCard(BuildContext context, int index, int filtro) {
       ),
     ),
   );
+
+
+}
+
+String previaConteudo(String texto) {
+  if(texto.length > 20 ) {
+    return "${texto.substring(0,20)}...";
+  }
+  return texto;
 }

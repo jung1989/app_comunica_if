@@ -41,26 +41,7 @@ class _LerMensagemState extends State<LerMensagem> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
-        Padding(
-          padding: EdgeInsets.only(left: 10, right: 10, top: 20, bottom: 10),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: <Widget>[
-              Expanded(
-                child: Text(
-                  mensagem.titulo,
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                ),
-              ),
-            ],
-          ),
-        ),
-        Divider(
-          height: 10,
-          thickness: 1,
-          indent: 10,
-          endIndent: 10,
-        ),
+
         Padding(
           padding: EdgeInsets.only(right: 10, bottom: 10),
           child: Row(
