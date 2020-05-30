@@ -1,6 +1,8 @@
 import 'package:app_comunica_if/model/mensagem.dart';
 import 'package:flutter/material.dart';
 
+import 'padroes.dart';
+
 Mensagem mensagem;
 
 class LerMensagem extends StatefulWidget {
@@ -48,7 +50,7 @@ class _LerMensagemState extends State<LerMensagem> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
               Text(
-                formatarDataHora(),
+                formatarDataHora(mensagem.dataHoraPublicacao),
                 //formatar data e hora da noticia
               )
             ],
@@ -63,9 +65,5 @@ class _LerMensagemState extends State<LerMensagem> {
     );
   }
 
-  String formatarDataHora() {
-    return "${mensagem.dataHoraPublicacao.day} / "
-        "${mensagem.dataHoraPublicacao.month} / "
-        "${mensagem.dataHoraPublicacao.year} ";
-  }
+
 }

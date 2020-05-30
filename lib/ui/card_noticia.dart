@@ -5,8 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'ler_noticia.dart';
 
-Widget noticiaCard(BuildContext context, int index) {
-  List<Noticia> listaTemporaria = BancoFiciticio.noticiasBanco;
+Widget noticiaCard(BuildContext context, int index,List<Noticia> listaTemporaria) {
 
   return GestureDetector(
     onTap: () {

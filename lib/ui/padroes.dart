@@ -68,3 +68,11 @@ Widget linhaTextoExpandida(String texto) {
     ],
   );
 }
+
+String formatarDataHora(DateTime dataHora) {
+  return "${dataHora.day} / "
+      "${dataHora.month} / "
+      "${dataHora.year}   "
+      "${dataHora.hour} : "
+      "${dataHora.minute}";
+}

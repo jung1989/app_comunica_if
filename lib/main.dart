@@ -1,3 +1,4 @@
+import 'package:app_comunica_if/sistema/sistema_admin.dart';
 import 'package:app_comunica_if/ui/principal.dart';
 import 'package:app_comunica_if/ui/tela_administrador.dart';
 import 'package:flutter/cupertino.dart';
@@ -44,6 +45,7 @@ class _InicialState extends State<Inicial> {
             RaisedButton(
                 child: Text("Administrador"),
                 onPressed: () {
+                  SistemaAdmin().login("", "");
                   Navigator.push(
                       context, MaterialPageRoute(builder: (context) => TelaAdministrador()));
                 })

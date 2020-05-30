@@ -1,5 +1,6 @@
 import 'package:app_comunica_if/model/grupo.dart';
 import 'package:app_comunica_if/model/mensagem.dart';
+import 'package:app_comunica_if/sistema/sistema_admin.dart';
 import 'package:app_comunica_if/testes/banco_ficticio.dart';
 import 'package:app_comunica_if/ui/padroes.dart';
 import 'package:flutter/material.dart';
@@ -122,6 +123,7 @@ class _InserirMensagemState extends State<InserirMensagem> {
     mensagem.titulo = _controllerTitulo.text;
     mensagem.conteudo = _controllerConteudo.text;
     mensagem.dataHoraPublicacao = DateTime.now();
+    mensagem.administrador = SistemaAdmin().administrador;
 
     showDialog(
         context: context,

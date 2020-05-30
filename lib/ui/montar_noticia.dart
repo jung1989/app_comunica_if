@@ -1,6 +1,9 @@
 import 'package:app_comunica_if/model/noticia.dart';
+import 'package:app_comunica_if/ui/ler_noticia.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import 'padroes.dart';
 
 List<Widget> montarNoticia(Noticia noticia) {
   List<Widget> conteudos = List();
@@ -36,7 +39,7 @@ List<Widget> montarNoticia(Noticia noticia) {
       child:  Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
-          Text(formatarDataHora(noticia),
+          Text(formatarDataHora(noticia.dataHoraPublicacao),
             //formatar data e hora da noticia
           )
         ],
@@ -47,7 +50,7 @@ List<Widget> montarNoticia(Noticia noticia) {
 
   for(Conteudo conteudo in noticia.conteudos) {
     switch(conteudo.tipo) {
-      case 1: //textos
+      case Conteudo.TIPO_PARAGRAFO: //textos
         conteudos.add(Padding(
           padding: EdgeInsets.all(10),
           child: Text(conteudo.texto,
@@ -58,7 +61,7 @@ List<Widget> montarNoticia(Noticia noticia) {
 
         )));
       break;
-      case 2: //imagens
+      case Conteudo.TIPO_IMAGEM: //imagens
         conteudos.add(Padding(
           padding: EdgeInsets.all(10),
           child: Image.asset(conteudo.texto,
@@ -69,7 +72,7 @@ List<Widget> montarNoticia(Noticia noticia) {
 
         break;
 
-      case 3://links
+      case Conteudo.TIPO_LINK://links
         conteudos.add(Padding(
             padding: EdgeInsets.all(10),
             child: InkWell(
@@ -91,8 +94,3 @@ List<Widget> montarNoticia(Noticia noticia) {
   return conteudos;
 }
 
-String formatarDataHora(Noticia noticia) {
-  return "${noticia.dataHoraPublicacao.day} / "
-      "${noticia.dataHoraPublicacao.month} / "
-      "${noticia.dataHoraPublicacao.year} ";
-}
