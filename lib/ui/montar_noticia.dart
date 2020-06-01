@@ -64,11 +64,15 @@ List<Widget> montarNoticia(Noticia noticia) {
       case Conteudo.TIPO_IMAGEM: //imagens
         conteudos.add(Padding(
           padding: EdgeInsets.all(10),
-          child: Image.asset(conteudo.texto,
-            height: 100,
+          child: conteudo.arquivo == null
+              ? Text("Sem imagem...")
+              : Image.file(
+            conteudo.arquivo,
+
             fit: BoxFit.fitWidth,
             //formatar imagem
-          )));
+          )
+          ));
 
         break;
 

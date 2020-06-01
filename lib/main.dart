@@ -3,7 +3,8 @@ import 'package:app_comunica_if/ui/principal.dart';
 import 'package:app_comunica_if/ui/tela_administrador.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:image_picker/image_picker.dart';
+import 'dart:async';
 
 
 void main() {
@@ -30,20 +31,16 @@ class _InicialState extends State<Inicial> {
         body: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
-            Text("Como você se sente hoje?"),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                botaoSentimento(1, "MT"),
-                botaoSentimento(2, "T"),
-                botaoSentimento(3, "N"),
-                botaoSentimento(4, "F"),
-                botaoSentimento(5, "MF"),
-
-              ],
-            ),
             RaisedButton(
-                child: Text("Administrador"),
+                child: Text("Protótipo Usuário"),
+                onPressed: () {
+                  SistemaAdmin().login("", "");
+                  Navigator.push(
+                      context, MaterialPageRoute(builder: (context) => Principal()));
+
+                }),
+            RaisedButton(
+                child: Text("Protótipo Administrador"),
                 onPressed: () {
                   SistemaAdmin().login("", "");
                   Navigator.push(
@@ -54,32 +51,7 @@ class _InicialState extends State<Inicial> {
     );
   }
 
-  Widget botaoSentimento(int sentimento, String imagem) {
-    return Expanded(child: FlatButton(
-        textColor: Colors.black,
-        child: Text(imagem),
-        onPressed: () {
-          switch (sentimento) {
-            case 1:
-            //muito triste
-              break;
-            case 2:
-            //triste
-              break;
-            case 3:
-            //normal
-              break;
-            case 4:
-            //feliz
-              break;
-            case 5:
-            //muito feliz
-              break;
-          }
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => Principal()));
-        }));
-  }
+
 }
 
 

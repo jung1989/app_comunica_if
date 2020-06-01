@@ -167,6 +167,11 @@ class BancoFiciticio {
     return true;
   }
 
+  static bool inserirNoticia(Noticia n) {
+    noticiasBanco.add(n);
+    return true;
+  }
+
   static void _carregarGrupos() {
     _gruposBanco = List();
 

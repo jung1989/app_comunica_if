@@ -1,16 +1,14 @@
-import 'package:app_comunica_if/model/grupo.dart';
-import 'package:app_comunica_if/model/mensagem.dart';
+import 'dart:io';
+
 import 'package:app_comunica_if/model/noticia.dart';
 import 'package:app_comunica_if/sistema/sistema_admin.dart';
 import 'package:app_comunica_if/testes/banco_ficticio.dart';
 import 'package:app_comunica_if/ui/padroes.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import 'montar_noticia.dart';
-import 'previa_noticia.dart';
-
-
+import 'dart:async';
 
 class InserirNoticia extends StatefulWidget {
   @override
@@ -18,13 +16,16 @@ class InserirNoticia extends StatefulWidget {
 }
 
 class _InserirNoticiaState extends State<InserirNoticia> {
-
   Noticia noticia;
 
   Conteudo ultimoConteudoRemovido;
   int ultimoIndiceRemovido;
 
+  TextEditingController _controllerTitulo = TextEditingController();
+
   final chaveScaffold = GlobalKey<ScaffoldState>();
+
+  final picker = ImagePicker();
 
   @override
   void initState() {
@@ -47,98 +48,176 @@ class _InserirNoticiaState extends State<InserirNoticia> {
   }
 
   Widget montarPrevia() {
-    return Column(
-      children: <Widget>[
-        cardInserirConteudo(context, "Novo parágrafo", null),
-        cardInserirConteudo(context, "Novo link", null),
-        cardInserirConteudo(context, "Nova imagem", null),
-        SizedBox(
-          height: 50,
-        ),
-        Column(
-          children: montarPreviaNoticia(noticia),
-        )
-      ],
+    return Padding(
+      padding: EdgeInsets.only(left: 10, right: 10),
+      child: Column(
+        children: <Widget>[
+          Column(
+            children: montarPreviaNoticia(noticia),
+          ),
+          cardInserirParagrafo(),
+          cardInserirLink(),
+          cardInserirImagem(),
+          SizedBox(height: 20),
+          SizedBox(
+            width: double.infinity,
+            height: 40,
+            child: RaisedButton(
+                child: Text("Publicar notícia",
+                  style: TextStyle(fontSize: 24, color: Colors.white)),
+                color: Colors.green,
+                onPressed: publicarNoticia
+            ),
+          ),
+          SizedBox(height: 50),
+        ],
+      ),
     );
   }
 
   publicarNoticia() {
-//    mensagem.titulo = _controllerTitulo.text;
-//    mensagem.conteudo = _controllerConteudo.text;
-//    mensagem.dataHoraPublicacao = DateTime.now();
-//    mensagem.administrador = SistemaAdmin().administrador;
-//
-//    showDialog(
-//        context: context,
-//        builder: (_) => AlertDialog(
-//          title: Text("Publicar?"),
-//          content:
-//          Column(
-//            mainAxisSize: MainAxisSize.min,
-//            crossAxisAlignment: CrossAxisAlignment.start,
-//            children: <Widget>[
-//              linhaTextoExpandida("Após publicada, a mensagem não poderá ser alterada."),
-//              SizedBox(height: 20),
-//              linhaTextoExpandida("Deseja realmente publicar?"),
-//            ],
-//          ),
-//
-//          actions: <Widget>[
-//            FlatButton(
-//              child: Text("Não"),
-//              onPressed: () {
-//                Navigator.of(context).pop();
-//              },
-//            ),
-//            FlatButton(
-//                child: Text("Sim"),
-//                onPressed: () {
-//                  if (BancoFiciticio.inserirMensagem(mensagem)) {
-//                    Navigator.pop(context);
-//                  }
-//                  Navigator.pop(context);
-//                }),
-//          ],
-//        ));
+    noticia.titulo = _controllerTitulo.text;
+
+    noticia.dataHoraPublicacao = DateTime.now();
+    noticia.administrador = SistemaAdmin().administrador;
+
+    showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+          title: Text("Publicar?"),
+          content:
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              linhaTextoExpandida("Após publicada, a notícia não poderá ser alterada."),
+              SizedBox(height: 20),
+              linhaTextoExpandida("Deseja realmente publicar?"),
+            ],
+          ),
+
+          actions: <Widget>[
+            FlatButton(
+              child: Text("Não"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+                child: Text("Sim"),
+                onPressed: () {
+                  if (BancoFiciticio.inserirNoticia(noticia)) {
+                    Navigator.pop(context);
+                  }
+                  Navigator.pop(context);
+                }),
+          ],
+        ));
   }
 
-  Widget cardInserirConteudo(
-      BuildContext context, String texto, StatefulWidget sw) {
-    return GestureDetector(
-      onTap: () {
-        Conteudo c = Conteudo();
-        c.texto = "sdhoad sdonsaodi sdohnd asodhn  ";
-        c.tipo = Conteudo.TIPO_PARAGRAFO;
-        setState(() {
-          noticia.conteudos.add(c);
-        });
-//        Navigator.push(context,
-//            MaterialPageRoute(builder: (context) => sw));
-      },
-      child: Card(
-        child: Padding(
-            padding: EdgeInsets.all(10),
-            child: Row(
-              children: <Widget>[
-                CircleAvatar(
-                  backgroundColor: Colors.green,
-                  child: Icon(
-                    Icons.add,
-                  ),
+  //card para inserção de parágrafos na notícia
+  Widget cardInserirParagrafo() {
+    TextEditingController paragrafoController = TextEditingController();
+    return Card(
+      child: Padding(
+          padding: EdgeInsets.all(10),
+          child: Row(
+            children: <Widget>[
+              SizedBox(width: 10),
+              Expanded(
+                child: inputLinhaSimples("Novo parágrafo", paragrafoController),
+              ),
+              IconButton(
+                icon: Icon(
+                  Icons.add_circle,
+                  size: 40,
+                  color: Colors.green,
                 ),
-                SizedBox(
-                  width: 10,
-                ),
-                Expanded(
-                  child: Text(
-                    texto,
-                    style: TextStyle(fontSize: 25),
-                  ),
-                )
-              ],
-            )),
-      ),
+                onPressed: () {
+                  Conteudo c = Conteudo();
+                  c.texto = paragrafoController.text;
+                  c.tipo = Conteudo.TIPO_PARAGRAFO;
+                  setState(() {
+                    noticia.conteudos.add(c);
+                    paragrafoController.clear();
+                  });
+                },
+              )
+            ],
+          )),
     );
+  }
+
+  //card para inserção de links na notícia
+  Widget cardInserirLink() {
+    TextEditingController controller = TextEditingController();
+    return Card(
+      child: Padding(
+          padding: EdgeInsets.all(10),
+          child: Row(
+            children: <Widget>[
+              SizedBox(
+                width: 10,
+              ),
+              Expanded(
+                child: inputLinhaSimples("Novo link", controller),
+              ),
+              IconButton(
+                icon: Icon(
+                  Icons.add_circle,
+                  size: 40,
+                  color: Colors.green,
+                ),
+                onPressed: () {
+                  Conteudo c = Conteudo();
+                  c.texto = controller.text;
+                  c.tipo = Conteudo.TIPO_LINK;
+                  setState(() {
+                    noticia.conteudos.add(c);
+                    controller.clear();
+                  });
+                },
+              )
+            ],
+          )),
+    );
+  }
+
+  //card para inserção de imagens na notícia
+  Widget cardInserirImagem() {
+    TextEditingController controller = TextEditingController();
+    return Padding(
+        padding: EdgeInsets.all(10),
+        child: RaisedButton.icon(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(18.0),
+              side: BorderSide(color: Colors.green)),
+          color: Colors.green,
+          label: Text("Nova imagem", style: TextStyle(color: Colors.white)),
+          icon: Icon(
+            Icons.add_a_photo,
+            size: 40,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            Conteudo c = Conteudo();
+            getImage(c).then((valor) {
+              c.tipo = Conteudo.TIPO_IMAGEM;
+              setState(() {
+                noticia.conteudos.add(c);
+                controller.clear();
+              });
+            });
+          },
+        ));
+  }
+
+  Future getImage(Conteudo conteudo) async {
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+
+    setState(() {
+      conteudo.arquivo = File(pickedFile.path);
+    });
   }
 
   List<Widget> montarPreviaNoticia(Noticia noticia) {
@@ -147,23 +226,16 @@ class _InserirNoticiaState extends State<InserirNoticia> {
     conteudos.add(Padding(
       padding: EdgeInsets.only(left: 10, right: 10, top: 20, bottom: 10),
       child: Row(
+        mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: <Widget>[
           Expanded(
-            child: TextField(
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-          ),
+              child: inputLinhaSimples("Título da notícia", _controllerTitulo)),
         ],
       ),
     ));
 
-    conteudos.add(Divider(
-      height: 10,
-      thickness: 1,
-      indent: 10,
-      endIndent: 10,
-    ));
+
 
     conteudos.add(Padding(
       padding: EdgeInsets.only(right: 10, bottom: 10),
@@ -172,7 +244,6 @@ class _InserirNoticiaState extends State<InserirNoticia> {
         children: <Widget>[
           Text(
             formatarDataHora(noticia.dataHoraPublicacao),
-            //formatar data e hora da noticia
           )
         ],
       ),
@@ -184,37 +255,44 @@ class _InserirNoticiaState extends State<InserirNoticia> {
           conteudos.add(removivel(
               Padding(
                   padding: EdgeInsets.all(10),
-                  child: Text(noticia.conteudos[c].texto,
-                      style: TextStyle(fontSize: 16, fontFamily: 'Serif'))),
+                  child: SizedBox(
+                      width: double.infinity,
+                      child: Text(noticia.conteudos[c].texto,
+                          style:
+                              TextStyle(fontSize: 16, fontFamily: 'Serif')))),
               c));
           break;
         case Conteudo.TIPO_IMAGEM: //imagens
           conteudos.add(removivel(
               Padding(
                   padding: EdgeInsets.all(10),
-                  child: Image.asset(
-                    noticia.conteudos[c].texto,
-                    height: 100,
-                    fit: BoxFit.fitWidth,
-                    //formatar imagem
-                  )),
+                  child: SizedBox(
+                      width: double.infinity,
+                      child: noticia.conteudos[c].arquivo == null
+                          ? Text("Sem imagem...")
+                          : Image.file(
+                              noticia.conteudos[c].arquivo,
+
+                              fit: BoxFit.fitWidth,
+                              //formatar imagem
+                            ))),
               c));
-
           break;
-
         case Conteudo.TIPO_LINK: //links
           conteudos.add(removivel(
               Padding(
                   padding: EdgeInsets.all(10),
-                  child: InkWell(
-                      child: new Text(noticia.conteudos[c].texto,
-                          style: TextStyle(
-                            color: Colors.blue,
-                            decoration: TextDecoration.underline,
-                          )),
-                      onTap: () => launch(noticia.conteudos[c].texto))),
+                  child: SizedBox(
+                      width: double.infinity,
+                      child: InkWell(
+                          child: new Text(noticia.conteudos[c].texto,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.blue,
+                                decoration: TextDecoration.underline,
+                              )),
+                          onTap: () => launch(noticia.conteudos[c].texto)))),
               c));
-
           break;
       }
     }
@@ -251,14 +329,14 @@ class _InserirNoticiaState extends State<InserirNoticia> {
               label: "Desfazer?",
               onPressed: () {
                 setState(() {
-                  noticia.conteudos.insert(ultimoIndiceRemovido, ultimoConteudoRemovido);
+                  noticia.conteudos
+                      .insert(ultimoIndiceRemovido, ultimoConteudoRemovido);
                 });
               },
             ),
           );
           chaveScaffold.currentState.showSnackBar(snack);
         });
-
       },
     );
   }

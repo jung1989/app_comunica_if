@@ -18,5 +18,6 @@ class Conteudo {
 
   int tipo;
   String texto;
+  File arquivo;
 
 }
