@@ -1,9 +1,7 @@
 import 'package:app_comunica_if/model/noticia.dart';
-import 'package:app_comunica_if/ui/ler_noticia.dart';
+import 'package:app_comunica_if/ui/padroes.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import 'padroes.dart';
 
 List<Widget> montarNoticia(Noticia noticia) {
   List<Widget> conteudos = List();
@@ -93,8 +91,23 @@ List<Widget> montarNoticia(Noticia noticia) {
         break;
 
     }
-
   }
+    conteudos.add(
+        Padding(
+            padding: EdgeInsets.only(top: 20, left: 10, right: 10, bottom: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                Text("Autor: ${noticia.administrador.nome}",
+                    style: TextStyle(
+                        fontSize: 14,
+                        fontFamily: 'Serif',
+                        color: Cores.corTextMedio))
+              ],
+            ))
+    );
+
+
   return conteudos;
 }
 

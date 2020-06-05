@@ -1,19 +1,16 @@
 import 'package:app_comunica_if/sistema/sistema_admin.dart';
-import 'package:app_comunica_if/ui/principal.dart';
-import 'package:app_comunica_if/ui/tela_administrador.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:app_comunica_if/ui_administrador/tela_administrador.dart';
+import 'package:app_comunica_if/ui_usuario/tela_usuario_mensagens.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'dart:async';
-
 
 void main() {
 
   runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
     home: Inicial(),
     theme: ThemeData(
       fontFamily: "Raleway",
-        primarySwatch: Colors.green
+
     ),
     title: "Bem vindo!",
   ));
@@ -35,8 +32,9 @@ class _InicialState extends State<Inicial> {
                 child: Text("Protótipo Usuário"),
                 onPressed: () {
                   SistemaAdmin().login("", "");
-                  Navigator.push(
-                      context, MaterialPageRoute(builder: (context) => Principal()));
+                  Navigator.push(context, FadeRoute(page:  TelaUsuarioMensagens()));
+//                  Navigator.push(
+//                      context, MaterialPageRoute(builder: (context) => TelaUsuarioMensagens()));
 
                 }),
             RaisedButton(
@@ -54,6 +52,27 @@ class _InicialState extends State<Inicial> {
 
 }
 
-
+class FadeRoute extends PageRouteBuilder {
+  final Widget page;
+  FadeRoute({this.page})
+      : super(
+    pageBuilder: (
+        BuildContext context,
+        Animation<double> animation,
+        Animation<double> secondaryAnimation,
+        ) =>
+    page,
+    transitionsBuilder: (
+        BuildContext context,
+        Animation<double> animation,
+        Animation<double> secondaryAnimation,
+        Widget child,
+        ) =>
+        FadeTransition(
+          opacity: animation,
+          child: child,
+        ),
+  );
+}
 
 

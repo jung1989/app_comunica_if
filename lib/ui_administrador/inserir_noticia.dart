@@ -39,6 +39,7 @@ class _InserirNoticiaState extends State<InserirNoticia> {
       key: chaveScaffold,
       appBar: AppBar(
         title: Text("Nova Notícia"),
+        backgroundColor: Cores.corAppBarBackground,
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -64,8 +65,8 @@ class _InserirNoticiaState extends State<InserirNoticia> {
             height: 40,
             child: RaisedButton(
                 child: Text("Publicar notícia",
-                  style: TextStyle(fontSize: 24, color: Colors.white)),
-                color: Colors.green,
+                  style: TextStyle(color: Colors.white)),
+                color: Cores.corBotoes,
                 onPressed: publicarNoticia
             ),
           ),
@@ -129,9 +130,9 @@ class _InserirNoticiaState extends State<InserirNoticia> {
               ),
               IconButton(
                 icon: Icon(
-                  Icons.add_circle,
+                  Icons.add,
                   size: 40,
-                  color: Colors.green,
+                  color: Cores.corBotoes,
                 ),
                 onPressed: () {
                   Conteudo c = Conteudo();
@@ -164,9 +165,9 @@ class _InserirNoticiaState extends State<InserirNoticia> {
               ),
               IconButton(
                 icon: Icon(
-                  Icons.add_circle,
+                  Icons.add,
                   size: 40,
-                  color: Colors.green,
+                  color: Cores.corBotoes,
                 ),
                 onPressed: () {
                   Conteudo c = Conteudo();
@@ -191,12 +192,12 @@ class _InserirNoticiaState extends State<InserirNoticia> {
         child: RaisedButton.icon(
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(18.0),
-              side: BorderSide(color: Colors.green)),
-          color: Colors.green,
+              side: BorderSide(color: Cores.corBotoes)),
+          color: Cores.corBotoes,
           label: Text("Nova imagem", style: TextStyle(color: Colors.white)),
           icon: Icon(
             Icons.add_a_photo,
-            size: 40,
+            size: 30,
             color: Colors.white,
           ),
           onPressed: () {

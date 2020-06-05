@@ -1,11 +1,12 @@
 import 'package:app_comunica_if/model/mensagem.dart';
 import 'package:app_comunica_if/model/noticia.dart';
 import 'package:app_comunica_if/testes/banco_ficticio.dart';
+import 'package:app_comunica_if/ui_usuario/componentes.dart';
 import 'package:app_comunica_if/ui/ler_mensagem.dart';
 import 'package:flutter/material.dart';
 
-import 'card_mensagem.dart';
-import 'card_noticia.dart';
+import '../ui/card_mensagem.dart';
+import '../ui/card_noticia.dart';
 import 'ler_noticia.dart';
 
 class Principal extends StatefulWidget {
@@ -53,6 +54,7 @@ class _PrincipalState extends State<Principal> {
 
             ],
           ),
+          bottomNavigationBar: barraInferior(context),
         ));
   }
 

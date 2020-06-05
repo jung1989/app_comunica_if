@@ -1,6 +1,6 @@
 
 import 'package:app_comunica_if/model/noticia.dart';
-import 'package:app_comunica_if/testes/banco_ficticio.dart';
+import 'package:app_comunica_if/ui/padroes.dart';
 import 'package:flutter/material.dart';
 
 import 'ler_noticia.dart';
@@ -16,41 +16,50 @@ Widget noticiaCard(BuildContext context, int index,List<Noticia> listaTemporaria
     },
     child: Card(
       child: Padding(
-        padding: EdgeInsets.all(10),
-        child: Column(
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-                CircleAvatar(
-                  backgroundColor: Colors.green,
-                  child:  Icon(
-                    Icons.art_track,
-                  ),
-                ),
+          padding: EdgeInsets.all(10),
+          child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Icon(
+                            Icons.description,
+                            color: Cores.corIconesClaro,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Flexible(
+                            child: Text(
+                              listaTemporaria[index].titulo,
+                              //overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Cores.corTextEscuro
+                              ),
+                            ),
+                          ) ,
+                        ],
 
-                SizedBox(
-                  width: 10,
+
+
+              ),
+
+
+              SizedBox(
+                width: double.infinity,
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child:  Text(
+                    formatarDataHora(listaTemporaria[index].dataHoraPublicacao),
+                  ),
                 ),
-                Expanded(
-                  child: Text(
-                    listaTemporaria[index].titulo,
-                    style: TextStyle(fontSize: 25),
-                  ),
-                )
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                Text("Ler notícia...",
-                  style: TextStyle(
-                    color: Colors.black54
-                  ),
-                )
-              ],
-            )
-          ],
-        ),
+              ),
+
+            ],
+          )
       ),
     ),
   );

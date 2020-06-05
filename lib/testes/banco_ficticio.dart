@@ -175,14 +175,42 @@ class BancoFiciticio {
   static void _carregarGrupos() {
     _gruposBanco = List();
 
-    Grupo g;
-    for(int c = 0; c < 10; c++) {
-      g = Grupo();
-      g.selecionado = false;
-      g.nome = "Grupo $c";
+    _gruposBanco.add(Grupo.nomeado("Docentes"));
+    _gruposBanco.add(Grupo.nomeado("Docentes"));
 
-      _gruposBanco.add(g);
-    }
+    _gruposBanco.add(Grupo.nomeado("TADS 1"));
+    _gruposBanco.add(Grupo.nomeado("TADS 2"));
+    _gruposBanco.add(Grupo.nomeado("TADS 3"));
+    _gruposBanco.add(Grupo.nomeado("TADS 4"));
+    _gruposBanco.add(Grupo.nomeado("TADS 5"));
+    _gruposBanco.add(Grupo.nomeado("TADS 6"));
+
+    _gruposBanco.add(Grupo.nomeado("TEC 1"));
+    _gruposBanco.add(Grupo.nomeado("TEC 2"));
+    _gruposBanco.add(Grupo.nomeado("TEC 3"));
+    _gruposBanco.add(Grupo.nomeado("TEC 4"));
+
+    _gruposBanco.add(Grupo.nomeado("TINF 1"));
+    _gruposBanco.add(Grupo.nomeado("TINF 2"));
+    _gruposBanco.add(Grupo.nomeado("TINF 3"));
+    _gruposBanco.add(Grupo.nomeado("TINF 4"));
+
+    _gruposBanco.add(Grupo.nomeado("TAI 1"));
+    _gruposBanco.add(Grupo.nomeado("TAI 2"));
+    _gruposBanco.add(Grupo.nomeado("TAI 3"));
+    _gruposBanco.add(Grupo.nomeado("TAI 4"));
+
+    _gruposBanco.add(Grupo.nomeado("TCA 1v"));
+    _gruposBanco.add(Grupo.nomeado("TCA 2v"));
+    _gruposBanco.add(Grupo.nomeado("TCA 3v"));
+    _gruposBanco.add(Grupo.nomeado("TCA 4v"));
+
+    _gruposBanco.add(Grupo.nomeado("TCA 1m"));
+    _gruposBanco.add(Grupo.nomeado("TCA 2m"));
+    _gruposBanco.add(Grupo.nomeado("TCA 3m"));
+    _gruposBanco.add(Grupo.nomeado("TCA 4m"));
+
+
   }
 
   static void _carregarAdmins() {

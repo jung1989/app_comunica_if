@@ -36,6 +36,7 @@ class _InserirMensagemState extends State<InserirMensagem> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Nova mensagem"),
+        backgroundColor: Cores.corAppBarBackground,
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -60,17 +61,18 @@ class _InserirMensagemState extends State<InserirMensagem> {
             titulo("Grupos para envio"),
             listaCheck(),
             SizedBox(height: 20),
-            RaisedButton(
+            SizedBox(width: double.infinity,
+                child: RaisedButton(
               child: Text("Publicar mensagem"),
-              color: Colors.green,
+              color: Cores.corBotoes,
               textColor: Colors.white,
               onPressed: () {
                 if(_chave.currentState.validate()) {
                   publicarMensagem();
                 }
               },
-            ),
-            SizedBox(height: 80),
+            )),
+            SizedBox(height: 50),
           ],
         ),
       ),
@@ -83,6 +85,7 @@ class _InserirMensagemState extends State<InserirMensagem> {
     List<CheckboxListTile> checks = List();
 
     CheckboxListTile check = CheckboxListTile(
+      activeColor: Cores.corIconesClaro,
       onChanged: (bool selecionado) {
         setState(() {
           for(Grupo g in _grupos) {
@@ -101,6 +104,7 @@ class _InserirMensagemState extends State<InserirMensagem> {
     print(_grupos.length);
     for(Grupo g in _grupos) {
       check = CheckboxListTile(
+        activeColor: Cores.corIconesClaro,
         onChanged: (bool selecionado) {
           setState(() {
             _selecionarTodos = false;
