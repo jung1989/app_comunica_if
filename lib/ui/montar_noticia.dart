@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:app_comunica_if/model/noticia.dart';
 import 'package:app_comunica_if/ui/padroes.dart';
 import 'package:flutter/material.dart';
@@ -38,7 +40,6 @@ List<Widget> montarNoticia(Noticia noticia) {
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
           Text(formatarDataHora(noticia.dataHoraPublicacao),
-            //formatar data e hora da noticia
           )
         ],
       ),
@@ -62,13 +63,11 @@ List<Widget> montarNoticia(Noticia noticia) {
       case Conteudo.TIPO_IMAGEM: //imagens
         conteudos.add(Padding(
           padding: EdgeInsets.all(10),
-          child: conteudo.arquivo == null
+          child: conteudo.texto == null
               ? Text("Sem imagem...")
-              : Image.file(
-            conteudo.arquivo,
-
+              : Image.file(File(conteudo.texto),
             fit: BoxFit.fitWidth,
-            //formatar imagem
+            //TODO formatar imagem
           )
           ));
 

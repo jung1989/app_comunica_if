@@ -1,3 +1,4 @@
+import 'package:app_comunica_if/helper/mensagem_helper.dart';
 import 'package:app_comunica_if/model/mensagem.dart';
 import 'package:flutter/material.dart';
 
@@ -8,6 +9,7 @@ Mensagem mensagem;
 class LerMensagem extends StatefulWidget {
   LerMensagem(Mensagem m) {
     mensagem = m;
+    MensagemHelper.atualizarMensagem(mensagem);
   }
 
   @override
@@ -28,6 +30,7 @@ class _LerMensagemState extends State<LerMensagem> {
             onPressed: () {
               setState(() {
                 mensagem.favorita = !mensagem.favorita;
+                MensagemHelper.atualizarMensagem(mensagem);
                 print("Mensagem ${mensagem.titulo} favoritada");
               });
             },

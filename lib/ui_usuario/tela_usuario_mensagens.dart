@@ -1,9 +1,13 @@
+import 'package:app_comunica_if/helper/mensagem_helper.dart';
 import 'package:app_comunica_if/model/mensagem.dart';
 import 'package:app_comunica_if/testes/banco_ficticio.dart';
 import 'package:app_comunica_if/ui/padroes.dart';
 import 'package:app_comunica_if/ui_usuario/componentes.dart';
+import 'package:app_comunica_if/ui_usuario/grupos_interesse.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import '../main.dart';
 import '../ui/card_mensagem.dart';
 
 class TelaUsuarioMensagens extends StatefulWidget {
@@ -12,11 +16,15 @@ class TelaUsuarioMensagens extends StatefulWidget {
 }
 
 class _TelaUsuarioMensagensState extends State<TelaUsuarioMensagens> {
+
   List<Mensagem> mensagens;
 
+  List<Mensagem> mensagensLidas;
+  List<Mensagem> mensagensNaoLidas;
+  List<Mensagem> mensagensFavoritas;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context)  {
     mensagens = BancoFiciticio.mensagensBanco;
     return Scaffold(
         appBar: AppBar(
@@ -25,7 +33,12 @@ class _TelaUsuarioMensagensState extends State<TelaUsuarioMensagens> {
           title: Text("Mensagens"),
           actions: <Widget>[
             IconButton(
-              icon: Icon(Icons.settings, color: Cores.corIconesClaro,),
+              icon: Icon(Icons.settings, color: Cores.corIconesClaro),
+              onPressed: () {
+                //Navigator.push(context, FadeRoute(page:  GruposInteresse()) );
+                _navegacaoTelaGrupos(context);
+              }
+              ,
             )
           ],
         ),
@@ -66,51 +79,96 @@ class _TelaUsuarioMensagensState extends State<TelaUsuarioMensagens> {
     );
   }
 
-  Widget listaMensagens() {
-    print("Tamanho ${BancoFiciticio.mensagensBanco.length}");
-    return ListView.builder(
-        padding: EdgeInsets.all(15.0),
-        itemCount: mensagens.length,
-        itemBuilder: (context, index) {
-          return mensagemCard(context, index, BancoFiciticio.mensagensBanco);
-        });
+  _navegacaoTelaGrupos(BuildContext context) async {
+    await Navigator.push(context, FadeRoute(page:  GruposInteresse()) ).then(
+        (valor) {
+          setState(() {
+            mensagensNaoLidas = BancoFiciticio.mensagensPorGrupo();
+          });
+        }
+    );
   }
 
   Widget listaMensagensLidas() {
-    return ListView.builder(
-        padding: EdgeInsets.all(15.0),
-        itemCount: BancoFiciticio.mensagensLidas().length,
-        itemBuilder: (
-          context,
-          index,
-        ) {
-          return mensagemCard(context, index, BancoFiciticio.mensagensLidas());
-        });
+    return FutureBuilder(
+      builder: (context, projectSnap) {
+        if (projectSnap.connectionState == ConnectionState.none &&
+            projectSnap.hasData == null) {
+          return Container(
+            child: Text("Carregando mensagens..."),
+          );
+        }
+        return ListView.builder(
+            padding: EdgeInsets.all(15.0),
+            itemCount: mensagensLidas.length,
+            itemBuilder: (
+                context,
+                index,
+                ) {
+              return mensagemCard(context, index, mensagensLidas);
+            });
+      },
+      future: carregarMensagensLidas(),
+    );
   }
 
   Widget listaMensagensNaoLidas() {
-    return ListView.builder(
-        padding: EdgeInsets.all(15.0),
-        itemCount: BancoFiciticio.mensagensNaoLidas().length,
-        itemBuilder: (
-          context,
-          index,
-        ) {
-          return mensagemCard(
-              context, index, BancoFiciticio.mensagensNaoLidas());
-        });
+    return FutureBuilder(
+      builder: (context, projectSnap) {
+        if (projectSnap.connectionState == ConnectionState.none &&
+            projectSnap.hasData == null) {
+          return Container(
+            child: Text("Carregando mensagens..."),
+          );
+        }
+        return ListView.builder(
+            padding: EdgeInsets.all(15.0),
+            itemCount: mensagensNaoLidas.length,
+            itemBuilder: (
+                context,
+                index,
+                ) {
+              return mensagemCard(context, index, mensagensNaoLidas);
+            });
+      },
+      future: carregarMensagensNaoLidas(),
+    );
   }
 
   Widget listaMensagensFavoritas() {
-    return ListView.builder(
-        padding: EdgeInsets.all(15.0),
-        itemCount: BancoFiciticio.mensagensFavoritas().length,
-        itemBuilder: (
-          context,
-          index,
-        ) {
-          return mensagemCard(
-              context, index, BancoFiciticio.mensagensFavoritas());
-        });
+    return FutureBuilder(
+      builder: (context, projectSnap) {
+        if (projectSnap.connectionState == ConnectionState.none &&
+            projectSnap.hasData == null) {
+          return Container(
+            child: Text("Carregando mensagens..."),
+          );
+        }
+        return ListView.builder(
+            padding: EdgeInsets.all(15.0),
+            itemCount: mensagensFavoritas.length,
+            itemBuilder: (
+                context,
+                index,
+                ) {
+              return mensagemCard(context, index, mensagensFavoritas);
+            });
+      },
+      future: carregarMensagensFavoritas(),
+    );
   }
+
+
+  Future carregarMensagensLidas() async {
+    mensagensLidas = await MensagemHelper.lerMensagensLidas(true);
+  }
+
+  Future carregarMensagensNaoLidas() async {
+    mensagensNaoLidas = await MensagemHelper.lerMensagensLidas(false);
+  }
+
+  Future carregarMensagensFavoritas() async {
+    mensagensFavoritas = await MensagemHelper.lerMensagensFavoritas(true);
+  }
+
 }

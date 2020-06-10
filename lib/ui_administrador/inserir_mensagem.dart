@@ -1,3 +1,4 @@
+import 'package:app_comunica_if/helper/mensagem_helper.dart';
 import 'package:app_comunica_if/model/grupo.dart';
 import 'package:app_comunica_if/model/mensagem.dart';
 import 'package:app_comunica_if/sistema/sistema_admin.dart';
@@ -129,6 +130,14 @@ class _InserirMensagemState extends State<InserirMensagem> {
     mensagem.dataHoraPublicacao = DateTime.now();
     mensagem.administrador = SistemaAdmin().administrador;
 
+    List<Grupo> grupos = List();
+    for(Grupo g in _grupos) {
+      if(g.selecionado) {
+        grupos.add(g);
+      }
+    }
+    mensagem.gruposInteresse = grupos;
+
     showDialog(
         context: context,
         builder: (_) => AlertDialog(
@@ -154,9 +163,8 @@ class _InserirMensagemState extends State<InserirMensagem> {
                 FlatButton(
                     child: Text("Sim"),
                     onPressed: () {
-                      if (BancoFiciticio.inserirMensagem(mensagem)) {
-                        Navigator.pop(context);
-                      }
+                      MensagemHelper.gravarMensagem(mensagem);
+                      Navigator.pop(context);
                       Navigator.pop(context);
                     }),
               ],

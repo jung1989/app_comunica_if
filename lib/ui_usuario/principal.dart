@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 
 import '../ui/card_mensagem.dart';
 import '../ui/card_noticia.dart';
-import 'ler_noticia.dart';
+
 
 class Principal extends StatefulWidget {
   @override

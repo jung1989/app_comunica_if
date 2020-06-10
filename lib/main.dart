@@ -1,10 +1,17 @@
+import 'package:app_comunica_if/helper/banco_de_dados.dart';
+import 'package:app_comunica_if/helper/mensagem_helper.dart';
+import 'package:app_comunica_if/helper/noticia_helper.dart';
+import 'package:app_comunica_if/model/administrador.dart';
+import 'package:app_comunica_if/model/mensagem.dart';
+import 'package:app_comunica_if/model/noticia.dart';
 import 'package:app_comunica_if/sistema/sistema_admin.dart';
+import 'package:app_comunica_if/sistema/sistema_usuario.dart';
+import 'package:app_comunica_if/testes/banco_ficticio.dart';
 import 'package:app_comunica_if/ui_administrador/tela_administrador.dart';
 import 'package:app_comunica_if/ui_usuario/tela_usuario_mensagens.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
     home: Inicial(),
@@ -14,6 +21,8 @@ void main() {
     ),
     title: "Bem vindo!",
   ));
+
+  SistemaUsuario().iniciar();
 }
 
 class Inicial extends StatefulWidget {
@@ -28,26 +37,86 @@ class _InicialState extends State<Inicial> {
         body: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
+            SizedBox(
+              width: double.infinity,
+              child:
             RaisedButton(
-                child: Text("Protótipo Usuário"),
+                child: Text("Protótipo Usuário!"),
                 onPressed: () {
                   SistemaAdmin().login("", "");
                   Navigator.push(context, FadeRoute(page:  TelaUsuarioMensagens()));
-//                  Navigator.push(
-//                      context, MaterialPageRoute(builder: (context) => TelaUsuarioMensagens()));
-
-                }),
+                })),
+        SizedBox(
+          width: double.infinity,
+          child:
             RaisedButton(
                 child: Text("Protótipo Administrador"),
                 onPressed: () {
                   SistemaAdmin().login("", "");
                   Navigator.push(
                       context, MaterialPageRoute(builder: (context) => TelaAdministrador()));
-                })
+                }))
           ],
         )
     );
   }
+
+
+}
+
+testeBanco() async {
+  BancoDeDados teste = BancoDeDados();
+
+  Administrador adm = Administrador.criarComNome("Admin Teste Banco");
+
+  Mensagem m = Mensagem();
+  m.titulo = "Titulo teste banco";
+  m.conteudo = "Conteudo de teste da mensagem do banco";
+  m.lida = false;
+  m.favorita = false;
+  m.administrador = adm;
+  m.dataHoraPublicacao = DateTime.now();
+
+  Noticia n = Noticia();
+  n.titulo = "Titulo noticia teste banco";
+  n.dataHoraPublicacao = DateTime.now();
+  n.favorita = false;
+  n.administrador = adm;
+  n.id = 104;
+
+  Conteudo c = Conteudo();
+  c.tipo = Conteudo.TIPO_PARAGRAFO;
+  c.texto = "Conteudo 1 da noticia";
+  c.idNoticia = n.id;
+
+  n.conteudos.add(c);
+
+  MensagemHelper.gravarMensagem(m);
+  n = await  NoticiaHelper.gravarNoticia(n);
+
+  MensagemHelper.lerMensagens().then(
+      (retorno) {
+        for(Mensagem m in retorno ) {
+          print(m.toMap());
+        }
+      }
+  );
+
+  NoticiaHelper.lerNoticias().then(
+          (retorno) {
+        for(Noticia n in retorno ) {
+          print(n.toMap());
+          for(Conteudo c in n.conteudos ) {
+            print(" >>> ${c.toMap()}");
+          }
+        }
+      }
+  );
+
+
+  NoticiaHelper.dataHoraUltimaNoticiaArmazenada().then((data) {
+    print(data.toString());
+  });
 
 
 }

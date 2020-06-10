@@ -217,7 +217,7 @@ class _InserirNoticiaState extends State<InserirNoticia> {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
 
     setState(() {
-      conteudo.arquivo = File(pickedFile.path);
+      conteudo.texto = pickedFile.path;
     });
   }
 
@@ -269,13 +269,11 @@ class _InserirNoticiaState extends State<InserirNoticia> {
                   padding: EdgeInsets.all(10),
                   child: SizedBox(
                       width: double.infinity,
-                      child: noticia.conteudos[c].arquivo == null
+                      child: noticia.conteudos[c].texto == null
                           ? Text("Sem imagem...")
-                          : Image.file(
-                              noticia.conteudos[c].arquivo,
-
+                          : Image.file(File(noticia.conteudos[c].texto),
                               fit: BoxFit.fitWidth,
-                              //formatar imagem
+                              //TODO formatar imagem
                             ))),
               c));
           break;
