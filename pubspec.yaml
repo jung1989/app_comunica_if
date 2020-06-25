@@ -28,6 +28,13 @@ dependencies:
   image_picker: ^0.6.0+3
   sqflite: any
   path: any
+  cloud_firestore: ^0.13.0+1
+  firebase_storage: ^3.1.1
+  firebase_auth: ^0.15.3
+  firebase_messaging: ^6.0.16
+  http: ^0.12.1
+  path_provider: ^1.4.4
+
 
 dev_dependencies:
   flutter_test:

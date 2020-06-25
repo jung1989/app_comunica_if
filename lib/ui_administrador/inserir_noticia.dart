@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:app_comunica_if/model/noticia.dart';
+import 'package:app_comunica_if/sistema/navegacao.dart';
 import 'package:app_comunica_if/sistema/sistema_admin.dart';
-import 'package:app_comunica_if/testes/banco_ficticio.dart';
 import 'package:app_comunica_if/ui/padroes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +26,10 @@ class _InserirNoticiaState extends State<InserirNoticia> {
   final chaveScaffold = GlobalKey<ScaffoldState>();
 
   final picker = ImagePicker();
+
+  bool _isEnviandoNoticia = false;
+
+  int ordemConteudo = 1;
 
   @override
   void initState() {
@@ -65,10 +69,9 @@ class _InserirNoticiaState extends State<InserirNoticia> {
             height: 40,
             child: RaisedButton(
                 child: Text("Publicar notícia",
-                  style: TextStyle(color: Colors.white)),
+                    style: TextStyle(color: Colors.white)),
                 color: Cores.corBotoes,
-                onPressed: publicarNoticia
-            ),
+                onPressed: publicarNoticia),
           ),
           SizedBox(height: 50),
         ],
@@ -84,36 +87,50 @@ class _InserirNoticiaState extends State<InserirNoticia> {
 
     showDialog(
         context: context,
-        builder: (_) => AlertDialog(
-          title: Text("Publicar?"),
-          content:
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              linhaTextoExpandida("Após publicada, a notícia não poderá ser alterada."),
-              SizedBox(height: 20),
-              linhaTextoExpandida("Deseja realmente publicar?"),
-            ],
-          ),
-
-          actions: <Widget>[
-            FlatButton(
-              child: Text("Não"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            FlatButton(
-                child: Text("Sim"),
-                onPressed: () {
-                  if (BancoFiciticio.inserirNoticia(noticia)) {
-                    Navigator.pop(context);
-                  }
-                  Navigator.pop(context);
-                }),
-          ],
-        ));
+        builder: (_) => StatefulBuilder(builder: (context, setState) {
+              return AlertDialog(
+                title: Text("Publicar?"),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    linhaTextoExpandida(
+                        "Após publicada, a notícia não poderá ser alterada."),
+                    SizedBox(height: 20),
+                    linhaTextoExpandida("Deseja realmente publicar?"),
+                  ],
+                ),
+                actions: <Widget>[
+                  Visibility(
+                    visible: _isEnviandoNoticia,
+                    child: Padding(
+                      padding: EdgeInsets.only(right: 15),
+                        child: CircularProgressIndicator()),
+                  ),
+                  Visibility(
+                      visible: !_isEnviandoNoticia,
+                      child: FlatButton(
+                        child: Text("Não"),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      )),
+                  Visibility(
+                    visible: !_isEnviandoNoticia,
+                    child: FlatButton(
+                        child: Text("Sim"),
+                        onPressed: () async {
+                          setState(() {
+                            _isEnviandoNoticia = true;
+                          });
+                          await SistemaAdmin().gravarNoticia(noticia);
+                          Navigator.popUntil(context,
+                              ModalRoute.withName(Rotas.TELA_ADMINISTRADOR));
+                        }),
+                  ),
+                ],
+              );
+            }));
   }
 
   //card para inserção de parágrafos na notícia
@@ -138,6 +155,7 @@ class _InserirNoticiaState extends State<InserirNoticia> {
                   Conteudo c = Conteudo();
                   c.texto = paragrafoController.text;
                   c.tipo = Conteudo.TIPO_PARAGRAFO;
+                  c.ordem = ordemConteudo++;
                   setState(() {
                     noticia.conteudos.add(c);
                     paragrafoController.clear();
@@ -173,6 +191,7 @@ class _InserirNoticiaState extends State<InserirNoticia> {
                   Conteudo c = Conteudo();
                   c.texto = controller.text;
                   c.tipo = Conteudo.TIPO_LINK;
+                  c.ordem = ordemConteudo++;
                   setState(() {
                     noticia.conteudos.add(c);
                     controller.clear();
@@ -204,6 +223,7 @@ class _InserirNoticiaState extends State<InserirNoticia> {
             Conteudo c = Conteudo();
             getImage(c).then((valor) {
               c.tipo = Conteudo.TIPO_IMAGEM;
+              c.ordem = ordemConteudo++;
               setState(() {
                 noticia.conteudos.add(c);
                 controller.clear();
@@ -218,6 +238,7 @@ class _InserirNoticiaState extends State<InserirNoticia> {
 
     setState(() {
       conteudo.texto = pickedFile.path;
+      conteudo.imagem = File(pickedFile.path);
     });
   }
 
@@ -235,8 +256,6 @@ class _InserirNoticiaState extends State<InserirNoticia> {
         ],
       ),
     ));
-
-
 
     conteudos.add(Padding(
       padding: EdgeInsets.only(right: 10, bottom: 10),
@@ -271,7 +290,8 @@ class _InserirNoticiaState extends State<InserirNoticia> {
                       width: double.infinity,
                       child: noticia.conteudos[c].texto == null
                           ? Text("Sem imagem...")
-                          : Image.file(File(noticia.conteudos[c].texto),
+                          : Image.file(
+                              noticia.conteudos[c].imagem,
                               fit: BoxFit.fitWidth,
                               //TODO formatar imagem
                             ))),

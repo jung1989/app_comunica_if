@@ -1,14 +1,14 @@
-
 import 'package:app_comunica_if/model/noticia.dart';
+import 'package:app_comunica_if/sistema/sistema_admin.dart';
 import 'package:app_comunica_if/ui/padroes.dart';
 import 'package:flutter/material.dart';
 
 import 'ler_noticia.dart';
 
-Widget noticiaCard(BuildContext context, int index,List<Noticia> listaTemporaria) {
-
+Widget noticiaCard(
+    BuildContext context, int index, List<Noticia> listaTemporaria) {
   return GestureDetector(
-    onTap: () {
+    onTap: () async {
       Navigator.push(
           context,
           MaterialPageRoute(
@@ -18,49 +18,41 @@ Widget noticiaCard(BuildContext context, int index,List<Noticia> listaTemporaria
       child: Padding(
           padding: EdgeInsets.all(10),
           child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Icon(
-                            Icons.description,
-                            color: Cores.corIconesClaro,
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Flexible(
-                            child: Text(
-                              listaTemporaria[index].titulo,
-                              //overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Cores.corTextEscuro
-                              ),
-                            ),
-                          ) ,
-                        ],
-
-
-
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Icon(
+                    Icons.description,
+                    color: Cores.corIconesClaro,
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Flexible(
+                    child: Text(
+                      listaTemporaria[index].titulo,
+                      //overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Cores.corTextEscuro),
+                    ),
+                  ),
+                ],
               ),
-
-
               SizedBox(
                 width: double.infinity,
                 child: Align(
                   alignment: Alignment.centerRight,
-                  child:  Text(
+                  child: Text(
                     formatarDataHora(listaTemporaria[index].dataHoraPublicacao),
                   ),
                 ),
               ),
-
             ],
-          )
-      ),
+          )),
     ),
   );
 }

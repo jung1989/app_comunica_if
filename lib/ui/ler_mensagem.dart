@@ -1,15 +1,22 @@
 import 'package:app_comunica_if/helper/mensagem_helper.dart';
+import 'package:app_comunica_if/model/grupo.dart';
 import 'package:app_comunica_if/model/mensagem.dart';
+import 'package:app_comunica_if/model/usuario.dart';
+import 'package:app_comunica_if/sistema/sistema_login.dart';
 import 'package:flutter/material.dart';
 
 import 'padroes.dart';
 
 Mensagem mensagem;
+bool _isAdmin;
 
 class LerMensagem extends StatefulWidget {
   LerMensagem(Mensagem m) {
     mensagem = m;
-    MensagemHelper.atualizarMensagem(mensagem);
+    _isAdmin = SistemaLogin.instance.usuario.perfil == Usuario.PERFIL_ADMINISTRADOR ? true : false;
+    if(!_isAdmin) {
+      MensagemHelper.atualizarMensagem(mensagem);
+    }
   }
 
   @override
@@ -21,11 +28,18 @@ class _LerMensagemState extends State<LerMensagem> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(mensagem.titulo),
+        title: Text("Mensagem"),
         backgroundColor: Cores.corAppBarBackground,
         actions: <Widget>[
-          IconButton(
-            icon: Icon(mensagem.favorita ? Icons.star : Icons.star_border,
+          _isAdmin
+              ?
+              IconButton(
+                  icon: Icon(Icons.comment,
+                      color: Cores.corIconesClaro)
+              )
+              :
+              IconButton(
+            icon: Icon(mensagem.favorita ? Icons.info : Icons.info_outline,
                 color: Cores.corIconesClaro),
             onPressed: () {
               setState(() {
@@ -90,8 +104,34 @@ class _LerMensagemState extends State<LerMensagem> {
                         fontFamily: 'Serif',
                         color: Cores.corTextMedio))
               ],
+            )),
+        Padding(
+            padding: EdgeInsets.only(left: 10, right: 10, top : 50, bottom: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                Flexible(
+                    child: Text(
+                      "Interessados: ${textoListaInteressados()}",
+                      overflow:  TextOverflow.clip,
+                      style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: Cores.corTextEscuro),
+                    )),
+
+              ],
             ))
       ],
     );
+  }
+
+  String textoListaInteressados() {
+    String retorno = "";
+    for(Grupo g in mensagem.gruposInteresse) {
+      retorno += " ${g.nome} - ";
+    }
+    retorno = retorno.substring(0,retorno.length-3);
+    return retorno;
   }
 }

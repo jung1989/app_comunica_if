@@ -73,7 +73,7 @@ class _PrincipalState extends State<Principal> {
         padding: EdgeInsets.all(15.0),
         itemCount: mensagens.length,
         itemBuilder: (context, index) {
-          return mensagemCard(context, index, BancoFiciticio.mensagensBanco);
+          return mensagemCard(context, index, BancoFiciticio.mensagensBanco,this);
         });
   }
 
@@ -85,7 +85,7 @@ class _PrincipalState extends State<Principal> {
           context,
           index,
         ) {
-          return mensagemCard(context, index,  BancoFiciticio.mensagensLidas());
+          return mensagemCard(context, index,  BancoFiciticio.mensagensLidas(),this);
         });
   }
 
@@ -97,7 +97,7 @@ class _PrincipalState extends State<Principal> {
           context,
           index,
         ) {
-          return mensagemCard(context, index, BancoFiciticio.mensagensNaoLidas());
+          return mensagemCard(context, index, BancoFiciticio.mensagensNaoLidas(),this);
         });
   }
 
@@ -109,7 +109,7 @@ class _PrincipalState extends State<Principal> {
             context,
             index,
             ) {
-          return mensagemCard(context, index, BancoFiciticio.mensagensFavoritas());
+          return mensagemCard(context, index, BancoFiciticio.mensagensFavoritas(),this);
         });
   }
 

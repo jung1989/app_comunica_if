@@ -1,6 +1,7 @@
 import 'package:app_comunica_if/ui/padroes.dart';
 import 'package:app_comunica_if/ui_usuario/tela_usuario_mensagens.dart';
 import 'package:app_comunica_if/ui_usuario/tela_usuario_noticias.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 // barra inferior utilizada nas telas do usuário
@@ -21,10 +22,8 @@ Widget barraInferior(BuildContext context) {
               ],
             ),
             onPressed: () {
-              Navigator.pop(context);
-              Navigator.push(context, SlideLeftRoute(page:  TelaUsuarioMensagens()));
-              //Navigator.push(
-                 // context, MaterialPageRoute(builder: (context) => TelaUsuarioMensagens()));
+              Navigator.pushReplacement(
+                  context, CupertinoPageRoute(builder: (context) => TelaUsuarioMensagens()));
             },
           ),
           FlatButton(
@@ -36,10 +35,8 @@ Widget barraInferior(BuildContext context) {
                 ],
               ),
             onPressed: () {
-              Navigator.pop(context);
-              Navigator.push(context, SlideRightRoute(page:  TelaUsuarioNoticias()));
-//              Navigator.push(
-//                  context, MaterialPageRoute(builder: (context) => TelaUsuarioNoticias()));
+              Navigator.pushReplacement(
+                  context, CupertinoPageRoute(builder: (context) => TelaUsuarioNoticias()));
             },
           ),
         ],

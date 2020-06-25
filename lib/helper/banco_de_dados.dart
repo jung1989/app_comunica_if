@@ -3,6 +3,7 @@ import 'package:app_comunica_if/helper/mensagem_grupo_helper.dart';
 import 'package:app_comunica_if/helper/mensagem_helper.dart';
 import 'package:app_comunica_if/helper/conteudo_noticia_helper.dart';
 import 'package:app_comunica_if/helper/noticia_helper.dart';
+import 'package:app_comunica_if/sistema/sistema_usuario.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -22,16 +23,17 @@ class BancoDeDados {
       return _banco;
     }
     else {
-      _banco = await iniciarBanco();
+      print("### BANCO DE DADOS -> iniciado...");
+      _banco = await _iniciarBanco();
       return _banco;
     }
   }
 
-  Future<Database> iniciarBanco() async {
+  Future<Database> _iniciarBanco() async {
     final caminhoBanco = await getDatabasesPath();
-    final caminho = join(caminhoBanco, "banco.db");
+    final caminho = join(caminhoBanco, "banco_${SistemaUsuario().usuario.email}.db");
 
-    return openDatabase(caminho, version: 17,
+    return openDatabase(caminho, version: 1,
         onCreate: (Database banco, int novaVersao) async {
           await banco.execute(MensagemHelper.queryCriacaoTabelaMensagens());
           await banco.execute(NoticiaHelper.queryCriacaoTabelaNoticias());
@@ -56,4 +58,12 @@ class BancoDeDados {
     );
   }
 
+  void fecharBanco() {
+    if(_banco != null) {
+      _banco.close();
+      _banco = null;
+      print("### BANCO DE DADOS -> finalizado...");
+    }
+
+  }
 }

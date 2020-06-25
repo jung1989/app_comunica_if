@@ -1,19 +1,13 @@
 
-
 import 'package:app_comunica_if/helper/grupo_interesse_helper.dart';
 import 'package:app_comunica_if/helper/mensagem_grupo_helper.dart';
 import 'package:app_comunica_if/model/grupo.dart';
 import 'package:app_comunica_if/model/mensagem.dart';
-import 'package:app_comunica_if/model/noticia.dart';
-import 'package:app_comunica_if/sistema/sistema_usuario.dart';
-import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 import 'banco_de_dados.dart';
 
-
 final String tabelaMensagem = "mensagem";
-
 
 final String colunaId = "id";
 final String colunaTitulo = "titulo";
@@ -22,14 +16,12 @@ final String colunaDataHoraPublicacao = "data_hora_publicacao";
 final String colunaLida = "lida";
 final String colunaFavorita = "favorita";
 final String colunaNomeAdministrador = "nome_administrador";
-final String colunaTextoConteudo = "texto_conteudo";
-final String colunaTipoConteudo = "tipo_conteudo";
-final String colunaIdNoticiaFK = "id_noticia";
+final String colunaGruposInteresse = "grupos_interesse";
 
 class MensagemHelper {
 
   static String queryCriacaoTabelaMensagens() {
-    return "CREATE TABLE $tabelaMensagem($colunaId INTEGER PRIMARY KEY ,"
+    return "CREATE TABLE $tabelaMensagem($colunaId TEXT PRIMARY KEY ,"
         "$colunaTitulo TEXT , "
         "$colunaConteudo TEXT , "
         "$colunaDataHoraPublicacao INTEGER , "
@@ -38,12 +30,10 @@ class MensagemHelper {
         "$colunaNomeAdministrador TEXT )";
   }
 
-
-
   /// CRUD MENSAGENS ///
   static Future<Mensagem> gravarMensagem(Mensagem mensagem) async {
     Database mensagens = await BancoDeDados().banco;
-    mensagem.id = await mensagens.insert(tabelaMensagem, mensagem.toMap());
+    await mensagens.insert(tabelaMensagem, mensagem.toMapSemGrupo());
     MensagemGrupoHelper.gravarMensagemGrupo(mensagem);
     return mensagem;
   }
@@ -86,11 +76,6 @@ class MensagemHelper {
             " INNER JOIN $tabelaMensagem m       ON mg.$colunaIdMensagemFK = m.$colunaId"
         " GROUP BY g.$colunaId");
 
-//    print(consultaGrupos);
-//
-//    List<Map> consultaTeste = await banco.rawQuery("SELECT * FROM $tabelaMensagemGrupo");
-//    print(">>>> $consultaTeste");
-
     List<Grupo> lista = List();
 
     for(Map grupo in consultaGrupos) {
@@ -113,7 +98,7 @@ class MensagemHelper {
 
     List<Mensagem> lista = List();
     for(Map m in consulta) {
-      Mensagem mensagem = Mensagem.fromMap(m);
+      Mensagem mensagem = Mensagem.fromMapSemGrupo(m);
       mensagem.gruposInteresse = await lerMensagensGrupo(mensagem);
       lista.add(mensagem);
     }
@@ -133,8 +118,10 @@ class MensagemHelper {
             " GROUP BY m.$colunaId");
 
     List<Mensagem> lista = List();
-    for(Map mensagem in consulta) {
-      lista.add(Mensagem.fromMap(mensagem));
+    for(Map m in consulta) {
+      Mensagem mensagem = Mensagem.fromMapSemGrupo(m);
+      mensagem.gruposInteresse = await lerMensagensGrupo(mensagem);
+      lista.add(mensagem);
     }
     return lista;
   }
@@ -151,8 +138,7 @@ class MensagemHelper {
 
   static Future<int> atualizarMensagem(Mensagem mensagem) async {
     Database mensagens = await BancoDeDados().banco;
-    print(mensagem.toMap());
-    return await mensagens.update(tabelaMensagem, mensagem.toMap(),
+    return await mensagens.update(tabelaMensagem, mensagem.toMapSemGrupo(),
                                   where: "$colunaId = ?",
                                   whereArgs: [mensagem.id]);
   }
@@ -163,9 +149,6 @@ class MensagemHelper {
                                   where: "$colunaId = ?",
                                   whereArgs: [id]);
   }
-
-
-
 
 
 
@@ -181,29 +164,8 @@ class MensagemHelper {
     if(consulta.length > 0) {
       return DateTime.fromMillisecondsSinceEpoch(consulta.last[colunaDataHoraPublicacao]);
     }
-  }
-
-
-  static List<Mensagem> filtrarMensagensPorGrupos(List<Mensagem> mensagensBanco) {
-    List<Mensagem> mensagens = List();
-
-    int c =0;
-
-    for(Mensagem m in mensagensBanco) {
-      for(Grupo gm in m.gruposInteresse) {
-        print(">>>>>>> ${gm.nome}");
-
-        for (Grupo gu in SistemaUsuario().usuario.gruposInteresse) {
-          if (gu.selecionado && gm.id == gu.id) {
-            c++;
-            print(" $c >>> ${gu.nome}");
-            mensagens.add(m);
-            break;
-          }
-        }
-      }
+    else {
+      return null;
     }
-
-    return mensagens;
   }
 }

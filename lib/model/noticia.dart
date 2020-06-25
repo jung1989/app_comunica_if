@@ -1,14 +1,14 @@
 
 import 'dart:io';
 
-import 'package:app_comunica_if/helper/mensagem_helper.dart';
-
-import 'administrador.dart';
+import 'package:app_comunica_if/helper/conteudo_noticia_helper.dart';
+import 'package:app_comunica_if/helper/noticia_helper.dart';
+import 'package:app_comunica_if/model/usuario.dart';
 
 class Noticia {
 
-  int id;
-  Administrador administrador;
+  String id;
+  Usuario administrador;
   String titulo;
   DateTime dataHoraPublicacao;
   bool favorita = false;
@@ -17,7 +17,7 @@ class Noticia {
   Noticia() {}
 
   Noticia.fromMap(Map map) {
-    administrador = Administrador.criarComNome(map[colunaNomeAdministrador]);
+    administrador = Usuario.construirComNome(map[colunaNomeAdministrador]);
     id = map[colunaId];
     titulo = map[colunaTitulo];
     dataHoraPublicacao = DateTime.fromMillisecondsSinceEpoch(map[colunaDataHoraPublicacao]);
@@ -39,6 +39,21 @@ class Noticia {
     return map;
   }
 
+  Noticia.fromMapFirebase(Map map) {
+    administrador = Usuario.construirComNome(map[colunaNomeAdministrador]);
+    titulo = map[colunaTitulo];
+    dataHoraPublicacao = DateTime.fromMillisecondsSinceEpoch(map[colunaDataHoraPublicacao]);
+  }
+
+  Map toMapFirebase() {
+    Map<String, dynamic> map = {
+      colunaTitulo: titulo,
+      colunaNomeAdministrador: administrador.nome,
+      colunaDataHoraPublicacao: dataHoraPublicacao.millisecondsSinceEpoch,
+    };
+    return map;
+  }
+
 }
 
 class Conteudo {
@@ -47,10 +62,13 @@ class Conteudo {
   static const int TIPO_IMAGEM = 2;
   static const int TIPO_LINK = 3;
 
-  int id;
+  String id;
   int tipo;
   String texto;
   int idNoticia;
+  int ordem;
+
+  File imagem;
 
   Conteudo() {}
 
@@ -59,6 +77,7 @@ class Conteudo {
     tipo = map[colunaTipoConteudo];
     texto = map[colunaTextoConteudo];
     idNoticia = map[colunaIdNoticiaFK];
+    ordem = map[colunaOrdem];
   }
 
   Map toMap() {
@@ -66,12 +85,28 @@ class Conteudo {
       colunaId: id,
       colunaTipoConteudo: tipo,
       colunaTextoConteudo: texto,
-      colunaIdNoticiaFK: idNoticia
+      colunaIdNoticiaFK: idNoticia,
+      colunaOrdem: ordem
     };
     if(id != null) {
       map[colunaId] = id;
     }
     return map;
+  }
+
+  Map toMapFireBase() {
+    Map<String, dynamic> map = {
+      colunaOrdem : ordem,
+      colunaTipoConteudo: tipo,
+      colunaTextoConteudo: texto,
+    };
+    return map;
+  }
+
+  Conteudo.fromMapFirebase(Map map) {
+    tipo = map[colunaTipoConteudo];
+    texto = map[colunaTextoConteudo];
+    ordem = map[colunaOrdem];
   }
 
 }

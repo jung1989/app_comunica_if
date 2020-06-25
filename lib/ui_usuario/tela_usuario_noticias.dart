@@ -1,10 +1,11 @@
-import 'package:app_comunica_if/model/mensagem.dart';
-import 'package:app_comunica_if/testes/banco_ficticio.dart';
+
+import 'package:app_comunica_if/model/noticia.dart';
+import 'package:app_comunica_if/sistema/navegacao.dart';
+import 'package:app_comunica_if/sistema/sistema_usuario.dart';
+import 'package:app_comunica_if/ui/card_noticia.dart';
 import 'package:app_comunica_if/ui/padroes.dart';
 import 'package:app_comunica_if/ui_usuario/componentes.dart';
 import 'package:flutter/material.dart';
-
-import '../ui/card_noticia.dart';
 
 class TelaUsuarioNoticias extends StatefulWidget {
   @override
@@ -12,11 +13,19 @@ class TelaUsuarioNoticias extends StatefulWidget {
 }
 
 class _TelaUsuarioNoticiasState extends State<TelaUsuarioNoticias> {
-  List<Mensagem> mensagens;
+
+  Future _futureNoticias;
+
+  List<Noticia> _noticias = List();
+
+  @override
+  void initState() {
+    super.initState();
+    _futureNoticias = carregarNoticias();
+  }
 
   @override
   Widget build(BuildContext context) {
-    mensagens = BancoFiciticio.mensagensBanco;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Cores.corAppBarBackground,
@@ -25,58 +34,43 @@ class _TelaUsuarioNoticiasState extends State<TelaUsuarioNoticias> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.settings, color: Cores.corIconesClaro,),
-          )
+            onPressed: () {
+              Navigator.pushNamed(context, Rotas.TELA_CONFIG_USUARIO);
+            },
+          ),
+
         ],
       ),
-      body: DefaultTabController(
-        length: 3,
-        child: Column(
-          children: <Widget>[
-            Container(
-              constraints: BoxConstraints(maxHeight: 150.0),
-              child: Material(
-                color: Colors.white,
-                child: TabBar(
-                  indicatorColor: Cores.corPrimaria,
-                  tabs: [
-                    Tab(icon: Icon(Icons.description, color: Cores.corIconesClaro)),
-                    Tab(icon: Icon(Icons.star, color: Cores.corIconesClaro)),
-                    Tab(icon: Icon(Icons.archive, color: Cores.corIconesClaro)),
-                  ],
-                ),
-              ),
-            ),
-            Expanded(
-              child: TabBarView(
-                children: [
-                  listaNoticias(),
-                  Container(),
-                  Container(),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
+      body: listaNoticias(),
       bottomNavigationBar: barraInferior(context),
     );
   }
 
-
-
-
-
-
-
   Widget listaNoticias() {
-    return ListView.builder(
-        padding: EdgeInsets.all(15.0),
-        itemCount: BancoFiciticio.noticiasBanco.length,
-        itemBuilder: (context, index) {
-          return noticiaCard(context, index, BancoFiciticio.noticiasBanco);
-        });
+    return FutureBuilder(
+      builder: (context, projectSnap) {
+        if (projectSnap.connectionState == ConnectionState.none &&
+            projectSnap.hasData == null) {
+          return Container(
+            child: Text("Carregando mensagens..."),
+          );
+        }
+        return ListView.builder(
+            padding: EdgeInsets.all(15.0),
+            itemCount: _noticias.length,
+            itemBuilder: (context, index) {
+              return noticiaCard(context, index, _noticias);
+            });
+      },
+      future: _futureNoticias,
+    );
   }
 
+
+  Future carregarNoticias() async {
+    _noticias = await SistemaUsuario().carregarTodasNoticias();
+    //_noticias = await NoticiaHelper.lerNoticias();
+  }
 
 }
 

@@ -16,8 +16,8 @@ class MensagemGrupoHelper {
 
   static String queryCriacaoTabelaMensagemGrupo() {
     return "CREATE TABLE $tabelaMensagemGrupo("
-        "$colunaIdMensagemFK INTEGER ,"
-        "$colunaIdGrupoFK INTEGER , "
+        "$colunaIdMensagemFK TEXT ,"
+        "$colunaIdGrupoFK TEXT , "
         "FOREIGN KEY($colunaIdMensagemFK) REFERENCES $tabelaMensagem($colunaId),"
         "FOREIGN KEY($colunaIdGrupoFK) REFERENCES $tabelaGrupoInteresse($colunaId))";
   }
@@ -29,7 +29,8 @@ class MensagemGrupoHelper {
         colunaIdMensagemFK : mensagem.id,
         colunaIdGrupoFK : g.id
       };
-      mensagem.id = await banco.insert(tabelaMensagemGrupo, map);
+      print(" **** $map");
+      await banco.insert(tabelaMensagemGrupo, map);
     }
     return mensagem;
   }

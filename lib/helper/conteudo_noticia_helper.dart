@@ -8,16 +8,15 @@ import 'noticia_helper.dart';
 
 final String tabelaConteudoNoticia = "conteudo_noticia";
 
-final String colunaId = "id";
-final String colunaNomeAdministrador = "nome_administrador";
 final String colunaTextoConteudo = "texto_conteudo";
 final String colunaTipoConteudo = "tipo_conteudo";
 final String colunaIdNoticiaFK = "id_noticia";
+final String colunaOrdem = "ordem";
 
 class ConteudoNoticia {
 
   static String queryCriacaoTabelaConteudoNoticia() {
-    return "CREATE TABLE $tabelaConteudoNoticia($colunaId INTEGER PRIMARY KEY ,"
+    return "CREATE TABLE $tabelaConteudoNoticia($colunaId TEXT PRIMARY KEY ,"
         "$colunaTipoConteudo INTEGER , "
         "$colunaTextoConteudo TEXT , "
         "$colunaNomeAdministrador TEXT ,"
@@ -28,7 +27,6 @@ class ConteudoNoticia {
   /// CRUD CONTEUDO NOTICIA ///
   static Future<Conteudo> gravarConteudo(Conteudo conteudo) async {
     Database conteudos = await BancoDeDados().banco;
-    conteudo.id =
     await conteudos.insert(tabelaConteudoNoticia, conteudo.toMap());
     return conteudo;
   }
@@ -53,7 +51,7 @@ class ConteudoNoticia {
     }
   }
 
-  static Future<List<Conteudo>> lerConteudosPorNoticia(int idNoticia) async {
+  static Future<List<Conteudo>> lerConteudosPorNoticia(String idNoticia) async {
     Database conteudos = await BancoDeDados().banco;
     List<Map> consulta = await conteudos.query(tabelaConteudoNoticia,
         columns: [
@@ -64,6 +62,8 @@ class ConteudoNoticia {
         ],
         where: "$colunaIdNoticiaFK = ?",
         whereArgs: [idNoticia]);
+
+
     List<Conteudo> lista = List();
     for (Map conteudo in consulta) {
       lista.add(Conteudo.fromMap(conteudo));

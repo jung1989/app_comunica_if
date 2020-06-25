@@ -5,14 +5,14 @@ import 'package:sqflite/sqflite.dart';
 import 'banco_de_dados.dart';
 
 final String tabelaGrupoInteresse = "grupo_interesse";
-final String colunaId = "id";
-final String colunaNome = "titulo";
+final String colunaIdGrupo = "id";
+final String colunaNome = "nome";
 final String colunaSelecionado = "selecionado";
 
 class GrupoInteresseHelper {
 
   static String queryCriacaoTabelaGruposInteresse() {
-    return "CREATE TABLE $tabelaGrupoInteresse($colunaId INTEGER PRIMARY KEY ,"
+    return "CREATE TABLE $tabelaGrupoInteresse($colunaIdGrupo TEXT PRIMARY KEY ,"
         "$colunaNome TEXT , "
         "$colunaSelecionado INTEGER)";
   }
@@ -21,15 +21,15 @@ class GrupoInteresseHelper {
   /// CRUD MENSAGENS ///
   static Future<Grupo> gravarGrupo(Grupo grupo) async {
     Database banco = await BancoDeDados().banco;
-    grupo.id = await banco.insert(tabelaGrupoInteresse, grupo.toMap());
+    await banco.insert(tabelaGrupoInteresse, grupo.toMap());
     return grupo;
   }
 
   static Future<Grupo> lerGrupo(int id) async {
     Database banco = await BancoDeDados().banco;
     List<Map> consulta = await banco.query(tabelaGrupoInteresse,
-        columns: [colunaId,colunaNome,colunaSelecionado],
-        where: "$colunaId = ?",
+        columns: [colunaIdGrupo,colunaNome,colunaSelecionado],
+        where: "$colunaIdGrupo = ?",
         whereArgs: [id]);
 
     if(consulta.length > 0) {
@@ -53,14 +53,14 @@ class GrupoInteresseHelper {
   static Future<int> atualizarGrupo(Grupo grupo) async {
     Database banco = await BancoDeDados().banco;
     return await banco.update(tabelaGrupoInteresse, grupo.toMap(),
-        where: "$colunaId = ?",
+        where: "$colunaIdGrupo = ?",
         whereArgs: [grupo.id]);
   }
 
   static Future<int> removerGrupo(int id) async {
     Database banco = await BancoDeDados().banco;
     return await banco.delete(tabelaGrupoInteresse,
-        where: "$colunaId = ?",
+        where: "$colunaIdGrupo = ?",
         whereArgs: [id]);
   }
 

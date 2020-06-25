@@ -1,13 +1,14 @@
 import 'package:app_comunica_if/helper/mensagem_helper.dart';
 import 'package:app_comunica_if/model/mensagem.dart';
-import 'package:app_comunica_if/testes/banco_ficticio.dart';
+import 'package:app_comunica_if/sistema/navegacao.dart';
+import 'package:app_comunica_if/sistema/sistema_login.dart';
+import 'package:app_comunica_if/sistema/sistema_usuario.dart';
+import 'package:app_comunica_if/ui/efeitos_visuais.dart';
 import 'package:app_comunica_if/ui/padroes.dart';
 import 'package:app_comunica_if/ui_usuario/componentes.dart';
 import 'package:app_comunica_if/ui_usuario/grupos_interesse.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../main.dart';
 import '../ui/card_mensagem.dart';
 
 class TelaUsuarioMensagens extends StatefulWidget {
@@ -17,79 +18,131 @@ class TelaUsuarioMensagens extends StatefulWidget {
 
 class _TelaUsuarioMensagensState extends State<TelaUsuarioMensagens> {
 
-  List<Mensagem> mensagens;
+  Future _inicial;
 
-  List<Mensagem> mensagensLidas;
-  List<Mensagem> mensagensNaoLidas;
-  List<Mensagem> mensagensFavoritas;
+  Future<List<Mensagem>> _futureMensagensLidas;
+  Future<List<Mensagem>> _futureMensagensNaoLidas;
+  Future<List<Mensagem>> _futureMensagensFavoritas;
+
+  List<Mensagem> _mensagensLidas = List();
+  List<Mensagem> _mensagensNaoLidas = List();
+  List<Mensagem> _mensagensFavoritas = List();
+
 
   @override
-  Widget build(BuildContext context)  {
-    mensagens = BancoFiciticio.mensagensBanco;
+  void initState() {
+    super.initState();
+    _inicial = atualizarMensagens();
+  }
+
+  Future atualizarMensagens() async {
+    _futureMensagensLidas = carregarMensagensLidas();
+    _futureMensagensNaoLidas = carregarMensagensNaoLidas();
+    _futureMensagensFavoritas = carregarMensagensFavoritas();
+
+    _mensagensLidas =  await _futureMensagensLidas;
+    _mensagensNaoLidas =  await _futureMensagensNaoLidas;
+    _mensagensFavoritas = await _futureMensagensFavoritas;
+  }
+
+
+  @override
+  void setState(VoidCallback fn) {
+    _inicial = atualizarMensagens();
+    print("########### setstate invocado");
+    super.setState(fn);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Cores.corAppBarBackground,
-          centerTitle: true,
-          title: Text("Mensagens"),
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.settings, color: Cores.corIconesClaro),
-              onPressed: () {
-                //Navigator.push(context, FadeRoute(page:  GruposInteresse()) );
-                _navegacaoTelaGrupos(context);
-              }
-              ,
-            )
-          ],
-        ),
-        body: DefaultTabController(
-          length: 3,
-          child: Column(
-            children: <Widget>[
-              Container(
-                constraints: BoxConstraints(maxHeight: 150.0),
-                child: Material(
-                  color: Colors.white,
-                  child: TabBar(
-                    indicatorColor: Cores.corPrimaria,
-                    tabs: [
-                      Tab(
-                          icon: BancoFiciticio.mensagensNaoLidas().length > 0
-                              ? Icon(Icons.playlist_add, color: Cores.corIconesClaro)
-                              : Icon(Icons.playlist_add_check, color: Cores.corIconesClaro)),
-                      Tab(icon: Icon(Icons.star, color: Cores.corIconesClaro)),
-                      Tab(icon: Icon(Icons.archive, color: Cores.corIconesClaro)),
-                    ],
-                  ),
-                ),
-              ),
-              Expanded(
-                child: TabBarView(
-                  children: [
-                    listaMensagensNaoLidas(),
-                    listaMensagensFavoritas(),
-                    listaMensagensLidas(),
-                  ],
-                ),
-              ),
-            ],
+      appBar: AppBar(
+        backgroundColor: Cores.corAppBarBackground,
+        centerTitle: true,
+        title: Text("Mensagens"),
+
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.sort, color: Cores.corIconesClaro),
+            onPressed: () {
+              _navegacaoTelaGrupos(context);
+            },
           ),
-        ),
+          IconButton(
+            icon: Icon(Icons.settings, color: Cores.corIconesClaro),
+            onPressed: () {
+              Navigator.pushNamed(context, Rotas.TELA_CONFIG_USUARIO);
+            },
+          )
+        ],
+      ),
+      body: FutureBuilder(
+        builder: (context, projectSnap) {
+          if (projectSnap.connectionState == ConnectionState.none &&
+              projectSnap.hasData == null) {
+            return Container(
+              child: Text("Carregando mensagens..."),
+            );
+          }
+          return tabMensagens();
+        },
+        future: _inicial,
+      ),
       bottomNavigationBar: barraInferior(context),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.refresh),
+        backgroundColor: Cores.corIconesClaro,
+        onPressed: () {
+          setState(() {
+            SistemaUsuario().carregarMensagens();
+            atualizarMensagens();
+          });
+        },
+      ),
+    );
+  }
+
+  Widget tabMensagens() {
+    return DefaultTabController(
+      length: 3,
+      child: Column(
+        children: <Widget>[
+          Container(
+            constraints: BoxConstraints(maxHeight: 150.0),
+            child: Material(
+              color: Colors.white,
+              child: TabBar(
+                indicatorColor: Cores.corPrimaria,
+                tabs: [
+                  Tab(icon: Icon(Icons.comment, color: Cores.corIconesClaro)),
+                  Tab(icon: Icon(Icons.info, color: Cores.corIconesClaro)),
+                  Tab(icon: Icon(Icons.archive, color: Cores.corIconesClaro)),
+                ],
+              ),
+            ),
+          ),
+          Expanded(
+            child: TabBarView(
+              children: [
+                _listaMensagensNaoLidas(),
+                _listaMensagensFavoritas(),
+                _listaMensagensLidas(),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 
   _navegacaoTelaGrupos(BuildContext context) async {
-    await Navigator.push(context, FadeRoute(page:  GruposInteresse()) ).then(
-        (valor) {
-          setState(() {
-            mensagensNaoLidas = BancoFiciticio.mensagensPorGrupo();
-          });
-        }
-    );
+    await Navigator.push(context, FadeRoute(page: GruposInteresse()));
+    await atualizarMensagens();
+    setState(() {});
   }
 
-  Widget listaMensagensLidas() {
+
+  Widget _listaMensagensLidas() {
     return FutureBuilder(
       builder: (context, projectSnap) {
         if (projectSnap.connectionState == ConnectionState.none &&
@@ -98,21 +151,29 @@ class _TelaUsuarioMensagensState extends State<TelaUsuarioMensagens> {
             child: Text("Carregando mensagens..."),
           );
         }
-        return ListView.builder(
-            padding: EdgeInsets.all(15.0),
-            itemCount: mensagensLidas.length,
-            itemBuilder: (
+        return _mensagensLidas.length > 0
+            ?
+            ListView.builder(
+              padding: EdgeInsets.all(15.0),
+              itemCount: _mensagensLidas.length,
+              itemBuilder: (
                 context,
                 index,
-                ) {
-              return mensagemCard(context, index, mensagensLidas);
-            });
+              ) {
+                return mensagemCard(context, index, _mensagensLidas, this);
+              })
+            :
+            Center(
+              child: Text(
+                "Nenhuma mensagem arquivada"
+              ),
+            );
       },
-      future: carregarMensagensLidas(),
+      future: _futureMensagensLidas,
     );
   }
 
-  Widget listaMensagensNaoLidas() {
+  Widget _listaMensagensNaoLidas() {
     return FutureBuilder(
       builder: (context, projectSnap) {
         if (projectSnap.connectionState == ConnectionState.none &&
@@ -121,21 +182,29 @@ class _TelaUsuarioMensagensState extends State<TelaUsuarioMensagens> {
             child: Text("Carregando mensagens..."),
           );
         }
-        return ListView.builder(
+        return _mensagensNaoLidas.length > 0
+            ?
+          ListView.builder(
             padding: EdgeInsets.all(15.0),
-            itemCount: mensagensNaoLidas.length,
+            itemCount: _mensagensNaoLidas.length,
             itemBuilder: (
-                context,
-                index,
-                ) {
-              return mensagemCard(context, index, mensagensNaoLidas);
-            });
+              context,
+              index,
+            ) {
+              return mensagemCard(context, index, _mensagensNaoLidas, this);
+            })
+        :
+        Center(
+          child: Text(
+              "Nenhuma mensagem nova"
+          ),
+        );
       },
-      future: carregarMensagensNaoLidas(),
+      future: _futureMensagensNaoLidas,
     );
   }
 
-  Widget listaMensagensFavoritas() {
+  Widget _listaMensagensFavoritas() {
     return FutureBuilder(
       builder: (context, projectSnap) {
         if (projectSnap.connectionState == ConnectionState.none &&
@@ -144,31 +213,75 @@ class _TelaUsuarioMensagensState extends State<TelaUsuarioMensagens> {
             child: Text("Carregando mensagens..."),
           );
         }
-        return ListView.builder(
+        return _mensagensFavoritas.length > 0
+          ?
+          ListView.builder(
             padding: EdgeInsets.all(15.0),
-            itemCount: mensagensFavoritas.length,
+            itemCount: _mensagensFavoritas.length,
             itemBuilder: (
-                context,
-                index,
-                ) {
-              return mensagemCard(context, index, mensagensFavoritas);
-            });
+              context,
+              index,
+            ) {
+              return mensagemCard(context, index, _mensagensFavoritas, this);
+            })
+        :
+        Center(
+            child: Text(
+            "Nenhuma mensagem marcada como importante"
+        ));
       },
-      future: carregarMensagensFavoritas(),
+      future: _futureMensagensFavoritas,
     );
   }
 
-
-  Future carregarMensagensLidas() async {
-    mensagensLidas = await MensagemHelper.lerMensagensLidas(true);
+  Future<List<Mensagem>> carregarMensagensLidas() async {
+     return await MensagemHelper.lerMensagensLidas(true);
   }
 
-  Future carregarMensagensNaoLidas() async {
-    mensagensNaoLidas = await MensagemHelper.lerMensagensLidas(false);
+  Future<List<Mensagem>> carregarMensagensNaoLidas() async {
+    return await MensagemHelper.lerMensagensLidas(false);
   }
 
-  Future carregarMensagensFavoritas() async {
-    mensagensFavoritas = await MensagemHelper.lerMensagensFavoritas(true);
+  Future<List<Mensagem>> carregarMensagensFavoritas() async {
+    return await MensagemHelper.lerMensagensFavoritas(true);
   }
-
 }
+
+
+
+
+/*
+
+  Widget listaMensagensNaoLidasStream() {
+    return StreamBuilder(
+      stream: Firestore.instance.collection("mensagens").snapshots(),
+      builder: (context, projectSnap) {
+        switch(projectSnap.connectionState) {
+          case ConnectionState.none:
+          case ConnectionState.waiting:
+
+            return Container(
+              child: Text("Carregando mensagens..."),
+            );
+
+          case ConnectionState.done:
+          case ConnectionState.active:
+            print("Atualizado done...");
+
+            return ListView.builder(
+                padding: EdgeInsets.all(15.0),
+                itemCount: _mensagensNaoLidas.length,
+                itemBuilder: (
+                    context,
+                    index,
+                    ) {
+                  return mensagemCard(context, index, _mensagensNaoLidas, this);
+                });
+        }
+        return null;
+
+      },
+    );
+  }
+
+ */

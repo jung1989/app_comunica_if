@@ -1,19 +1,18 @@
+import 'package:app_comunica_if/helper/grupo_interesse_helper.dart';
 import 'package:app_comunica_if/helper/mensagem_helper.dart';
-import 'package:app_comunica_if/model/administrador.dart';
-import 'package:app_comunica_if/testes/banco_ficticio.dart';
-import 'package:path/path.dart';
+import 'package:app_comunica_if/model/usuario.dart';
 
 import 'grupo.dart';
 
 class Mensagem {
 
-  Administrador administrador;
-  int           id;
-  String        titulo;
-  String        conteudo;
-  DateTime        dataHoraPublicacao;
-  bool          lida;
-  bool          favorita;
+  Usuario   administrador;
+  String    id;
+  String    titulo;
+  String    conteudo;
+  DateTime  dataHoraPublicacao;
+  bool      lida;
+  bool      favorita;
 
   List<Grupo> gruposInteresse = List();
 
@@ -26,15 +25,25 @@ class Mensagem {
   }
 
   Mensagem.fromMap(Map map) {
-    administrador = Administrador.criarComNome(map[colunaNomeAdministrador]);
     id = map[colunaId];
     titulo = map[colunaTitulo];
     conteudo = map[colunaConteudo];
     dataHoraPublicacao = DateTime.fromMillisecondsSinceEpoch(map[colunaDataHoraPublicacao]);
     lida = map[colunaLida]==0?false:true;
     favorita = map[colunaFavorita]==0?false:true;
-    administrador = Administrador.criarComNome(map[colunaNomeAdministrador]);
-    //gruposIteresse = map[colunaGruposInteresse].
+    administrador = Usuario.construirComNome(map[colunaNomeAdministrador]);
+    gruposInteresse = listaGruposFromMap(map[colunaGruposInteresse]);
+  }
+
+  /// utilizado para armazenamento no SQFLITE
+  Mensagem.fromMapSemGrupo(Map map) {
+    id = map[colunaId];
+    titulo = map[colunaTitulo];
+    conteudo = map[colunaConteudo];
+    dataHoraPublicacao = DateTime.fromMillisecondsSinceEpoch(map[colunaDataHoraPublicacao]);
+    lida = map[colunaLida]==0?false:true;
+    favorita = map[colunaFavorita]==0?false:true;
+    administrador = Usuario.construirComNome(map[colunaNomeAdministrador]);
   }
 
   Map toMap() {
@@ -45,8 +54,8 @@ class Mensagem {
       colunaDataHoraPublicacao: dataHoraPublicacao.millisecondsSinceEpoch,
       colunaLida: lida?1:0,
       colunaFavorita: favorita?1:0,
-      colunaNomeAdministrador : administrador.nome
-      //colunaGruposInteresse: gruposIteresse.toString();
+      colunaNomeAdministrador : administrador.nome,
+      colunaGruposInteresse: listaGruposToMap()
     };
     if(id != null) {
       map[colunaId] = id;
@@ -54,36 +63,45 @@ class Mensagem {
     return map;
   }
 
-  String codigoParaFiltroMensagens() {
-    String retorno = "";
-    for(Grupo g in gruposInteresse) {
-      retorno += "${g.nome} ";
+  /// utilizado para armazenamento no SQFLITE
+  Map toMapSemGrupo() {
+    Map<String, dynamic> map = {
+      colunaId: id,
+      colunaTitulo: titulo,
+      colunaConteudo: conteudo,
+      colunaDataHoraPublicacao: dataHoraPublicacao.millisecondsSinceEpoch,
+      colunaLida: lida?1:0,
+      colunaFavorita: favorita?1:0,
+      colunaNomeAdministrador : administrador.nome,
+    };
+    if(id != null) {
+      map[colunaId] = id;
     }
-    return retorno;
+    return map;
   }
 
-  String idsGruposInteresseParaTexto() {
-    String retorno = "";
-    if (gruposInteresse.length > 0) {
-      retorno += "${gruposInteresse[0].id}";
-    }
-    for (int c = 1; c < gruposInteresse.length; c++) {
-      retorno += ",${gruposInteresse[c].id}";
-    }
-    return retorno;
+  List<Grupo> listaGruposFromMap(Map map) {
+    List<Grupo> lista = List();
+    map.forEach( (key, value) {
+      Grupo g = Grupo.fromMap(map[key]);
+      g.id = key;
+      lista.add(g);
+    });
+    return lista;
   }
 
-    List<int> textoGruposInteresseParaIds(String texto) {
-      List<int> retorno = List();
-      
-      var idsTexto = texto.split(",");
+  /// retorna um map da lista de grupos de interesse do usuário
+  Map listaGruposToMap() {
+    Map<String, Map<String, dynamic>> map = Map();
+    gruposInteresse.forEach( (grupo) {
+      Map<String, dynamic> m = {
+        colunaNome : grupo.nome,
+        colunaSelecionado : grupo.selecionado
+      };
+      map["${grupo.id}"] = m;
+    });
+    return map;
+  }
 
-      for(String t in idsTexto) {
-        retorno.add(int.parse(t));
-      }
 
-
-
-      return retorno;
-    }
 }

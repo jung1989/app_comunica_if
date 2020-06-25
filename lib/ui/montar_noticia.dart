@@ -1,9 +1,8 @@
-import 'dart:io';
-
 import 'package:app_comunica_if/model/noticia.dart';
 import 'package:app_comunica_if/ui/padroes.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 
 List<Widget> montarNoticia(Noticia noticia) {
   List<Widget> conteudos = List();
@@ -14,14 +13,11 @@ List<Widget> montarNoticia(Noticia noticia) {
       crossAxisAlignment: CrossAxisAlignment.end,
       children: <Widget>[
         Expanded(
-          child: Text(noticia.titulo,
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold
-            ),
+          child: Text(
+            noticia.titulo,
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
         ),
-
       ],
     ),
   ));
@@ -33,80 +29,60 @@ List<Widget> montarNoticia(Noticia noticia) {
     endIndent: 10,
   ));
 
-  conteudos.add(
-    Padding(
-      padding: EdgeInsets.only(right: 10, bottom: 10),
-      child:  Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget>[
-          Text(formatarDataHora(noticia.dataHoraPublicacao),
-          )
-        ],
-      ),
-    )
+  conteudos.add(Padding(
+    padding: EdgeInsets.only(right: 10, bottom: 10),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: <Widget>[
+        Text(
+          formatarDataHora(noticia.dataHoraPublicacao),
+        )
+      ],
+    ),
+  ));
 
-  );
-
-  for(Conteudo conteudo in noticia.conteudos) {
-    switch(conteudo.tipo) {
+  for (Conteudo conteudo in noticia.conteudos) {
+    switch (conteudo.tipo) {
       case Conteudo.TIPO_PARAGRAFO: //textos
         conteudos.add(Padding(
-          padding: EdgeInsets.all(10),
-          child: Text(conteudo.texto,
-            style: TextStyle(
-              fontSize: 16,
-              fontFamily: 'Serif'
-            )
-
-        )));
-      break;
+            padding: EdgeInsets.all(10),
+            child: Text(conteudo.texto,
+                style: TextStyle(fontSize: 16, fontFamily: 'Serif'))));
+        break;
       case Conteudo.TIPO_IMAGEM: //imagens
         conteudos.add(Padding(
-          padding: EdgeInsets.all(10),
-          child: conteudo.texto == null
-              ? Text("Sem imagem...")
-              : Image.file(File(conteudo.texto),
-            fit: BoxFit.fitWidth,
-            //TODO formatar imagem
-          )
-          ));
-
+            padding: EdgeInsets.all(10),
+            child: conteudo.texto == null
+                ? Text("Sem imagem...")
+                : Image.network(
+                    conteudo.texto,
+                    fit: BoxFit.fitWidth,
+                    //TODO formatar imagem
+                  )));
         break;
 
-      case Conteudo.TIPO_LINK://links
+      case Conteudo.TIPO_LINK: //links
         conteudos.add(Padding(
             padding: EdgeInsets.all(10),
             child: InkWell(
                 child: new Text(conteudo.texto,
-
                     style: TextStyle(
                       color: Colors.blue,
                       decoration: TextDecoration.underline,
                     )),
-                onTap: () => launch(conteudo.texto)
-            )
-        ));
-
+                onTap: () => launch(conteudo.texto))));
         break;
-
     }
   }
-    conteudos.add(
-        Padding(
-            padding: EdgeInsets.only(top: 20, left: 10, right: 10, bottom: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                Text("Autor: ${noticia.administrador.nome}",
-                    style: TextStyle(
-                        fontSize: 14,
-                        fontFamily: 'Serif',
-                        color: Cores.corTextMedio))
-              ],
-            ))
-    );
-
-
+  conteudos.add(Padding(
+      padding: EdgeInsets.only(top: 20, left: 10, right: 10, bottom: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          Text("Autor: ${noticia.administrador.nome}",
+              style: TextStyle(
+                  fontSize: 14, fontFamily: 'Serif', color: Cores.corTextMedio))
+        ],
+      )));
   return conteudos;
 }
-

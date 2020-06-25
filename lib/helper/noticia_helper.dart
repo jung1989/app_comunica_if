@@ -15,7 +15,7 @@ final String colunaNomeAdministrador = "nome_administrador";
 class NoticiaHelper {
 
   static String queryCriacaoTabelaNoticias() {
-    return "CREATE TABLE $tabelaNoticia($colunaId INTEGER PRIMARY KEY ,"
+    return "CREATE TABLE $tabelaNoticia($colunaId TEXT PRIMARY KEY ,"
         "$colunaTitulo TEXT , "
         "$colunaDataHoraPublicacao INTEGER , "
         "$colunaFavorita INTEGER , "
@@ -25,7 +25,7 @@ class NoticiaHelper {
   /// CRUD NOTICIAS ///
   static Future<Noticia> gravarNoticia(Noticia noticia) async {
     Database noticias = await BancoDeDados().banco;
-    noticia.id = await noticias.insert(tabelaNoticia, noticia.toMap());
+    await noticias.insert(tabelaNoticia, noticia.toMap());
     for (Conteudo c in noticia.conteudos) {
       //print("Gravando ${c.toMap()}");
       ConteudoNoticia.gravarConteudo(c);
@@ -57,6 +57,7 @@ class NoticiaHelper {
     Database noticias = await BancoDeDados().banco;
     List<Map> consulta = await noticias.rawQuery(
         "SELECT * FROM $tabelaNoticia");
+
     List<Noticia> lista = List();
     for (Map noticia in consulta) {
       Noticia n = Noticia.fromMap(noticia);

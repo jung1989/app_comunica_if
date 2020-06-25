@@ -1,28 +1,46 @@
-import 'package:app_comunica_if/helper/banco_de_dados.dart';
-import 'package:app_comunica_if/helper/mensagem_helper.dart';
-import 'package:app_comunica_if/helper/noticia_helper.dart';
-import 'package:app_comunica_if/model/administrador.dart';
-import 'package:app_comunica_if/model/mensagem.dart';
-import 'package:app_comunica_if/model/noticia.dart';
-import 'package:app_comunica_if/sistema/sistema_admin.dart';
-import 'package:app_comunica_if/sistema/sistema_usuario.dart';
-import 'package:app_comunica_if/testes/banco_ficticio.dart';
+import 'package:app_comunica_if/sistema/navegacao.dart';
+import 'package:app_comunica_if/sistema/sistema_login.dart';
+import 'package:app_comunica_if/ui/tela_login.dart';
+import 'package:app_comunica_if/ui/tela_inicial.dart';
+import 'package:app_comunica_if/ui_administrador/inserir_administrador.dart';
+import 'package:app_comunica_if/ui_administrador/inserir_grupo.dart';
 import 'package:app_comunica_if/ui_administrador/tela_administrador.dart';
+import 'package:app_comunica_if/ui_administrador/tela_configuracoes.dart';
+import 'package:app_comunica_if/ui_administrador/tela_inserir_usuario.dart';
+import 'package:app_comunica_if/ui_usuario/tela_configuracoes.dart';
 import 'package:app_comunica_if/ui_usuario/tela_usuario_mensagens.dart';
+import 'package:app_comunica_if/ui_usuario/tela_usuario_noticias.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: Inicial(),
-    theme: ThemeData(
-      fontFamily: "Raleway",
+  runApp(MeuApp());
+}
 
-    ),
-    title: "Bem vindo!",
-  ));
-
-  SistemaUsuario().iniciar();
+class MeuApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        fontFamily: "Raleway",
+      ),
+      title: "Bem vindo!",
+      routes: {
+        Rotas.INICIAL : (context) => Inicial(),
+        Rotas.TELA_LOGIN : (context) => TelaLogin(),
+        Rotas.TELA_INICIAL: (context) => TelaInicial(),
+        Rotas.TELA_CONFIG_USUARIO: (context) => TelaConfiguracoesUsuario(),
+        Rotas.TELA_CONFIG_ADMINISTRADOR: (context) => TelaConfiguracoesAdministrador(),
+        Rotas.TELA_INSERIR_USUARIO: (context) => TelaInserirUsuario(),
+        Rotas.TELA_INSERIR_ADMINISTRADOR: (context) => TelaInserirAdministrador(),
+        Rotas.TELA_INSERIR_GRUPO: (context) => TelaInserirGrupo(),
+        Rotas.TELA_MENSAGENS_USUARIO: (context) => TelaUsuarioMensagens(),
+        Rotas.TELA_NOTICIAS_USUARIO: (context) => TelaUsuarioNoticias(),
+        Rotas.TELA_ADMINISTRADOR: (context) => TelaAdministrador()
+      },
+    );
+  }
 }
 
 class Inicial extends StatefulWidget {
@@ -31,117 +49,46 @@ class Inicial extends StatefulWidget {
 }
 
 class _InicialState extends State<Inicial> {
+
+  Future _iniciarSistema;
+
+  ///TODO VERIFICAR MESSAGING
+  FirebaseMessaging _firebaseMessaging = new FirebaseMessaging();
+
+  @override
+  void initState() {
+    super.initState();
+    _iniciarSistema = tempoEspera();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            SizedBox(
-              width: double.infinity,
-              child:
-            RaisedButton(
-                child: Text("Protótipo Usuário!"),
-                onPressed: () {
-                  SistemaAdmin().login("", "");
-                  Navigator.push(context, FadeRoute(page:  TelaUsuarioMensagens()));
-                })),
-        SizedBox(
-          width: double.infinity,
-          child:
-            RaisedButton(
-                child: Text("Protótipo Administrador"),
-                onPressed: () {
-                  SistemaAdmin().login("", "");
-                  Navigator.push(
-                      context, MaterialPageRoute(builder: (context) => TelaAdministrador()));
-                }))
-          ],
-        )
+        body: Center(child: abertura()));
+  }
+
+  Widget abertura() {
+    return FutureBuilder(
+      builder: (context, projectSnap) {
+        if (projectSnap.connectionState == ConnectionState.none &&
+            projectSnap.hasData == null) {
+          return Container(
+            child: Text("Carregando sistema..."),
+          );
+        }
+        return Container(
+          child: Center(
+              child: Text("Esperando...")
+          ),
+        );
+      },
+      future: _iniciarSistema,
     );
   }
 
-
+  Future tempoEspera() async {
+    print("### Espera inicial...");
+    await Future.delayed(Duration(seconds: 5));
+    await Navigator.pushReplacementNamed(context, Rotas.TELA_INICIAL);
+  }
 }
-
-testeBanco() async {
-  BancoDeDados teste = BancoDeDados();
-
-  Administrador adm = Administrador.criarComNome("Admin Teste Banco");
-
-  Mensagem m = Mensagem();
-  m.titulo = "Titulo teste banco";
-  m.conteudo = "Conteudo de teste da mensagem do banco";
-  m.lida = false;
-  m.favorita = false;
-  m.administrador = adm;
-  m.dataHoraPublicacao = DateTime.now();
-
-  Noticia n = Noticia();
-  n.titulo = "Titulo noticia teste banco";
-  n.dataHoraPublicacao = DateTime.now();
-  n.favorita = false;
-  n.administrador = adm;
-  n.id = 104;
-
-  Conteudo c = Conteudo();
-  c.tipo = Conteudo.TIPO_PARAGRAFO;
-  c.texto = "Conteudo 1 da noticia";
-  c.idNoticia = n.id;
-
-  n.conteudos.add(c);
-
-  MensagemHelper.gravarMensagem(m);
-  n = await  NoticiaHelper.gravarNoticia(n);
-
-  MensagemHelper.lerMensagens().then(
-      (retorno) {
-        for(Mensagem m in retorno ) {
-          print(m.toMap());
-        }
-      }
-  );
-
-  NoticiaHelper.lerNoticias().then(
-          (retorno) {
-        for(Noticia n in retorno ) {
-          print(n.toMap());
-          for(Conteudo c in n.conteudos ) {
-            print(" >>> ${c.toMap()}");
-          }
-        }
-      }
-  );
-
-
-  NoticiaHelper.dataHoraUltimaNoticiaArmazenada().then((data) {
-    print(data.toString());
-  });
-
-
-}
-
-class FadeRoute extends PageRouteBuilder {
-  final Widget page;
-  FadeRoute({this.page})
-      : super(
-    pageBuilder: (
-        BuildContext context,
-        Animation<double> animation,
-        Animation<double> secondaryAnimation,
-        ) =>
-    page,
-    transitionsBuilder: (
-        BuildContext context,
-        Animation<double> animation,
-        Animation<double> secondaryAnimation,
-        Widget child,
-        ) =>
-        FadeTransition(
-          opacity: animation,
-          child: child,
-        ),
-  );
-}
-
-

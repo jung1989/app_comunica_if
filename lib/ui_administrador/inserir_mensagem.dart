@@ -1,12 +1,9 @@
-import 'package:app_comunica_if/helper/mensagem_helper.dart';
 import 'package:app_comunica_if/model/grupo.dart';
 import 'package:app_comunica_if/model/mensagem.dart';
+import 'package:app_comunica_if/sistema/navegacao.dart';
 import 'package:app_comunica_if/sistema/sistema_admin.dart';
-import 'package:app_comunica_if/testes/banco_ficticio.dart';
 import 'package:app_comunica_if/ui/padroes.dart';
 import 'package:flutter/material.dart';
-
-Mensagem mensagem;
 
 class InserirMensagem extends StatefulWidget {
   @override
@@ -14,20 +11,25 @@ class InserirMensagem extends StatefulWidget {
 }
 
 class _InserirMensagemState extends State<InserirMensagem> {
-
   GlobalKey<FormState> _chave = GlobalKey<FormState>();
 
   TextEditingController _controllerTitulo;
   TextEditingController _controllerConteudo;
 
+  Future _futureGrupos;
   List<Grupo> _grupos = List();
+
+  bool _isEnviandoMensagem = false;
+
+  Mensagem _mensagem;
 
   @override
   void initState() {
+    super.initState();
 
-    _grupos = BancoFiciticio.gruposBanco;
+    _futureGrupos = carregarGrupos();
 
-    mensagem = Mensagem();
+    _mensagem = Mensagem();
     _controllerTitulo = TextEditingController();
     _controllerConteudo = TextEditingController();
   }
@@ -43,7 +45,6 @@ class _InserirMensagemState extends State<InserirMensagem> {
       body: SingleChildScrollView(
         child: montarMensagem(),
       ),
-
     );
   }
 
@@ -60,19 +61,20 @@ class _InserirMensagemState extends State<InserirMensagem> {
             inputLinhaSimples("Conteúdo da mensagem", _controllerConteudo),
             SizedBox(height: 40),
             titulo("Grupos para envio"),
-            listaCheck(),
+            listaGrupos(),
             SizedBox(height: 20),
-            SizedBox(width: double.infinity,
+            SizedBox(
+                width: double.infinity,
                 child: RaisedButton(
-              child: Text("Publicar mensagem"),
-              color: Cores.corBotoes,
-              textColor: Colors.white,
-              onPressed: () {
-                if(_chave.currentState.validate()) {
-                  publicarMensagem();
-                }
-              },
-            )),
+                  child: Text("Publicar mensagem"),
+                  color: Cores.corBotoes,
+                  textColor: Colors.white,
+                  onPressed: () {
+                    if (_chave.currentState.validate()) {
+                      publicarMensagem();
+                    }
+                  },
+                )),
             SizedBox(height: 50),
           ],
         ),
@@ -80,8 +82,30 @@ class _InserirMensagemState extends State<InserirMensagem> {
     );
   }
 
+  Widget listaGrupos() {
+    return FutureBuilder(
+      builder: (context, projectSnap) {
+        if (projectSnap.connectionState == ConnectionState.none &&
+            projectSnap.hasData == null) {
+          return Container(
+            child: Text("Carregando mensagens..."),
+          );
+        }
+        return listaCheck();
+      },
+      future: _futureGrupos,
+    );
+  }
+
+  Future carregarGrupos() async {
+    _grupos = await SistemaAdmin().carregarGrupos();
+    for (Grupo g in _grupos) {
+      g.selecionado = false;
+    }
+  }
 
   bool _selecionarTodos = false;
+
   Widget listaCheck() {
     List<CheckboxListTile> checks = List();
 
@@ -89,21 +113,18 @@ class _InserirMensagemState extends State<InserirMensagem> {
       activeColor: Cores.corIconesClaro,
       onChanged: (bool selecionado) {
         setState(() {
-          for(Grupo g in _grupos) {
+          for (Grupo g in _grupos) {
             g.selecionado = selecionado;
           }
           _selecionarTodos = selecionado;
         });
       },
       value: _selecionarTodos,
-      title: Text(
-          "Selecionar todos"
-      ),
+      title: Text("Selecionar todos"),
     );
     checks.add(check);
 
-    print(_grupos.length);
-    for(Grupo g in _grupos) {
+    for (Grupo g in _grupos) {
       check = CheckboxListTile(
         activeColor: Cores.corIconesClaro,
         onChanged: (bool selecionado) {
@@ -113,9 +134,7 @@ class _InserirMensagemState extends State<InserirMensagem> {
           });
         },
         value: g.selecionado,
-        title: Text(
-          g.nome
-        ),
+        title: Text(g.nome),
       );
       checks.add(check);
     }
@@ -125,48 +144,59 @@ class _InserirMensagemState extends State<InserirMensagem> {
   }
 
   publicarMensagem() {
-    mensagem.titulo = _controllerTitulo.text;
-    mensagem.conteudo = _controllerConteudo.text;
-    mensagem.dataHoraPublicacao = DateTime.now();
-    mensagem.administrador = SistemaAdmin().administrador;
+    _mensagem.titulo = _controllerTitulo.text;
+    _mensagem.conteudo = _controllerConteudo.text;
+    _mensagem.dataHoraPublicacao = DateTime.now();
+    _mensagem.administrador = SistemaAdmin().administrador;
 
     List<Grupo> grupos = List();
-    for(Grupo g in _grupos) {
-      if(g.selecionado) {
+    for (Grupo g in _grupos) {
+      if (g.selecionado) {
         grupos.add(g);
       }
     }
-    mensagem.gruposInteresse = grupos;
+    _mensagem.gruposInteresse = grupos;
 
     showDialog(
         context: context,
         builder: (_) => AlertDialog(
               title: Text("Publicar?"),
-              content:
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      linhaTextoExpandida("Após publicada, a mensagem não poderá ser alterada."),
-                      SizedBox(height: 20),
-                      linhaTextoExpandida("Deseja realmente publicar?"),
-                    ],
-                  ),
-
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  linhaTextoExpandida(
+                      "Após publicada, a mensagem não poderá ser alterada."),
+                  SizedBox(height: 20),
+                  linhaTextoExpandida("Deseja realmente publicar?"),
+                ],
+              ),
               actions: <Widget>[
-                FlatButton(
-                  child: Text("Não"),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
+                Visibility(
+                  visible: _isEnviandoMensagem,
+                  child: Center(child: CircularProgressIndicator()),
                 ),
-                FlatButton(
-                    child: Text("Sim"),
-                    onPressed: () {
-                      MensagemHelper.gravarMensagem(mensagem);
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                    }),
+                Visibility(
+                  visible: !_isEnviandoMensagem,
+                    child: FlatButton(
+                      child: Text("Não"),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                )),
+                Visibility(
+                  visible: !_isEnviandoMensagem,
+                  child: FlatButton(
+                      child: Text("Sim"),
+                      onPressed: () async {
+                        setState(() {
+                          _isEnviandoMensagem = true;
+                        });
+                        await SistemaAdmin().gravarMensagem(_mensagem);
+                        Navigator.popUntil(context,
+                            ModalRoute.withName(Rotas.TELA_ADMINISTRADOR));
+                      }),
+                )
               ],
             ));
   }

@@ -6,14 +6,18 @@ import 'package:flutter/rendering.dart';
 import 'ler_mensagem.dart';
 
 Widget mensagemCard(
-    BuildContext context, int index, List<Mensagem> listaTemporaria) {
+    BuildContext context, int index, List<Mensagem> listaTemporaria, State st) {
   return GestureDetector(
-    onTap: () {
+    onTap: () async {
       listaTemporaria[index].lida = true;
-      Navigator.push(
+
+      await Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => LerMensagem(listaTemporaria[index])));
+              builder: (context) => LerMensagem(listaTemporaria[index])
+          )
+      );
+      st.setState(() {});
     },
     child: Card(
       child: Padding(
@@ -31,9 +35,9 @@ Widget mensagemCard(
                     width: 10,
                   ),
                   Flexible(
-                    child: Text(
+                      child: Text(
                     listaTemporaria[index].titulo,
-                    overflow:  TextOverflow.ellipsis,
+                    overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -46,7 +50,8 @@ Widget mensagemCard(
                 child: SizedBox(
                     width: double.infinity,
                     child: Text(
-                      previaConteudo(listaTemporaria[index].conteudo),
+                      listaTemporaria[index].conteudo,
+                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(fontSize: 16, color: Cores.corTextMedio),
                     )),
               ),
@@ -65,9 +70,3 @@ Widget mensagemCard(
   );
 }
 
-String previaConteudo(String texto) {
-  if (texto.length > 30) {
-    return "${texto.substring(0, 30)}...";
-  }
-  return texto;
-}

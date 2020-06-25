@@ -1,4 +1,4 @@
-package br.com.jung.app_comunica_if
+package br.com.jung1989.app_comunica_if
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity

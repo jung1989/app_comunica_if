@@ -1,5 +1,8 @@
+import 'package:app_comunica_if/model/mensagem.dart';
+import 'package:app_comunica_if/model/noticia.dart';
+import 'package:app_comunica_if/sistema/navegacao.dart';
 import 'package:app_comunica_if/sistema/sistema_admin.dart';
-import 'package:app_comunica_if/testes/banco_ficticio.dart';
+import 'package:app_comunica_if/sistema/sistema_login.dart';
 import 'package:app_comunica_if/ui/padroes.dart';
 import 'package:flutter/material.dart';
 
@@ -14,6 +17,38 @@ class TelaAdministrador extends StatefulWidget {
 }
 
 class _TelaAdministradorState extends State<TelaAdministrador> {
+
+  Future<List<Mensagem>> _futureMensagens;
+  List<Mensagem> _mensagens = List();
+
+  Future<List<Noticia>> _futureNoticias;
+  List<Noticia> _noticias = List();
+
+  @override
+  void initState() {
+    super.initState();
+    atualizarMensagens();
+    atualizarNoticias();
+  }
+
+  Future atualizarMensagens() async {
+    _futureMensagens = carregarMensagens();
+    _mensagens =  await _futureMensagens;
+  }
+
+  Future atualizarNoticias() async {
+    _futureNoticias = carregarNoticias();
+    _noticias =  await _futureNoticias;
+  }
+
+  Future<List<Mensagem>> carregarMensagens() async {
+    return await SistemaAdmin.instance.carregarMensagensPorAdministrador();
+  }
+
+  Future<List<Noticia>> carregarNoticias() async {
+    return await SistemaAdmin.instance.carregarNoticiasPorAdministrador();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,7 +58,13 @@ class _TelaAdministradorState extends State<TelaAdministrador> {
         title: Text("Área administrativa"),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.settings, color: Cores.corIconesClaro,),
+            icon: Icon(
+              Icons.settings,
+              color: Cores.corIconesClaro,
+            ),
+            onPressed: () {
+              Navigator.pushNamed(context, Rotas.TELA_CONFIG_ADMINISTRADOR);
+            },
           )
         ],
       ),
@@ -80,15 +121,20 @@ class _TelaAdministradorState extends State<TelaAdministrador> {
             borderRadius: BorderRadius.circular(18.0),
             side: BorderSide(color: Cores.corBotoes)),
         color: Cores.corBotoes,
-        label: Text("Inserir mensagem", style: TextStyle(fontSize: 20, color: Colors.white)),
+        label: Text("Inserir mensagem",
+            style: TextStyle(fontSize: 20, color: Colors.white)),
         icon: Icon(
           Icons.add,
           size: 40,
           color: Colors.white,
         ),
-        onPressed: () {
-          Navigator.push(context,
+        onPressed: () async{
+          await Navigator.push(context,
               MaterialPageRoute(builder: (context) => InserirMensagem()));
+          _mensagens = await carregarMensagens();
+          setState(() {
+
+          });
         });
   }
 
@@ -98,69 +144,98 @@ class _TelaAdministradorState extends State<TelaAdministrador> {
             borderRadius: BorderRadius.circular(18.0),
             side: BorderSide(color: Cores.corBotoes)),
         color: Cores.corBotoes,
-        label: Text("Inserir notícia", style: TextStyle(fontSize: 20, color: Colors.white)),
+        label: Text("Inserir notícia",
+            style: TextStyle(fontSize: 20, color: Colors.white)),
         icon: Icon(
           Icons.add,
           size: 40,
           color: Colors.white,
         ),
-        onPressed: () {
-          Navigator.push(context,
+        onPressed: () async {
+          await Navigator.push(context,
               MaterialPageRoute(builder: (context) => InserirNoticia()));
+          _noticias = await carregarNoticias();
+          setState(() {
+
+          });
         });
   }
 
-
-   /// PAINEIS ///
+  /// PAINEIS ///
 
   Widget painelMensagens() {
     return Column(
       children: <Widget>[
-
-    Padding(padding: EdgeInsets.only(top:20, right: 10, left: 10, bottom: 10),
-    child: Text("Mensagens publicadas por você",
-            style: TextStyle(fontSize: 20, color: Cores.corTextEscuro, fontWeight: FontWeight.bold,))),
         Padding(padding: EdgeInsets.all(10), child: botaoInserirMensagem()),
-        Expanded(
-          child: ListView.builder(
-              padding: EdgeInsets.all(10.0),
-              itemCount:
-                  BancoFiciticio.mensagensPorAdmin(SistemaAdmin().administrador)
-                      .length,
-              itemBuilder: (context, index) {
-                return mensagemCard(
-                    context,
-                    index,
-                    BancoFiciticio.mensagensPorAdmin(
-                        SistemaAdmin().administrador));
-              }),
-        )
+        Padding(
+            padding: EdgeInsets.only(top: 10, right: 10, left: 10, bottom: 10),
+            child: Text("Mensagens publicadas por você",
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Cores.corTextEscuro,
+                  fontWeight: FontWeight.bold,
+                ))),
+        Expanded(child: listaMensagens())
       ],
     );
   }
 
+  Widget listaMensagens() {
+    return FutureBuilder(
+      builder: (context, projectSnap) {
+        if (projectSnap.connectionState == ConnectionState.none &&
+            projectSnap.hasData == null) {
+          return Container(
+            child: Text("Carregando mensagens..."),
+          );
+        }
+        return ListView.builder(
+            padding: EdgeInsets.all(10.0),
+            itemCount: _mensagens.length,
+            itemBuilder: (context, index) {
+              return mensagemCard(context, index, _mensagens,this);
+            });
+      },
+      future: _futureMensagens,
+    );
+  }
+
+
+
   Widget painelNoticias() {
     return Column(
       children: <Widget>[
-        Padding(padding: EdgeInsets.only(top:20, right: 10, left: 10, bottom: 10),
-            child: Text("Notícias publicadas por você",
-                style: TextStyle(fontSize: 20, color: Cores.corTextEscuro, fontWeight: FontWeight.bold,))),
         Padding(padding: EdgeInsets.all(10), child: botaoInserirNoticia()),
-        Expanded(
-          child: ListView.builder(
-              padding: EdgeInsets.all(15.0),
-              itemCount:
-                  BancoFiciticio.noticiasPorAdmin(SistemaAdmin().administrador)
-                      .length,
-              itemBuilder: (context, index) {
-                return noticiaCard(
-                    context,
-                    index,
-                    BancoFiciticio.noticiasPorAdmin(
-                        SistemaAdmin().administrador));
-              }),
-        )
+        Padding(
+            padding: EdgeInsets.only(top: 10, right: 10, left: 10, bottom: 10),
+            child: Text("Notícias publicadas por você",
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Cores.corTextEscuro,
+                  fontWeight: FontWeight.bold,
+                ))),
+        Expanded(child: listaNoticias())
       ],
+    );
+  }
+
+  Widget listaNoticias() {
+    return FutureBuilder(
+      builder: (context, projectSnap) {
+        if (projectSnap.connectionState == ConnectionState.none &&
+            projectSnap.hasData == null) {
+          return Container(
+            child: Text("Carregando noticias..."),
+          );
+        }
+        return ListView.builder(
+            padding: EdgeInsets.all(10.0),
+            itemCount: _noticias.length,
+            itemBuilder: (context, index) {
+              return noticiaCard(context, index, _noticias);
+            });
+      },
+      future: _futureNoticias,
     );
   }
 }
@@ -196,8 +271,6 @@ Widget cardNovaMensagem(BuildContext context) {
     ),
   );
 }
-
-
 
 Widget cardNovaNoticia(BuildContext context) {
   return GestureDetector(
