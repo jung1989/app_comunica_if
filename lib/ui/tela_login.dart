@@ -1,13 +1,8 @@
 import 'package:app_comunica_if/model/usuario.dart';
-import 'package:app_comunica_if/sistema/autenticacao.dart';
 import 'package:app_comunica_if/sistema/navegacao.dart';
 import 'package:app_comunica_if/sistema/sistema_login.dart';
 import 'package:app_comunica_if/ui/padroes.dart';
-import 'package:app_comunica_if/ui_administrador/tela_administrador.dart';
-import 'package:app_comunica_if/ui_usuario/tela_usuario_mensagens.dart';
 import 'package:flutter/material.dart';
-
-import 'efeitos_visuais.dart';
 
 class TelaLogin extends StatefulWidget {
   TelaLogin();
@@ -39,6 +34,7 @@ class _TelaLoginState extends State<TelaLogin> {
 
   ///
   void validarESubmeter() async {
+    if(_isLoading) return;
     setState(() {
       _errorMessage = "";
       _isLoading = true;
@@ -115,6 +111,7 @@ class _TelaLoginState extends State<TelaLogin> {
   }
 
   void toggleFormMode() {
+    if(_isLoading) return;
     resetForm();
     setState(() {
       _isLoginForm = !_isLoginForm;
@@ -221,6 +218,7 @@ class _TelaLoginState extends State<TelaLogin> {
         maxLines: 1,
         keyboardType: TextInputType.emailAddress,
         autofocus: false,
+        enabled: !_isLoading,
         decoration: new InputDecoration(
             hintText: 'Email',
             icon: new Icon(
@@ -242,6 +240,7 @@ class _TelaLoginState extends State<TelaLogin> {
           maxLines: 1,
           keyboardType: TextInputType.text,
           autofocus: false,
+          enabled: !_isLoading,
           decoration: new InputDecoration(
               hintText: 'Matrícula ou SIAPE',
               icon: new Icon(
@@ -267,6 +266,7 @@ class _TelaLoginState extends State<TelaLogin> {
         maxLines: 1,
         obscureText: true,
         autofocus: false,
+        enabled: !_isLoading,
         decoration: new InputDecoration(
             focusedBorder: UnderlineInputBorder(
               borderSide: BorderSide(color: Cores.corTextMedio),
@@ -286,6 +286,7 @@ class _TelaLoginState extends State<TelaLogin> {
 
   Widget botaoAlternar() {
     return new FlatButton(
+
         child: new Text(
             _isLoginForm ? 'Criar conta' : 'Já tem uma conta? Entre',
             style: new TextStyle(fontSize: 18.0, fontWeight: FontWeight.w300)),

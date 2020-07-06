@@ -193,8 +193,8 @@ class _InserirMensagemState extends State<InserirMensagem> {
                           _isEnviandoMensagem = true;
                         });
                         await SistemaAdmin().gravarMensagem(_mensagem);
-                        Navigator.popUntil(context,
-                            ModalRoute.withName(Rotas.TELA_ADMINISTRADOR));
+                        Navigator.pop(context);
+                        Navigator.pop(context);
                       }),
                 )
               ],

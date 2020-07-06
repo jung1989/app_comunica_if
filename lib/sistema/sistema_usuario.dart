@@ -1,11 +1,9 @@
 import 'package:app_comunica_if/helper/grupo_interesse_helper.dart';
 import 'package:app_comunica_if/helper/mensagem_helper.dart';
-import 'package:app_comunica_if/helper/noticia_helper.dart';
 import 'package:app_comunica_if/model/grupo.dart';
 import 'package:app_comunica_if/model/mensagem.dart';
 import 'package:app_comunica_if/model/noticia.dart';
 import 'package:app_comunica_if/model/usuario.dart';
-import 'package:app_comunica_if/testes/banco_ficticio.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SistemaUsuario {
@@ -25,13 +23,14 @@ class SistemaUsuario {
 
   Usuario get usuario => _usuario;
 
-  bool login(Usuario usuario) {
+  void login(Usuario usuario) {
     _usuario = usuario;
   }
 
-  void iniciar() async {
+  Future<void> iniciar() async {
     await atualizarBancoLocal();
     _usuario.gruposInteresse = await GrupoInteresseHelper.lerGrupos();
+    _usuario.gruposInteresse.sort((a, b) => a.nome.compareTo(b.nome));
   }
 
   /// carregamento dos grupos de interesse do usuário

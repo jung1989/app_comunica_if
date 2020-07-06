@@ -32,6 +32,7 @@ class _TelaConfiguracoesAdministradorState extends State<TelaConfiguracoesAdmini
           botaoInserirUsuario(),
           botaoInserirAdministrador(),
           botaoInserirGrupo(),
+          botaoGerenciarDicas(),
           botaoSair()
         ],
       ),
@@ -66,7 +67,17 @@ class _TelaConfiguracoesAdministradorState extends State<TelaConfiguracoesAdmini
       },
     );
   }
-  
+
+  Widget botaoGerenciarDicas() {
+    return FlatButton(
+      child: Text("Gerenciar dicas", style: TextStyle(color: Cores.corTextMedio)),
+      onPressed: () {
+        Navigator.pushNamed(context, Rotas.TELA_GERENCIAR_DICAS);
+      },
+    );
+  }
+
+
   Widget botaoSair() {
     return FlatButton(
       child: Text("Fazer logout do sistema", style: TextStyle(color: Colors.redAccent)),

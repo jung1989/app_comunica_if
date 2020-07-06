@@ -15,5 +15,12 @@ class Rotas {
   static const TELA_NOTICIAS_USUARIO = "/tela_noticias_usuario";
 
   static const TELA_ADMINISTRADOR = "/tela_mensagens_administrador";
+
+
+  static const TELA_GERENCIAR_DICAS = "/tela_gerenciar_dicas";
+
+
+  static const TELA_INSERIR_DICA = "/tela_inserir_dicas";
+
 }
 

@@ -1,5 +1,4 @@
 import 'package:app_comunica_if/model/noticia.dart';
-import 'package:app_comunica_if/sistema/sistema_admin.dart';
 import 'package:app_comunica_if/ui/padroes.dart';
 import 'package:flutter/material.dart';
 
@@ -41,6 +40,9 @@ Widget noticiaCard(
                     ),
                   ),
                 ],
+              ),
+              SizedBox(
+                height: 5,
               ),
               SizedBox(
                 width: double.infinity,

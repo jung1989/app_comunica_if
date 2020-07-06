@@ -10,7 +10,15 @@ import 'package:image_picker/image_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:async';
 
+
+TextEditingController _controllerTitulo;
+
 class InserirNoticia extends StatefulWidget {
+
+  InserirNoticia() {
+    _controllerTitulo = TextEditingController();
+  }
+
   @override
   _InserirNoticiaState createState() => _InserirNoticiaState();
 }
@@ -21,7 +29,7 @@ class _InserirNoticiaState extends State<InserirNoticia> {
   Conteudo ultimoConteudoRemovido;
   int ultimoIndiceRemovido;
 
-  TextEditingController _controllerTitulo = TextEditingController();
+
 
   final chaveScaffold = GlobalKey<ScaffoldState>();
 
@@ -35,6 +43,7 @@ class _InserirNoticiaState extends State<InserirNoticia> {
   void initState() {
     noticia = Noticia();
     noticia.dataHoraPublicacao = DateTime.now();
+    super.initState();
   }
 
   @override
@@ -123,9 +132,10 @@ class _InserirNoticiaState extends State<InserirNoticia> {
                           setState(() {
                             _isEnviandoNoticia = true;
                           });
+                          await Future.delayed(Duration(seconds: 1));
                           await SistemaAdmin().gravarNoticia(noticia);
-                          Navigator.popUntil(context,
-                              ModalRoute.withName(Rotas.TELA_ADMINISTRADOR));
+                          Navigator.pop(context);
+                          Navigator.pop(context);
                         }),
                   ),
                 ],
@@ -215,7 +225,7 @@ class _InserirNoticiaState extends State<InserirNoticia> {
           color: Cores.corBotoes,
           label: Text("Nova imagem", style: TextStyle(color: Colors.white)),
           icon: Icon(
-            Icons.add_a_photo,
+            Icons.add_photo_alternate,
             size: 30,
             color: Colors.white,
           ),

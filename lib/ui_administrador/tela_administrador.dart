@@ -2,7 +2,6 @@ import 'package:app_comunica_if/model/mensagem.dart';
 import 'package:app_comunica_if/model/noticia.dart';
 import 'package:app_comunica_if/sistema/navegacao.dart';
 import 'package:app_comunica_if/sistema/sistema_admin.dart';
-import 'package:app_comunica_if/sistema/sistema_login.dart';
 import 'package:app_comunica_if/ui/padroes.dart';
 import 'package:flutter/material.dart';
 
@@ -49,6 +48,12 @@ class _TelaAdministradorState extends State<TelaAdministrador> {
     return await SistemaAdmin.instance.carregarNoticiasPorAdministrador();
   }
 
+  _atualizarTela() {
+    setState(() {
+
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,7 +65,7 @@ class _TelaAdministradorState extends State<TelaAdministrador> {
           IconButton(
             icon: Icon(
               Icons.settings,
-              color: Cores.corIconesClaro,
+              color: Cores.corTextClaro,
             ),
             onPressed: () {
               Navigator.pushNamed(context, Rotas.TELA_CONFIG_ADMINISTRADOR);
@@ -193,7 +198,7 @@ class _TelaAdministradorState extends State<TelaAdministrador> {
             padding: EdgeInsets.all(10.0),
             itemCount: _mensagens.length,
             itemBuilder: (context, index) {
-              return mensagemCard(context, index, _mensagens,this);
+              return mensagemCard(context, index, _mensagens, _atualizarTela);
             });
       },
       future: _futureMensagens,

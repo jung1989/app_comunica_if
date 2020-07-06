@@ -6,7 +6,7 @@ import 'package:flutter/rendering.dart';
 import 'ler_mensagem.dart';
 
 Widget mensagemCard(
-    BuildContext context, int index, List<Mensagem> listaTemporaria, State st) {
+    BuildContext context, int index, List<Mensagem> listaTemporaria, Function atualizarTela) {
   return GestureDetector(
     onTap: () async {
       listaTemporaria[index].lida = true;
@@ -17,7 +17,7 @@ Widget mensagemCard(
               builder: (context) => LerMensagem(listaTemporaria[index])
           )
       );
-      st.setState(() {});
+      atualizarTela();
     },
     child: Card(
       child: Padding(

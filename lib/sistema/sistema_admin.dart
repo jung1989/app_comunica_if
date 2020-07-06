@@ -1,3 +1,4 @@
+import 'package:app_comunica_if/model/dica.dart';
 import 'package:app_comunica_if/model/grupo.dart';
 import 'package:app_comunica_if/model/mensagem.dart';
 import 'package:app_comunica_if/model/noticia.dart';
@@ -19,7 +20,7 @@ class SistemaAdmin {
   static Usuario _administrador;
 
   /// declaração dos métodos
-  Usuario login(Usuario administrador) {
+  void login(Usuario administrador) {
     _administrador = administrador;
   }
 
@@ -40,32 +41,24 @@ class SistemaAdmin {
   /// gravação de usuários no Firebase
   Future<bool> gravarUsuario(Usuario usuario) async {
     bool verifica = await verificarMatriculaJaExistente(usuario.matricula);
-    if(verifica) {
+    if (verifica) {
       return false;
-    }
-    else {
-      await Firestore.instance
-          .collection("perfis")
-          .add(usuario.toMap());
+    } else {
+      await Firestore.instance.collection("perfis").add(usuario.toMap());
       return true;
     }
-
   }
 
   /// gravação de GRUPOS no Firebase
   Future<bool> gravarGrupo(String nome, int restricao) async {
     bool verifica = await verificarGrupoJaExistente(nome);
-    if(verifica) {
+    if (verifica) {
       return false;
-    }
-    else {
-      Map<String, dynamic> grupo = {"nome" : nome, "restricao" : restricao};
-      await Firestore.instance
-          .collection("grupos")
-          .add(grupo);
+    } else {
+      Map<String, dynamic> grupo = {"nome": nome, "restricao": restricao};
+      await Firestore.instance.collection("grupos").add(grupo);
       return true;
     }
-
   }
 
   Future<bool> verificarGrupoJaExistente(String nome) async {
@@ -92,6 +85,68 @@ class SistemaAdmin {
     }
   }
 
+  /// gravação de DICAS no Firebase
+  Future<bool> gravarDica(Dica dica) async {
+    if (dica.id == null) {
+      /// inserir uma dica nova
+      /// o nome da imagem recebe o tempo atual em milisegundos para garantir um nome único
+      String nomeImagem = DateTime.now().millisecondsSinceEpoch.toString();
+
+      StorageUploadTask task = FirebaseStorage.instance
+          .ref()
+          .child("imagens_dicas")
+          .child(nomeImagem)
+          .putFile(dica.imagem);
+
+      StorageTaskSnapshot taskSnapshot = await task.onComplete;
+
+      dica.nomeImagem = nomeImagem;
+
+      /// o campo caminho_imagem da dica recebe o link da imagem no Firestorage
+      dica.caminhoImagem = await taskSnapshot.ref.getDownloadURL();
+
+      await Firestore.instance.collection("dicas").add(dica.toMap());
+
+      print(" ### Dica inserida no Firebase...");
+    } else {
+      /// atualizar uma dica
+      if (dica.imagem != null) {
+        /// carregando nova imagem
+        StorageUploadTask task = FirebaseStorage.instance
+            .ref()
+            .child("imagens_dicas")
+            .child(dica.nomeImagem)
+            .putFile(dica.imagem);
+
+        StorageTaskSnapshot taskSnapshot = await task.onComplete;
+
+        /// o campo caminho_imagem da dica recebe o link da imagem no Firestorage
+        dica.caminhoImagem = await taskSnapshot.ref.getDownloadURL();
+      }
+
+      await Firestore.instance
+          .collection("dicas")
+          .document(dica.id)
+          .updateData(dica.toMap());
+
+      print(" ### Dica atualizada no Firebase... ${dica.toMap()}");
+    }
+    return true;
+  }
+
+  /// carregamento de todas as dicas armazenadas no Firebase
+  Future<List<Dica>> carregarDicas() async {
+    List<Dica> dicas = List();
+    QuerySnapshot querySnapshot =
+        await Firestore.instance.collection("dicas").getDocuments();
+    querySnapshot.documents.forEach((dica) {
+      Dica d = Dica.fromMap(dica.data);
+      d.id = dica.documentID;
+      dicas.add(d);
+    });
+    return dicas;
+  }
+
   /// gravação de notícias no Firebase
   Future gravarNoticia(Noticia noticia) async {
     /// gravação da notícia
@@ -99,6 +154,7 @@ class SistemaAdmin {
         .collection("noticias")
         .add(noticia.toMapFirebase());
     String idDocumento = docRef.documentID;
+
     /// gravação dos conteúdos da notícia
     for (Conteudo conteudo in noticia.conteudos) {
       /// caso o conteúdo seja uma imagem, a mesma sera armazenada no Firestorage
@@ -113,6 +169,7 @@ class SistemaAdmin {
             .putFile(conteudo.imagem);
 
         StorageTaskSnapshot taskSnapshot = await task.onComplete;
+
         /// o campo texto do conteúdo recebe o link da imagem no Firestorage
         conteudo.texto = await taskSnapshot.ref.getDownloadURL();
       }
@@ -194,6 +251,7 @@ class SistemaAdmin {
     QuerySnapshot querySnapshot = await Firestore.instance
         .collection("grupos")
         .orderBy("restricao", descending: false)
+        .orderBy("nome", descending: false)
         .getDocuments();
     querySnapshot.documents.forEach((grupo) {
       Grupo g = Grupo.fromMap(grupo.data);

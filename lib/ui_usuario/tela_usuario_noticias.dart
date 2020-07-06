@@ -30,15 +30,14 @@ class _TelaUsuarioNoticiasState extends State<TelaUsuarioNoticias> {
       appBar: AppBar(
         backgroundColor: Cores.corAppBarBackground,
         centerTitle: true,
-        title: Text("Notícias"),
+        title: Text("Notícias", style: TextStyle(color: Cores.corTextClaro)),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.settings, color: Cores.corIconesClaro,),
+            icon: Icon(Icons.settings, color: Cores.corTextClaro,),
             onPressed: () {
               Navigator.pushNamed(context, Rotas.TELA_CONFIG_USUARIO);
             },
           ),
-
         ],
       ),
       body: listaNoticias(),

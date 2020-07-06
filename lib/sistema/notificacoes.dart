@@ -1,7 +1,5 @@
 
-import 'package:app_comunica_if/sistema/sistema_usuario.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:http/http.dart';
+//import 'package:firebase_messaging/firebase_messaging.dart';
 
 class GerenciadorNotificacoes {
 
@@ -11,37 +9,37 @@ class GerenciadorNotificacoes {
 
   static final GerenciadorNotificacoes _instance = GerenciadorNotificacoes._();
 
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
-  bool _initialized = false;
+  //final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+ // bool _initialized = false;
 
-  Future<void> init() async {
-    if (!_initialized) {
-      // For iOS request permission first.
-      _firebaseMessaging
-          .requestNotificationPermissions(const IosNotificationSettings(sound: true, badge: true, alert: true));
-
-      _firebaseMessaging.configure(
-        onMessage: (Map<String, dynamic> message) {
-          SistemaUsuario().carregarMensagens();
-          print('on message $message');
-        },
-        onResume: (Map<String, dynamic> message) {
-          SistemaUsuario().carregarMensagens();
-          print('on resume $message');
-        },
-        onLaunch: (Map<String, dynamic> message) {
-          SistemaUsuario().carregarMensagens();
-          print('on launch $message');
-        },
-      );
-
-      // For testing purposes print the Firebase Messaging token
-      String token = await _firebaseMessaging.getToken();
-      print("FirebaseMessaging token: $token");
-
-      _initialized = true;
-    }
-  }
+//  Future<void> init() async {
+//    if (!_initialized) {
+//      // For iOS request permission first.
+//      _firebaseMessaging
+//          .requestNotificationPermissions(const IosNotificationSettings(sound: true, badge: true, alert: true));
+//
+//      _firebaseMessaging.configure(
+//        onMessage: (Map<String, dynamic> message) {
+//          SistemaUsuario().carregarMensagens();
+//          print('on message $message');
+//        },
+//        onResume: (Map<String, dynamic> message) {
+//          SistemaUsuario().carregarMensagens();
+//          print('on resume $message');
+//        },
+//        onLaunch: (Map<String, dynamic> message) {
+//          SistemaUsuario().carregarMensagens();
+//          print('on launch $message');
+//        },
+//      );
+//
+//      // For testing purposes print the Firebase Messaging token
+//      String token = await _firebaseMessaging.getToken();
+//      print("FirebaseMessaging token: $token");
+//
+//      _initialized = true;
+//    }
+//  }
 
 //  void enviarNotificacao(String titulo, String conteudo) {
 //    String DATA =

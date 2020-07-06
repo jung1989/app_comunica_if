@@ -65,7 +65,7 @@ class SistemaLogin {
           break;
         case Usuario.PERFIL_ALUNO:
         case Usuario.PERFIL_SERVIDOR:
-          await SistemaUsuario.instance.login(usuario);
+          SistemaUsuario.instance.login(usuario);
           await SistemaUsuario.instance.iniciar();
           break;
       }

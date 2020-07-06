@@ -70,7 +70,7 @@ List<Widget> montarNoticia(Noticia noticia) {
                       color: Colors.blue,
                       decoration: TextDecoration.underline,
                     )),
-                onTap: () => launch(conteudo.texto))));
+                onTap: () => _launchURL(conteudo.texto))));
         break;
     }
   }
@@ -85,4 +85,18 @@ List<Widget> montarNoticia(Noticia noticia) {
         ],
       )));
   return conteudos;
+}
+
+_launchURL(String url) async {
+
+  if(!url.contains("http://") && !url.contains("https://")) {
+    print("### Adicionado http://...");
+    url = "http://$url";
+  }
+
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    throw 'Could not launch $url';
+  }
 }

@@ -90,6 +90,7 @@ class NoticiaHelper {
     if(consulta.length > 0) {
       return DateTime.fromMillisecondsSinceEpoch(consulta.last[colunaDataHoraPublicacao]);
     }
+    return null;
   }
 
 }

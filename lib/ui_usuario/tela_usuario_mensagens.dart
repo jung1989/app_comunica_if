@@ -1,7 +1,6 @@
 import 'package:app_comunica_if/helper/mensagem_helper.dart';
 import 'package:app_comunica_if/model/mensagem.dart';
 import 'package:app_comunica_if/sistema/navegacao.dart';
-import 'package:app_comunica_if/sistema/sistema_login.dart';
 import 'package:app_comunica_if/sistema/sistema_usuario.dart';
 import 'package:app_comunica_if/ui/efeitos_visuais.dart';
 import 'package:app_comunica_if/ui/padroes.dart';
@@ -59,17 +58,17 @@ class _TelaUsuarioMensagensState extends State<TelaUsuarioMensagens> {
       appBar: AppBar(
         backgroundColor: Cores.corAppBarBackground,
         centerTitle: true,
-        title: Text("Mensagens"),
+        title: Text("Mensagens", style: TextStyle(color: Cores.corTextClaro),),
 
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.sort, color: Cores.corIconesClaro),
+            icon: Icon(Icons.sort, color: Cores.corTextClaro),
             onPressed: () {
               _navegacaoTelaGrupos(context);
             },
           ),
           IconButton(
-            icon: Icon(Icons.settings, color: Cores.corIconesClaro),
+            icon: Icon(Icons.settings, color: Cores.corTextClaro),
             onPressed: () {
               Navigator.pushNamed(context, Rotas.TELA_CONFIG_USUARIO);
             },
@@ -141,6 +140,12 @@ class _TelaUsuarioMensagensState extends State<TelaUsuarioMensagens> {
     setState(() {});
   }
 
+  _atualizarTela() {
+    setState(() {
+
+    });
+  }
+
 
   Widget _listaMensagensLidas() {
     return FutureBuilder(
@@ -160,7 +165,7 @@ class _TelaUsuarioMensagensState extends State<TelaUsuarioMensagens> {
                 context,
                 index,
               ) {
-                return mensagemCard(context, index, _mensagensLidas, this);
+                return mensagemCard(context, index, _mensagensLidas, _atualizarTela);
               })
             :
             Center(
@@ -191,7 +196,7 @@ class _TelaUsuarioMensagensState extends State<TelaUsuarioMensagens> {
               context,
               index,
             ) {
-              return mensagemCard(context, index, _mensagensNaoLidas, this);
+              return mensagemCard(context, index, _mensagensNaoLidas, _atualizarTela);
             })
         :
         Center(
@@ -222,7 +227,7 @@ class _TelaUsuarioMensagensState extends State<TelaUsuarioMensagens> {
               context,
               index,
             ) {
-              return mensagemCard(context, index, _mensagensFavoritas, this);
+              return mensagemCard(context, index, _mensagensFavoritas, _atualizarTela);
             })
         :
         Center(

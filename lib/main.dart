@@ -1,5 +1,5 @@
 import 'package:app_comunica_if/sistema/navegacao.dart';
-import 'package:app_comunica_if/sistema/sistema_login.dart';
+import 'package:app_comunica_if/sistema/sistema_dicas.dart';
 import 'package:app_comunica_if/ui/tela_login.dart';
 import 'package:app_comunica_if/ui/tela_inicial.dart';
 import 'package:app_comunica_if/ui_administrador/inserir_administrador.dart';
@@ -7,11 +7,13 @@ import 'package:app_comunica_if/ui_administrador/inserir_grupo.dart';
 import 'package:app_comunica_if/ui_administrador/tela_administrador.dart';
 import 'package:app_comunica_if/ui_administrador/tela_configuracoes.dart';
 import 'package:app_comunica_if/ui_administrador/tela_inserir_usuario.dart';
+import 'package:app_comunica_if/ui_administrador/tela_listar_dicas.dart';
 import 'package:app_comunica_if/ui_usuario/tela_configuracoes.dart';
+import 'package:app_comunica_if/ui_usuario/tela_inserir_dica.dart';
 import 'package:app_comunica_if/ui_usuario/tela_usuario_mensagens.dart';
 import 'package:app_comunica_if/ui_usuario/tela_usuario_noticias.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
   runApp(MeuApp());
@@ -37,8 +39,15 @@ class MeuApp extends StatelessWidget {
         Rotas.TELA_INSERIR_GRUPO: (context) => TelaInserirGrupo(),
         Rotas.TELA_MENSAGENS_USUARIO: (context) => TelaUsuarioMensagens(),
         Rotas.TELA_NOTICIAS_USUARIO: (context) => TelaUsuarioNoticias(),
-        Rotas.TELA_ADMINISTRADOR: (context) => TelaAdministrador()
+        Rotas.TELA_ADMINISTRADOR: (context) => TelaAdministrador(),
+        Rotas.TELA_GERENCIAR_DICAS: (context) => TelaListarDicas(),
+        Rotas.TELA_INSERIR_DICA: (context) => TelaInseirDica()
       },
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate
+      ],
+      supportedLocales: [const Locale('pt', 'BR')],
     );
   }
 }
@@ -53,7 +62,7 @@ class _InicialState extends State<Inicial> {
   Future _iniciarSistema;
 
   ///TODO VERIFICAR MESSAGING
-  FirebaseMessaging _firebaseMessaging = new FirebaseMessaging();
+  //FirebaseMessaging _firebaseMessaging = new FirebaseMessaging();
 
   @override
   void initState() {
@@ -88,7 +97,8 @@ class _InicialState extends State<Inicial> {
 
   Future tempoEspera() async {
     print("### Espera inicial...");
-    await Future.delayed(Duration(seconds: 5));
+    await SistemaDicas.instance.inicializar();
+    await Future.delayed(Duration(seconds: 3));
     await Navigator.pushReplacementNamed(context, Rotas.TELA_INICIAL);
   }
 }

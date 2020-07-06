@@ -70,10 +70,11 @@ class MensagemHelper {
 
     List<Map> consultaGrupos = await banco.rawQuery(
         " SELECT "
-            "g.$colunaId, g.$colunaNome, g.$colunaSelecionado"
+            "g.$colunaId, g.$colunaNome, g.$colunaSelecionado, m.$colunaId as id_mensagem"
         " FROM $tabelaGrupoInteresse g "
             " INNER JOIN $tabelaMensagemGrupo mg ON mg.$colunaIdGrupoFK = g.$colunaId"
             " INNER JOIN $tabelaMensagem m       ON mg.$colunaIdMensagemFK = m.$colunaId"
+        " WHERE id_mensagem = '${mensagem.id}'"
         " GROUP BY g.$colunaId");
 
     List<Grupo> lista = List();

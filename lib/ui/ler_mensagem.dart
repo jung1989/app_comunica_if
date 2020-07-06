@@ -33,10 +33,8 @@ class _LerMensagemState extends State<LerMensagem> {
         actions: <Widget>[
           _isAdmin
               ?
-              IconButton(
-                  icon: Icon(Icons.comment,
+              Icon(Icons.comment,
                       color: Cores.corIconesClaro)
-              )
               :
               IconButton(
             icon: Icon(mensagem.favorita ? Icons.info : Icons.info_outline,

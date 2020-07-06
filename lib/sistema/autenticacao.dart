@@ -27,7 +27,7 @@ class Autenticacao {
       "email" : email,
       "ultimo_acesso" : DateTime.now().millisecondsSinceEpoch
     };
-    DocumentReference perfilCarregado = await Firestore.instance.collection("perfis").document(id);
+    DocumentReference perfilCarregado = Firestore.instance.collection("perfis").document(id);
     await perfilCarregado.updateData(perfil);
 
     _firebaseUser = resultado.user;
@@ -36,7 +36,7 @@ class Autenticacao {
 
   Future<bool> cadastrarAdministrador(Usuario administrador, String senha) async {
     //TODO arrumar para solicitar cadastro
-    AuthResult resultado = await _firebaseAuth.createUserWithEmailAndPassword(
+    await _firebaseAuth.createUserWithEmailAndPassword(
         email: administrador.email, password: senha);
 
     return await SistemaAdmin.instance.gravarUsuario(administrador);

@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:app_comunica_if/model/noticia.dart';
 import 'package:app_comunica_if/sistema/sistema_admin.dart';

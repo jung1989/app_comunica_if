@@ -14,7 +14,7 @@ class Noticia {
   bool favorita = false;
   List<Conteudo> conteudos = List();
 
-  Noticia() {}
+  Noticia();
 
   Noticia.fromMap(Map map) {
     administrador = Usuario.construirComNome(map[colunaNomeAdministrador]);
@@ -70,7 +70,7 @@ class Conteudo {
 
   File imagem;
 
-  Conteudo() {}
+  Conteudo();
 
   Conteudo.fromMap(Map map) {
     id = map[colunaId];

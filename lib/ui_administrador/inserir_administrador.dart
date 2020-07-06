@@ -1,5 +1,4 @@
 import 'package:app_comunica_if/model/usuario.dart';
-import 'package:app_comunica_if/sistema/sistema_admin.dart';
 import 'package:app_comunica_if/sistema/sistema_login.dart';
 import 'package:app_comunica_if/ui/padroes.dart';
 import 'package:flutter/material.dart';
