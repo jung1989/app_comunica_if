@@ -168,7 +168,9 @@ class _TelaInserirGrupoState extends State<TelaInserirGrupo> {
               borderSide: BorderSide(color: Cores.corTextMedio),
             ),
             //labelStyle: TextStyle(fontSize: 20, color: Cores.corTextMedio),
-            hintText: 'Nome',
+            labelText: 'Nome',
+            labelStyle: TextStyle(color: Cores.corTextMedio),
+            //hintText: 'Nome',
             icon: new Icon(
               Icons.person,
               color: Colors.grey,
@@ -205,12 +207,14 @@ class _TelaInserirGrupoState extends State<TelaInserirGrupo> {
           value: Usuario.PERFIL_SERVIDOR,
           groupValue: _numeroRestricao,
           onChanged: _radioModificado,
+          activeColor: Cores.corTextMedio,
         ),
         RadioListTile(
           title: Text("Aluno"),
           value: Usuario.PERFIL_ALUNO,
           groupValue: _numeroRestricao,
           onChanged: _radioModificado,
+          activeColor: Cores.corTextMedio,
         )
       ],
     );

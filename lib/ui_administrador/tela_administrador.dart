@@ -4,6 +4,7 @@ import 'package:app_comunica_if/sistema/navegacao.dart';
 import 'package:app_comunica_if/sistema/sistema_admin.dart';
 import 'package:app_comunica_if/ui/padroes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 import '../ui/card_mensagem.dart';
 import '../ui/card_noticia.dart';
@@ -115,6 +116,7 @@ class _TelaAdministradorState extends State<TelaAdministrador> {
           ],
         ),
       ),
+      floatingActionButton: botaoSuspenso(),
     );
   }
 
@@ -171,7 +173,7 @@ class _TelaAdministradorState extends State<TelaAdministrador> {
   Widget painelMensagens() {
     return Column(
       children: <Widget>[
-        Padding(padding: EdgeInsets.all(10), child: botaoInserirMensagem()),
+        //Padding(padding: EdgeInsets.all(10), child: botaoInserirMensagem()),
         Padding(
             padding: EdgeInsets.only(top: 10, right: 10, left: 10, bottom: 10),
             child: Text("Mensagens publicadas por você",
@@ -194,12 +196,19 @@ class _TelaAdministradorState extends State<TelaAdministrador> {
             child: Text("Carregando mensagens..."),
           );
         }
-        return ListView.builder(
-            padding: EdgeInsets.all(10.0),
-            itemCount: _mensagens.length,
-            itemBuilder: (context, index) {
-              return mensagemCard(context, index, _mensagens, _atualizarTela);
-            });
+        return _mensagens.length > 0
+            ?
+              ListView.builder(
+                padding: EdgeInsets.all(10.0),
+                itemCount: _mensagens.length,
+                itemBuilder: (context, index) {
+                return mensagemCard(context, index, _mensagens, _atualizarTela);
+              })
+            :
+              Padding(
+                padding: EdgeInsets.only(top: 50),
+                child: Text("Nenhuma mensagem publicada por você"),
+              );
       },
       future: _futureMensagens,
     );
@@ -210,7 +219,7 @@ class _TelaAdministradorState extends State<TelaAdministrador> {
   Widget painelNoticias() {
     return Column(
       children: <Widget>[
-        Padding(padding: EdgeInsets.all(10), child: botaoInserirNoticia()),
+        //Padding(padding: EdgeInsets.all(10), child: botaoInserirNoticia()),
         Padding(
             padding: EdgeInsets.only(top: 10, right: 10, left: 10, bottom: 10),
             child: Text("Notícias publicadas por você",
@@ -233,17 +242,25 @@ class _TelaAdministradorState extends State<TelaAdministrador> {
             child: Text("Carregando noticias..."),
           );
         }
-        return ListView.builder(
+        return _noticias.length > 0
+        ?
+          ListView.builder(
             padding: EdgeInsets.all(10.0),
             itemCount: _noticias.length,
             itemBuilder: (context, index) {
               return noticiaCard(context, index, _noticias);
-            });
+            })
+        :
+            Padding(
+              padding: EdgeInsets.only(top: 50),
+              child: Text("Nenhuma notícia publicada por você"),
+            )
+        ;
       },
       future: _futureNoticias,
     );
   }
-}
+
 
 Widget cardNovaMensagem(BuildContext context) {
   return GestureDetector(
@@ -307,4 +324,46 @@ Widget cardNovaNoticia(BuildContext context) {
           )),
     ),
   );
+}
+
+  Widget botaoSuspenso() {
+    return SpeedDial(
+      // both default to 16
+      marginRight: 18,
+      marginBottom: 20,
+      animatedIcon: AnimatedIcons.menu_close,
+      animatedIconTheme: IconThemeData(size: 22.0),
+      // this is ignored if animatedIcon is non null
+      // child: Icon(Icons.add),
+      visible: true,
+      // If true user is forced to close dial manually
+      // by tapping main button and overlay is not rendered.
+      closeManually: false,
+      curve: Curves.bounceIn,
+      overlayColor: Colors.black,
+      overlayOpacity: 0.5,
+      tooltip: 'Speed Dial',
+      heroTag: 'speed-dial-hero-tag',
+      backgroundColor: Colors.white,
+      foregroundColor: Colors.black,
+      elevation: 8.0,
+      shape: CircleBorder(),
+      children: [
+        SpeedDialChild(
+          child: Icon(Icons.note_add),
+          backgroundColor: Cores.corBotoes,
+          label: 'Nova notícia',
+          labelStyle: TextStyle(fontSize: 18.0),
+          onTap: () => Navigator.pushNamed(context, Rotas.TELA_INSERIR_NOTICIA),
+        ),
+        SpeedDialChild(
+            child: Icon(Icons.add_comment),
+            backgroundColor: Cores.corBotoes,
+            label: 'Nova mensagem',
+            labelStyle: TextStyle(fontSize: 18.0),
+            onTap: () => Navigator.pushNamed(context, Rotas.TELA_INSERIR_MENSAGEM),
+        ),
+      ],
+    );
+  }
 }

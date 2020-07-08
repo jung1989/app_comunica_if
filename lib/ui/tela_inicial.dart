@@ -7,6 +7,7 @@ import 'package:app_comunica_if/ui/efeitos_visuais.dart';
 import 'package:app_comunica_if/ui/padroes.dart';
 import 'package:app_comunica_if/ui_administrador/tela_administrador.dart';
 import 'package:app_comunica_if/ui_usuario/tela_usuario_mensagens.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class TelaInicial extends StatefulWidget {
@@ -21,11 +22,18 @@ class _TelaInicialState extends State<TelaInicial> {
 
   bool _visivel = false;
 
+  String _mensagemVersao = "";
+
   @override
   void initState() {
     super.initState();
     _iniciarSistema = iniciarSistema();
     _dica = SistemaDicas.instance.buscarDicaAleatoria();
+
+    if (SistemaLogin.VERSAO < SistemaLogin.instance.versaoMaisRecente) {
+      _mensagemVersao =
+          "Uma nova versão do aplicativo está disponível. Atualize assim que possível.";
+    }
   }
 
   Future<int> iniciarSistema() async {
@@ -46,7 +54,8 @@ class _TelaInicialState extends State<TelaInicial> {
         backgroundColor: Cores.corAppBarBackground,
         centerTitle: true,
         actions: <Widget>[
-          IconButton(icon: Icon(Icons.refresh),
+          IconButton(
+            icon: Icon(Icons.refresh),
             onPressed: () {
               setState(() {
                 _dica = SistemaDicas.instance.buscarDicaAleatoria();
@@ -55,22 +64,20 @@ class _TelaInicialState extends State<TelaInicial> {
           )
         ],
       ),
-        body: painelDica(),
+      body: painelDica(),
       bottomNavigationBar: barraInferior(),
     );
   }
 
   Widget barraInferior() {
     return BottomAppBar(
-      //color: Cores.corPretoTransparente,
-      child: botaoEntrar()
-    );
+        //color: Cores.corPretoTransparente,
+        child: botaoEntrar());
   }
 
   Widget painelDica() {
     return SingleChildScrollView(
-
-      child:  Column(
+      child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
           imagemDica(),
@@ -82,21 +89,31 @@ class _TelaInicialState extends State<TelaInicial> {
 
   Widget textoDica() {
     return Container(
-      //color: Cores.corFundo,
+        //color: Cores.corFundo,
         child: Padding(
-          padding: EdgeInsets.only(top: 10, bottom: 10, left: 10, right: 10),
-          child: Text(_dica.texto?? "Sem texto...",
-              textAlign: TextAlign.left,
-              style: TextStyle(fontSize: 20, fontFamily: 'Roboto')),
-        )
-    );
+      padding: EdgeInsets.only(top: 10, bottom: 10, left: 10, right: 10),
+      child: Text(_dica.texto ?? "Sem texto...",
+          textAlign: TextAlign.left,
+          style: TextStyle(fontSize: 20, fontFamily: 'Roboto')),
+    ));
   }
 
   Widget imagemDica() {
-    return SizedBox(
-        width: double.infinity,
-        child: Image.network(_dica.caminhoImagem)
-    );
+    return Container(
+       margin: EdgeInsets.only(top: 20, bottom: 20,left: 10, right: 10),
+        padding: EdgeInsets.only(),
+        child:  Image.network(_dica.caminhoImagem),
+        decoration: BoxDecoration(
+            color: Colors.white,
+
+            boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 5,
+            blurRadius: 7,
+            offset: Offset(0, 3), // changes position of shadow
+          ),
+        ]));
   }
 
   Widget painelEntrar() {
@@ -106,8 +123,7 @@ class _TelaInicialState extends State<TelaInicial> {
           return Center(
             child: Text("Carregando sistema..."),
           );
-        }
-        else {
+        } else {
           return botaoEntrar();
         }
       },
@@ -161,25 +177,26 @@ class _TelaInicialState extends State<TelaInicial> {
 //  }
 
   Widget botaoEntrar() {
-    return  Padding(
-      padding: EdgeInsets.all(10),
+    return Container(
+      padding: EdgeInsets.only(),
       child: SizedBox(
-        height: 40,
+        height: 60,
         child: Center(
-          child: AnimatedCrossFade(
-            crossFadeState: !_visivel ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-            duration: const Duration(milliseconds: 500),
-            firstChild: Text("Aguarde um instante..."),
-            secondChild: RaisedButton(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18.0),
-                    side: BorderSide(color: Cores.corIconesClaro)),
+            child: AnimatedCrossFade(
+          crossFadeState:
+              !_visivel ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+          duration: const Duration(milliseconds: 400),
+          firstChild: Text("$_mensagemVersao Aguarde um instante..."),
+          secondChild: SizedBox(
+            height: 60,
+            width: double.infinity,
+            child: RaisedButton(
                 color: Cores.corIconesClaro,
-                child: Text("Entrar", style: TextStyle(fontSize: 20, color: Colors.white)),
-                onPressed: verificarLogin
-            ),
-          )
-        ),
+                child: Text("Entrar",
+                    style: TextStyle(fontSize: 24, color: Colors.white)),
+                onPressed: verificarLogin),
+          ),
+        )),
       ),
     );
   }

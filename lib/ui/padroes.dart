@@ -90,16 +90,23 @@ String formatarDataHora(DateTime dataHora) {
 class Cores {
 
   //static const corAppBarBackground =  Color(0xFF17252A);
-  static const corAppBarBackground =  Color(0xFF3AAFA9);
+  //static const corAppBarBackground =  Color(0xFF3AAFA9);
+  static const corAppBarBackground =  Color(0xFF005F40);
+
 
   static const corTextEscuro =  Color(0xFF17252A);
   static const corTextMedio =  Color(0xFF2B7A78);
-  static const corTextClaro =  Color(0xFFFEFFFF);
+  //static const corTextClaro =  Color(0xFFFEFFFF);
+  static const corTextClaro =  Color(0xFFEDEDED);
 
   static const corPrimaria =  Color(0xFF17252A);
-  static const corIconesClaro = Color(0xFF3AAFA9);
+  //static const corIconesClaro = Color(0xFF3AAFA9);
+  static const corIconesClaro = Color(0xFF005F40);
 
-  static const corBotoes = Color(0xFF2B7A78);
+  static const corCirculoLogo = Color(0xFF17252A);
+
+
+  static const corBotoes = Color(0xFF005F40);
 
   static const corFundo = Color(0xFF2B7A68);
 

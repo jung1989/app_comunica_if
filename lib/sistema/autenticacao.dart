@@ -17,6 +17,13 @@ class Autenticacao {
     return _firebaseUser.email;
   }
 
+
+  FirebaseUser get firebaseUser => _firebaseUser;
+
+  set firebaseUser(FirebaseUser value) {
+    _firebaseUser = value;
+  }
+
   Future<String> cadastrarUsuario(String email, String senha, String id) async {
     //TODO arrumar para solicitar cadastro
     AuthResult resultado = await _firebaseAuth.createUserWithEmailAndPassword(
@@ -54,6 +61,10 @@ class Autenticacao {
   Future<void> enviarEmailDeVerificacao() async {
     FirebaseUser usuario = await _firebaseAuth.currentUser();
     usuario.sendEmailVerification();
+  }
+
+  Future<void> redefinirSenha(String email) async {
+    _firebaseAuth.sendPasswordResetEmail(email: email);
   }
 
   Future<bool> isEmailVerificado() async {

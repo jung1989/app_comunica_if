@@ -36,6 +36,7 @@ dependencies:
   firebase_messaging: ^6.0.16
   http: ^0.12.1
   path_provider: ^1.4.4
+  flutter_speed_dial: ^1.2.5
 
 
 dev_dependencies:
@@ -56,7 +57,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - imagens/imagemteste.png
+    - imagens/logocinzatitulo.png
   #  - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

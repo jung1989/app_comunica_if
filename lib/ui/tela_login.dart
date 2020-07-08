@@ -34,7 +34,7 @@ class _TelaLoginState extends State<TelaLogin> {
 
   ///
   void validarESubmeter() async {
-    if(_isLoading) return;
+    if (_isLoading) return;
     setState(() {
       _errorMessage = "";
       _isLoading = true;
@@ -50,10 +50,12 @@ class _TelaLoginState extends State<TelaLogin> {
           switch (perfil) {
             case Usuario.PERFIL_ALUNO:
             case Usuario.PERFIL_SERVIDOR:
-              Navigator.pushNamedAndRemoveUntil(context, Rotas.TELA_MENSAGENS_USUARIO, (route) => false);
+              Navigator.pushNamedAndRemoveUntil(
+                  context, Rotas.TELA_MENSAGENS_USUARIO, (route) => false);
               break;
             case Usuario.PERFIL_ADMINISTRADOR:
-              Navigator.pushNamedAndRemoveUntil(context, Rotas.TELA_ADMINISTRADOR, (route) => false);
+              Navigator.pushNamedAndRemoveUntil(
+                  context, Rotas.TELA_ADMINISTRADOR, (route) => false);
               break;
           }
         } else {
@@ -74,17 +76,11 @@ class _TelaLoginState extends State<TelaLogin> {
               _errorMessage = "Matrícula ou SIAPE não cadastrado";
             });
           }
-          //widget.auth.sendEmailVerification();
-          //_showVerifyEmailSentDialog();
-          //print('Signed up user: $emailUsuario');
         }
         setState(() {
           _isLoading = false;
         });
 
-//        if (emailUsuario.length > 0 && emailUsuario != null && _isLoginForm) {
-//          widget.loginCallback();
-//        }
       } catch (e) {
         print('Error: $e');
 
@@ -94,6 +90,12 @@ class _TelaLoginState extends State<TelaLogin> {
           //_formKey.currentState.reset();
         });
       }
+    } else {
+      setState(() {
+        _isLoading = false;
+        _errorMessage = "";
+        _isLoading = false;
+      });
     }
   }
 
@@ -111,7 +113,7 @@ class _TelaLoginState extends State<TelaLogin> {
   }
 
   void toggleFormMode() {
-    if(_isLoading) return;
+    if (_isLoading) return;
     resetForm();
     setState(() {
       _isLoginForm = !_isLoginForm;
@@ -124,19 +126,17 @@ class _TelaLoginState extends State<TelaLogin> {
         body: Stack(
       children: <Widget>[
         _showForm(),
-        _showCircularProgress(),
+        //_showCircularProgress(),
       ],
     ));
   }
 
   Widget _showCircularProgress() {
-    if (_isLoading) {
-      return Center(child: CircularProgressIndicator());
-    }
-    return Container(
-      height: 0.0,
-      width: 0.0,
-    );
+    return Visibility(
+        visible: _isLoading,
+        child: CircularProgressIndicator(
+          valueColor: new AlwaysStoppedAnimation<Color>(Colors.white),
+        ));
   }
 
 //  void _showVerifyEmailSentDialog() {
@@ -174,9 +174,10 @@ class _TelaLoginState extends State<TelaLogin> {
               inputMatricula(),
               inputEmail(),
               inputSenha(),
+              mensagemErro(),
               botaoEntrarCadastrar(),
               botaoAlternar(),
-              mensagemErro(),
+              botaoRedefinirSenha(),
             ],
           ),
         ));
@@ -184,15 +185,18 @@ class _TelaLoginState extends State<TelaLogin> {
 
   Widget mensagemErro() {
     if (_errorMessage.length > 0 && _errorMessage != null) {
-      return Center(
-          child: Text(
-        _errorMessage,
-        style: TextStyle(
-            fontSize: 13.0,
-            color: Colors.red,
-            height: 1.0,
-            fontWeight: FontWeight.w300),
-      ));
+      return Padding(
+        padding: EdgeInsets.only(top: 10),
+        child: Center(
+            child: Text(
+          _errorMessage,
+          style: TextStyle(
+              fontSize: 13.0,
+              color: Colors.red,
+              height: 1.0,
+              fontWeight: FontWeight.w300),
+        )),
+      );
     } else {
       return new Container(
         height: 0.0,
@@ -220,7 +224,13 @@ class _TelaLoginState extends State<TelaLogin> {
         autofocus: false,
         enabled: !_isLoading,
         decoration: new InputDecoration(
-            hintText: 'Email',
+            focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Cores.corTextMedio),
+            ),
+            //labelStyle: TextStyle(fontSize: 20, color: Cores.corTextMedio),
+            labelText: 'Email',
+            labelStyle: TextStyle(color: Cores.corTextMedio),
+            //hintText: 'Email',
             icon: new Icon(
               Icons.mail,
               color: Colors.grey,
@@ -242,7 +252,13 @@ class _TelaLoginState extends State<TelaLogin> {
           autofocus: false,
           enabled: !_isLoading,
           decoration: new InputDecoration(
-              hintText: 'Matrícula ou SIAPE',
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Cores.corTextMedio),
+              ),
+              //labelStyle: TextStyle(fontSize: 20, color: Cores.corTextMedio),
+              labelText: 'Matrícula ou SIAPE',
+              labelStyle: TextStyle(color: Cores.corTextMedio),
+              //hintText: 'Matrícula ou SIAPE',
               icon: new Icon(
                 Icons.vpn_key,
                 color: Colors.grey,
@@ -272,7 +288,9 @@ class _TelaLoginState extends State<TelaLogin> {
               borderSide: BorderSide(color: Cores.corTextMedio),
             ),
             //labelStyle: TextStyle(fontSize: 20, color: Cores.corTextMedio),
-            hintText: 'Senha',
+            labelText: 'Senha',
+            labelStyle: TextStyle(color: Cores.corTextMedio),
+            //hintText: 'Senha',
             //labelText: 'Senha',
             icon: new Icon(
               Icons.lock,
@@ -286,16 +304,27 @@ class _TelaLoginState extends State<TelaLogin> {
 
   Widget botaoAlternar() {
     return new FlatButton(
-
         child: new Text(
             _isLoginForm ? 'Criar conta' : 'Já tem uma conta? Entre',
             style: new TextStyle(fontSize: 18.0, fontWeight: FontWeight.w300)),
         onPressed: toggleFormMode);
   }
 
+  Widget botaoRedefinirSenha() {
+    return Visibility(
+        visible: _isLoginForm,
+        child: FlatButton(
+            child: new Text('Esqueci minha senha',
+                style:
+                    new TextStyle(fontSize: 18.0, fontWeight: FontWeight.w300)),
+            onPressed: () {
+              Navigator.pushNamed(context, Rotas.TELA_REDEFINIR_SENHA);
+            }));
+  }
+
   Widget botaoEntrarCadastrar() {
     return new Padding(
-        padding: EdgeInsets.fromLTRB(0.0, 45.0, 0.0, 0.0),
+        padding: EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
         child: SizedBox(
           height: 40.0,
           child: new RaisedButton(
@@ -303,8 +332,23 @@ class _TelaLoginState extends State<TelaLogin> {
             shape: new RoundedRectangleBorder(
                 borderRadius: new BorderRadius.circular(30.0)),
             color: Cores.corBotoes,
-            child: new Text(_isLoginForm ? 'Entrar' : 'Criar conta',
-                style: new TextStyle(fontSize: 20.0, color: Colors.white)),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                SizedBox(
+                  width: 30,
+                ),
+                Text(_isLoginForm ? 'Entrar' : 'Criar conta',
+                    style: new TextStyle(fontSize: 20.0, color: Colors.white)),
+                SizedBox(
+                  width: 10,
+                ),
+                SizedBox(child: _showCircularProgress(), height: 20, width: 20),
+              ],
+            ),
+
+//            new Text(_isLoginForm ? 'Entrar' : 'Criar conta',
+//                style: new TextStyle(fontSize: 20.0, color: Colors.white)),
             onPressed: validarESubmeter,
           ),
         ));

@@ -24,13 +24,15 @@ class _TelaConfiguracoesUsuarioState extends State<TelaConfiguracoesUsuario> {
 
   Widget corpo() {
     return SingleChildScrollView(
-      child: Column(
+        child: SizedBox(
+        width: double.infinity,
+        child: Column(
         children: <Widget>[
-
+          botaoRedefinirSenha(),
           botaoSair()
         ],
       ),
-    );
+    ));
   }
 
 
@@ -41,6 +43,15 @@ class _TelaConfiguracoesUsuarioState extends State<TelaConfiguracoesUsuario> {
       onPressed: () {
         SistemaLogin().sair();
         Navigator.pushNamedAndRemoveUntil(context, Rotas.TELA_INICIAL, (route) => false);
+      },
+    );
+  }
+
+  Widget botaoRedefinirSenha() {
+    return  FlatButton(
+      child: Text("Redefinir senha", style: TextStyle(color: Cores.corTextMedio)),
+      onPressed: () {
+        Navigator.pushNamed(context, Rotas.TELA_REDEFINIR_SENHA);
       },
     );
   }

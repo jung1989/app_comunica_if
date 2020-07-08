@@ -19,7 +19,15 @@ class _TelaConfiguracoesAdministradorState extends State<TelaConfiguracoesAdmini
           centerTitle: true,
           title: Text("Configurações"),
         ),
-        body: corpo()
+        body: corpo(),
+        bottomNavigationBar: BottomAppBar(
+          child: SizedBox(
+            height: 50,
+            child: Center(
+              child: Text("Olá ${SistemaLogin.instance.usuario.nome}"),
+            ),
+          ),
+    ),
     );
   }
   
@@ -33,6 +41,7 @@ class _TelaConfiguracoesAdministradorState extends State<TelaConfiguracoesAdmini
           botaoInserirAdministrador(),
           botaoInserirGrupo(),
           botaoGerenciarDicas(),
+          botaoRedefinirSenha(),
           botaoSair()
         ],
       ),
@@ -42,11 +51,20 @@ class _TelaConfiguracoesAdministradorState extends State<TelaConfiguracoesAdmini
 
   Widget botaoInserirUsuario() {
     return  FlatButton(
-        child: Text("Inserir usuáriio", style: TextStyle(color: Cores.corTextMedio)),
+        child: Text("Inserir usuário", style: TextStyle(color: Cores.corTextMedio)),
         onPressed: () {
           Navigator.pushNamed(context, Rotas.TELA_INSERIR_USUARIO);
         },
 
+    );
+  }
+
+  Widget botaoRedefinirSenha() {
+    return  FlatButton(
+      child: Text("Redefinir senha", style: TextStyle(color: Cores.corTextMedio)),
+      onPressed: () {
+        Navigator.pushNamed(context, Rotas.TELA_REDEFINIR_SENHA);
+      },
     );
   }
 

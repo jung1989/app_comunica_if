@@ -22,5 +22,9 @@ class Rotas {
 
   static const TELA_INSERIR_DICA = "/tela_inserir_dicas";
 
+  static const TELA_REDEFINIR_SENHA = "/tela_redefinir_senha";
+
+  static const TELA_INSERIR_MENSAGEM = "/tela_inserir_mensagem";
+  static const TELA_INSERIR_NOTICIA = "/tela_inserir_noticia";
 }
 

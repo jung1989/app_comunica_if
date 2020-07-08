@@ -176,7 +176,12 @@ class _TelaInserirAdministradorState extends State<TelaInserirAdministrador> {
         keyboardType: TextInputType.text,
         autofocus: false,
         decoration: new InputDecoration(
-            hintText: 'Matrícula ou SIAPE',
+            focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Cores.corTextMedio),
+            ),
+            labelText: 'Matrícula ou SIAPE',
+            labelStyle: TextStyle(color: Cores.corTextMedio),
+            //hintText: 'Matrícula ou SIAPE',
             icon: new Icon(
               Icons.vpn_key,
               color: Colors.grey,
@@ -198,7 +203,9 @@ class _TelaInserirAdministradorState extends State<TelaInserirAdministrador> {
               borderSide: BorderSide(color: Cores.corTextMedio),
             ),
             //labelStyle: TextStyle(fontSize: 20, color: Cores.corTextMedio),
-            hintText: 'Nome',
+            labelText: 'Nome',
+            labelStyle: TextStyle(color: Cores.corTextMedio),
+            //hintText: 'Nome',
             icon: new Icon(
               Icons.person,
               color: Colors.grey,
@@ -221,7 +228,9 @@ class _TelaInserirAdministradorState extends State<TelaInserirAdministrador> {
               borderSide: BorderSide(color: Cores.corTextMedio),
             ),
             //labelStyle: TextStyle(fontSize: 20, color: Cores.corTextMedio),
-            hintText: 'Email',
+            labelText: 'Email',
+            labelStyle: TextStyle(color: Cores.corTextMedio),
+            //hintText: 'Email',
             icon: new Icon(
               Icons.email,
               color: Colors.grey,
@@ -243,7 +252,9 @@ class _TelaInserirAdministradorState extends State<TelaInserirAdministrador> {
               borderSide: BorderSide(color: Cores.corTextMedio),
             ),
             //labelStyle: TextStyle(fontSize: 20, color: Cores.corTextMedio),
-            hintText: 'Senha',
+            labelText: 'Senha',
+            labelStyle: TextStyle(color: Cores.corTextMedio),
+            //hintText: 'Senha',
             icon: new Icon(
               Icons.lock,
               color: Colors.grey,

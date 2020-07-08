@@ -8,6 +8,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'autenticacao.dart';
 
 class SistemaLogin {
+
+  static const double VERSAO = 2.0;
+
   /// implementação do singleton
   static final SistemaLogin _instance = SistemaLogin._interno();
 
@@ -22,6 +25,8 @@ class SistemaLogin {
 
   /// instancias do usuário e administrador, dependendo do perfil
   Usuario usuario;
+
+  double versaoMaisRecente;
 
   /// inicialização do sistema
   Future iniciar() async {
@@ -47,8 +52,26 @@ class SistemaLogin {
     BancoDeDados().fecharBanco();
   }
 
+  Future<double> verificaVersao() async {
+    print("### Verificando versão do aplicativo...");
+    QuerySnapshot querySnapshot = await Firestore.instance
+        .collection("versao")
+        .getDocuments();
+
+    if (querySnapshot.documents.length > 0) {
+      print("### Verificando versão atual do aplicativo: $VERSAO");
+      versaoMaisRecente = querySnapshot.documents[0].data['versao'] * 1.0;
+      print("### Verificando mais recente do aplicativo: $versaoMaisRecente");
+      return versaoMaisRecente;
+    }
+    return 0.0;
+  }
+
   Future<int> buscarPerfil(String email) async {
     print("### Buscando perfil do usuário... ");
+
+    autenticacao.firebaseUser = await autenticacao.getUsuario();
+
     QuerySnapshot querySnapshot = await Firestore.instance
         .collection("perfis")
         .where("email", isEqualTo: email)
