@@ -1,6 +1,5 @@
 
 import 'package:app_comunica_if/model/dica.dart';
-import 'package:app_comunica_if/sistema/navegacao.dart';
 import 'package:app_comunica_if/sistema/sistema_admin.dart';
 import 'package:app_comunica_if/ui/padroes.dart';
 import 'package:app_comunica_if/ui_usuario/tela_inserir_dica.dart';

@@ -14,42 +14,50 @@ class _TelaConfiguracoesAdministradorState extends State<TelaConfiguracoesAdmini
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Cores.corAppBarBackground,
-          centerTitle: true,
-          title: Text("Configurações"),
-        ),
-        body: corpo(),
-        bottomNavigationBar: BottomAppBar(
-          child: SizedBox(
-            height: 50,
-            child: Center(
-              child: Text("Olá ${SistemaLogin.instance.usuario.nome}"),
-            ),
-          ),
-    ),
+        appBar: _barraSuperior(),
+        body: _corpo(),
+        bottomNavigationBar: _barraInferior(),
     );
   }
   
-  Widget corpo() {
+  Widget _corpo() {
     return SingleChildScrollView(
       child: SizedBox(
         width: double.infinity,
         child: Column(
         children: <Widget>[
-          botaoInserirUsuario(),
-          botaoInserirAdministrador(),
-          botaoInserirGrupo(),
-          botaoGerenciarDicas(),
-          botaoRedefinirSenha(),
-          botaoSair()
+          _botaoInserirUsuario(),
+          _botaoInserirAdministrador(),
+          _botaoInserirGrupo(),
+          _botaoGerenciarDicas(),
+          _botaoRedefinirSenha(),
+          _botaoSair()
         ],
       ),
       )
     );
   }
 
-  Widget botaoInserirUsuario() {
+  Widget _barraSuperior() {
+    return AppBar(
+      backgroundColor: Cores.corAppBarBackground,
+      centerTitle: true,
+      title: Text("Configurações"),
+    );
+  }
+
+  Widget _barraInferior() {
+    return BottomAppBar(
+      child: SizedBox(
+        height: 50,
+        child: Center(
+          child: Text("Olá ${SistemaLogin.instance.usuario.nome}"),
+        ),
+      ),
+    );
+  }
+
+  Widget _botaoInserirUsuario() {
     return  FlatButton(
         child: Text("Inserir usuário", style: TextStyle(color: Cores.corTextMedio)),
         onPressed: () {
@@ -59,7 +67,7 @@ class _TelaConfiguracoesAdministradorState extends State<TelaConfiguracoesAdmini
     );
   }
 
-  Widget botaoRedefinirSenha() {
+  Widget _botaoRedefinirSenha() {
     return  FlatButton(
       child: Text("Redefinir senha", style: TextStyle(color: Cores.corTextMedio)),
       onPressed: () {
@@ -68,7 +76,7 @@ class _TelaConfiguracoesAdministradorState extends State<TelaConfiguracoesAdmini
     );
   }
 
-  Widget botaoInserirAdministrador() {
+  Widget _botaoInserirAdministrador() {
     return FlatButton(
       child: Text("Inserir administrador", style: TextStyle(color: Cores.corTextMedio)),
       onPressed: () {
@@ -77,7 +85,7 @@ class _TelaConfiguracoesAdministradorState extends State<TelaConfiguracoesAdmini
     );
   }
 
-  Widget botaoInserirGrupo() {
+  Widget _botaoInserirGrupo() {
     return FlatButton(
       child: Text("Inserir grupo", style: TextStyle(color: Cores.corTextMedio)),
       onPressed: () {
@@ -86,7 +94,7 @@ class _TelaConfiguracoesAdministradorState extends State<TelaConfiguracoesAdmini
     );
   }
 
-  Widget botaoGerenciarDicas() {
+  Widget _botaoGerenciarDicas() {
     return FlatButton(
       child: Text("Gerenciar dicas", style: TextStyle(color: Cores.corTextMedio)),
       onPressed: () {
@@ -96,7 +104,7 @@ class _TelaConfiguracoesAdministradorState extends State<TelaConfiguracoesAdmini
   }
 
 
-  Widget botaoSair() {
+  Widget _botaoSair() {
     return FlatButton(
       child: Text("Fazer logout do sistema", style: TextStyle(color: Colors.redAccent)),
       onPressed: () {

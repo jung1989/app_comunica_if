@@ -1,6 +1,6 @@
 import 'package:app_comunica_if/model/grupo.dart';
 import 'package:app_comunica_if/model/mensagem.dart';
-import 'package:app_comunica_if/sistema/navegacao.dart';
+import 'package:app_comunica_if/model/usuario.dart';
 import 'package:app_comunica_if/sistema/sistema_admin.dart';
 import 'package:app_comunica_if/ui/padroes.dart';
 import 'package:flutter/material.dart';
@@ -149,13 +149,41 @@ class _InserirMensagemState extends State<InserirMensagem> {
     _mensagem.dataHoraPublicacao = DateTime.now();
     _mensagem.administrador = SistemaAdmin().administrador;
 
+    bool alunos = false;
+    bool servidores = false;
+
     List<Grupo> grupos = List();
     for (Grupo g in _grupos) {
+      print("@@@ ${g.restricao}");
       if (g.selecionado) {
         grupos.add(g);
+        if(g.restricao == Usuario.PERFIL_ALUNO) {
+          alunos = true;
+        }
+        if(g.restricao == Usuario.PERFIL_SERVIDOR) {
+          servidores = true;
+        }
       }
     }
     _mensagem.gruposInteresse = grupos;
+
+    /// restricao = 1 : somente servidores
+    /// restricao = 2 : somente alunos
+    /// restricao = 9 : alunos e professores
+
+    _mensagem.restricao = 0;
+    if(alunos && servidores) {
+      _mensagem.restricao = 9;
+    }
+    else {
+      if(alunos) {
+        _mensagem.restricao = 2;
+      }
+      if(servidores) {
+        _mensagem.restricao = 1;
+      }
+    }
+
 
     showDialog(
         context: context,

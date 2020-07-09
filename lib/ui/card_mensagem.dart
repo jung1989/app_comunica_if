@@ -20,53 +20,55 @@ Widget mensagemCard(
       atualizarTela();
     },
     child: Card(
-      child: Padding(
-          padding: EdgeInsets.all(10),
-          child: Column(
-            children: <Widget>[
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Icon(
-                    listaTemporaria[index].lida ? Icons.drafts : Icons.email,
-                    color: Cores.corIconesClaro,
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Flexible(
+
+        child: Padding(
+            padding: EdgeInsets.all(10),
+            child: Column(
+              children: <Widget>[
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Icon(
+                      listaTemporaria[index].lida ? Icons.drafts : Icons.email,
+                      color: Cores.corIconesClaro,
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Flexible(
+                        child: Text(
+                          listaTemporaria[index].titulo,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Cores.corTextEscuro),
+                        )),
+                  ],
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 5, bottom: 5),
+                  child: SizedBox(
+                      width: double.infinity,
                       child: Text(
-                    listaTemporaria[index].titulo,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Cores.corTextEscuro),
-                  )),
-                ],
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 5, bottom: 5),
-                child: SizedBox(
-                    width: double.infinity,
+                        listaTemporaria[index].conteudo,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(fontSize: 16, color: Cores.corTextMedio),
+                      )),
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  child: Align(
+                    alignment: Alignment.centerRight,
                     child: Text(
-                      listaTemporaria[index].conteudo,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(fontSize: 16, color: Cores.corTextMedio),
-                    )),
-              ),
-              SizedBox(
-                width: double.infinity,
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child: Text(
-                    formatarDataHora(listaTemporaria[index].dataHoraPublicacao),
+                      formatarDataHora(listaTemporaria[index].dataHoraPublicacao),
+                    ),
                   ),
                 ),
-              ),
-            ],
-          )),
-    ),
+              ],
+            )),
+      ),
+
   );
 }
 

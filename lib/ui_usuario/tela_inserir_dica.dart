@@ -3,14 +3,12 @@
 import 'dart:io';
 
 import 'package:app_comunica_if/model/dica.dart';
-import 'package:app_comunica_if/sistema/navegacao.dart';
 import 'package:app_comunica_if/sistema/sistema_admin.dart';
 import 'package:app_comunica_if/ui/padroes.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 Dica _dica;
-Dica _dicaOriginal;
 
 bool _isImagemLocal;
 
@@ -23,7 +21,6 @@ class TelaInseirDica extends StatefulWidget {
       _dica.ativo = true;
     }
     else {
-      _dicaOriginal = dica;
       _dica = Dica.fromMap(dica.toMap());
       _dica.id = dica.id;
       _isImagemLocal = false;
@@ -184,11 +181,6 @@ class _TelaInseirDicaState extends State<TelaInseirDica> {
     });
   }
 
-  Widget botaoEntrar() {
-    return FlatButton(
-      child: Text("Entrar")
-    );
-  }
 
   Widget tituloPrevia() {
     return Padding(

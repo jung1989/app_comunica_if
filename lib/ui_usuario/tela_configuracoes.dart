@@ -18,26 +18,37 @@ class _TelaConfiguracoesUsuarioState extends State<TelaConfiguracoesUsuario> {
           centerTitle: true,
           title: Text("Configurações"),
         ),
-        body: corpo()
+        body: _corpo(),
+      bottomNavigationBar: _barraInferior(),
     );
   }
 
-  Widget corpo() {
+  Widget _corpo() {
     return SingleChildScrollView(
         child: SizedBox(
         width: double.infinity,
         child: Column(
         children: <Widget>[
-          botaoRedefinirSenha(),
-          botaoSair()
+          _botaoRedefinirSenha(),
+          _botaoSair()
         ],
       ),
     ));
   }
 
 
+  Widget _barraInferior() {
+    return BottomAppBar(
+      child: SizedBox(
+        height: 50,
+        child: Center(
+          child: Text("Olá ${SistemaLogin.instance.usuario.nome}"),
+        ),
+      ),
+    );
+  }
 
-  Widget botaoSair() {
+  Widget _botaoSair() {
     return FlatButton(
       child: Text("Fazer logout do sistema", style: TextStyle(color: Colors.redAccent)),
       onPressed: () {
@@ -47,7 +58,7 @@ class _TelaConfiguracoesUsuarioState extends State<TelaConfiguracoesUsuario> {
     );
   }
 
-  Widget botaoRedefinirSenha() {
+  Widget _botaoRedefinirSenha() {
     return  FlatButton(
       child: Text("Redefinir senha", style: TextStyle(color: Cores.corTextMedio)),
       onPressed: () {

@@ -7,21 +7,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 class Autenticacao {
 
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-  FirebaseUser _firebaseUser;
+  FirebaseUser firebaseUser;
 
   Future<String> logar(String email, String senha) async {
     AuthResult resultado = await _firebaseAuth.signInWithEmailAndPassword(
         email: email, password: senha);
 
-    _firebaseUser = resultado.user;
-    return _firebaseUser.email;
-  }
-
-
-  FirebaseUser get firebaseUser => _firebaseUser;
-
-  set firebaseUser(FirebaseUser value) {
-    _firebaseUser = value;
+    firebaseUser = resultado.user;
+    return firebaseUser.email;
   }
 
   Future<String> cadastrarUsuario(String email, String senha, String id) async {
@@ -37,8 +30,8 @@ class Autenticacao {
     DocumentReference perfilCarregado = Firestore.instance.collection("perfis").document(id);
     await perfilCarregado.updateData(perfil);
 
-    _firebaseUser = resultado.user;
-    return _firebaseUser.uid;
+    firebaseUser = resultado.user;
+    return firebaseUser.uid;
   }
 
   Future<bool> cadastrarAdministrador(Usuario administrador, String senha) async {

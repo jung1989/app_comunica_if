@@ -29,7 +29,6 @@ class MensagemGrupoHelper {
         colunaIdMensagemFK : mensagem.id,
         colunaIdGrupoFK : g.id
       };
-      print(" **** $map");
       await banco.insert(tabelaMensagemGrupo, map);
     }
     return mensagem;

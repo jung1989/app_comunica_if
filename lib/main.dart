@@ -1,4 +1,5 @@
 import 'package:app_comunica_if/sistema/navegacao.dart';
+import 'package:app_comunica_if/sistema/notificacoes.dart';
 import 'package:app_comunica_if/sistema/sistema_dicas.dart';
 import 'package:app_comunica_if/sistema/sistema_login.dart';
 import 'package:app_comunica_if/ui/padroes.dart';
@@ -33,7 +34,7 @@ class MeuApp extends StatelessWidget {
       theme: ThemeData(
         fontFamily: "Raleway",
       ),
-      title: "Bem vindo!",
+      title: "Comunica IF",
       routes: {
         Rotas.INICIAL: (context) => Inicial(),
         Rotas.TELA_LOGIN: (context) => TelaLogin(),
@@ -78,6 +79,7 @@ class _InicialState extends State<Inicial> {
   void initState() {
     super.initState();
     _iniciarSistema = tempoEspera();
+    GerenciadorNotificacoes.instance.init();
   }
 
   @override

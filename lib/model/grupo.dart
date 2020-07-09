@@ -18,6 +18,8 @@ class Grupo {
   String nome;
   bool selecionado;
 
+  int restricao;
+
   Grupo.fromMap(Map map) {
     id = map[colunaIdGrupo];
     nome = map[colunaNome];

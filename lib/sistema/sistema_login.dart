@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:app_comunica_if/helper/banco_de_dados.dart';
 import 'package:app_comunica_if/model/usuario.dart';
+import 'package:app_comunica_if/sistema/notificacoes.dart';
 import 'package:app_comunica_if/sistema/sistema_admin.dart';
 import 'package:app_comunica_if/sistema/sistema_usuario.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -85,6 +88,7 @@ class SistemaLogin {
       switch (usuario.perfil) {
         case Usuario.PERFIL_ADMINISTRADOR:
           SistemaAdmin.instance.login(usuario);
+
           break;
         case Usuario.PERFIL_ALUNO:
         case Usuario.PERFIL_SERVIDOR:
@@ -92,6 +96,7 @@ class SistemaLogin {
           await SistemaUsuario.instance.iniciar();
           break;
       }
+      await GerenciadorNotificacoes.instance.gravarToken(usuario.perfil);
       return usuario.perfil;
     }
     return -1;
@@ -108,5 +113,18 @@ class SistemaLogin {
     } else {
       return "";
     }
+  }
+  
+  /// efetua a gravação do token do aplicativo relacionado ao usuário
+  gravarToken(String fcmToken) async {
+    var docRef = await Firestore.instance
+        .collection("tokens")
+        .document(usuario.id);
+    
+    await docRef.setData({
+      'token' : fcmToken,
+      'criacao' : FieldValue.serverTimestamp(),
+      'plataforma' : Platform.operatingSystem
+    });
   }
 }

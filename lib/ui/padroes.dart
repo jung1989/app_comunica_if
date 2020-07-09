@@ -91,7 +91,15 @@ class Cores {
 
   //static const corAppBarBackground =  Color(0xFF17252A);
   //static const corAppBarBackground =  Color(0xFF3AAFA9);
-  static const corAppBarBackground =  Color(0xFF005F40);
+  static const corAppBarBackground =  Color(0xFF00452E);
+
+  static const corFundo  =  Color(0xFFEDEDED);
+
+  /// ICONES
+  static const corIconesTab  =  Color(0xFF005F40);
+  static const corIconesAppBar  =  Color(0xFFEDEDED);
+
+  static const corFundoCards  =  Color(0xFFEDEDED);
 
 
   static const corTextEscuro =  Color(0xFF17252A);
@@ -108,7 +116,7 @@ class Cores {
 
   static const corBotoes = Color(0xFF005F40);
 
-  static const corFundo = Color(0xFF2B7A68);
+  //static const corFundo = Color(0xFF2B7A68);
 
   static const corFundoBottomBar = Color(0xFF3AAFA9);
 

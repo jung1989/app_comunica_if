@@ -54,22 +54,22 @@ class _TelaUsuarioNoticiasState extends State<TelaUsuarioNoticias> {
             child: Text("Carregando mensagens..."),
           );
         }
-        return ListView.builder(
-            padding: EdgeInsets.all(15.0),
-            itemCount: _noticias.length,
-            itemBuilder: (context, index) {
-              return noticiaCard(context, index, _noticias);
-            });
+        return Container(
+          color: Cores.corFundo,
+          child: ListView.builder(
+              padding: EdgeInsets.all(15.0),
+              itemCount: _noticias.length,
+              itemBuilder: (context, index) {
+                return noticiaCard(context, index, _noticias);
+              }),
+        );
       },
       future: _futureNoticias,
     );
   }
 
-
   Future carregarNoticias() async {
     _noticias = await SistemaUsuario().carregarTodasNoticias();
-    //_noticias = await NoticiaHelper.lerNoticias();
   }
-
 }
 

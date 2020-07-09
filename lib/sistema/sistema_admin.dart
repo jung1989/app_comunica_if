@@ -35,7 +35,7 @@ class SistemaAdmin {
     await Firestore.instance
         .collection("mensagens")
         .document()
-        .setData(mensagem.toMap());
+        .setData(mensagem.toMapFireBase());
   }
 
   /// gravação de usuários no Firebase
@@ -256,6 +256,7 @@ class SistemaAdmin {
     querySnapshot.documents.forEach((grupo) {
       Grupo g = Grupo.fromMap(grupo.data);
       g.id = grupo.documentID;
+      g.restricao = grupo.data['restricao'];
       grupos.add(g);
     });
     return grupos;

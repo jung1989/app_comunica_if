@@ -49,7 +49,9 @@ class _TelaAdministradorState extends State<TelaAdministrador> {
     return await SistemaAdmin.instance.carregarNoticiasPorAdministrador();
   }
 
-  _atualizarTela() {
+  _atualizarTela() async {
+    await atualizarNoticias();
+    await atualizarMensagens();
     setState(() {
 
     });
@@ -81,7 +83,7 @@ class _TelaAdministradorState extends State<TelaAdministrador> {
             Container(
               constraints: BoxConstraints(maxHeight: 150.0),
               child: Material(
-                color: Colors.white,
+                color: Cores.corFundo,
                 child: TabBar(
                   indicatorColor: Cores.corPrimaria,
                   tabs: [
@@ -171,19 +173,22 @@ class _TelaAdministradorState extends State<TelaAdministrador> {
   /// PAINEIS ///
 
   Widget painelMensagens() {
-    return Column(
-      children: <Widget>[
-        //Padding(padding: EdgeInsets.all(10), child: botaoInserirMensagem()),
-        Padding(
-            padding: EdgeInsets.only(top: 10, right: 10, left: 10, bottom: 10),
-            child: Text("Mensagens publicadas por você",
-                style: TextStyle(
-                  fontSize: 20,
-                  color: Cores.corTextEscuro,
-                  fontWeight: FontWeight.bold,
-                ))),
-        Expanded(child: listaMensagens())
-      ],
+    return Container(
+      color: Cores.corFundo,
+      child: Column(
+        children: <Widget>[
+          //Padding(padding: EdgeInsets.all(10), child: botaoInserirMensagem()),
+          Padding(
+              padding: EdgeInsets.only(top: 10, right: 10, left: 10, bottom: 10),
+              child: Text("Mensagens publicadas por você",
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Cores.corTextEscuro,
+                    fontWeight: FontWeight.bold,
+                  ))),
+          Expanded(child: listaMensagens())
+        ],
+      ),
     );
   }
 
@@ -214,22 +219,23 @@ class _TelaAdministradorState extends State<TelaAdministrador> {
     );
   }
 
-
-
   Widget painelNoticias() {
-    return Column(
-      children: <Widget>[
-        //Padding(padding: EdgeInsets.all(10), child: botaoInserirNoticia()),
-        Padding(
-            padding: EdgeInsets.only(top: 10, right: 10, left: 10, bottom: 10),
-            child: Text("Notícias publicadas por você",
-                style: TextStyle(
-                  fontSize: 20,
-                  color: Cores.corTextEscuro,
-                  fontWeight: FontWeight.bold,
-                ))),
-        Expanded(child: listaNoticias())
-      ],
+    return Container(
+      color: Cores.corFundo,
+      child:  Column(
+        children: <Widget>[
+          //Padding(padding: EdgeInsets.all(10), child: botaoInserirNoticia()),
+          Padding(
+              padding: EdgeInsets.only(top: 10, right: 10, left: 10, bottom: 10),
+              child: Text("Notícias publicadas por você",
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Cores.corTextEscuro,
+                    fontWeight: FontWeight.bold,
+                  ))),
+          Expanded(child: listaNoticias())
+        ],
+      ),
     );
   }
 
@@ -354,14 +360,20 @@ Widget cardNovaNoticia(BuildContext context) {
           backgroundColor: Cores.corBotoes,
           label: 'Nova notícia',
           labelStyle: TextStyle(fontSize: 18.0),
-          onTap: () => Navigator.pushNamed(context, Rotas.TELA_INSERIR_NOTICIA),
+          onTap: () async {
+            await Navigator.pushNamed(context, Rotas.TELA_INSERIR_NOTICIA);
+            _atualizarTela();
+          },
         ),
         SpeedDialChild(
             child: Icon(Icons.add_comment),
             backgroundColor: Cores.corBotoes,
             label: 'Nova mensagem',
             labelStyle: TextStyle(fontSize: 18.0),
-            onTap: () => Navigator.pushNamed(context, Rotas.TELA_INSERIR_MENSAGEM),
+            onTap: () async {
+              await Navigator.pushNamed(context, Rotas.TELA_INSERIR_MENSAGEM);
+              _atualizarTela();
+            }
         ),
       ],
     );

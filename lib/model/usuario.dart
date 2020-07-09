@@ -15,6 +15,8 @@ class Usuario {
   bool ativo;
   int perfil;
 
+  String fcmToken;
+
   List<Grupo> gruposInteresse = List();
 
   Usuario();
@@ -35,7 +37,7 @@ class Usuario {
       'email' : email,
       'ultimo_acesso' : ultimoAcesso.millisecondsSinceEpoch,
       'ativo' : ativo?1:0,
-      'perfil' : perfil
+      'perfil' : perfil,
     };
     return map;
   }

@@ -14,6 +14,8 @@ class Mensagem {
   bool      lida;
   bool      favorita;
 
+  int restricao;
+
   List<Grupo> gruposInteresse = List();
 
   Mensagem() {
@@ -56,6 +58,24 @@ class Mensagem {
       colunaFavorita: favorita?1:0,
       colunaNomeAdministrador : administrador.nome,
       colunaGruposInteresse: listaGruposToMap()
+    };
+    if(id != null) {
+      map[colunaId] = id;
+    }
+    return map;
+  }
+
+  Map toMapFireBase() {
+    Map<String, dynamic> map = {
+      colunaId: id,
+      colunaTitulo: titulo,
+      colunaConteudo: conteudo,
+      colunaDataHoraPublicacao: dataHoraPublicacao.millisecondsSinceEpoch,
+      colunaLida: lida?1:0,
+      colunaFavorita: favorita?1:0,
+      colunaNomeAdministrador : administrador.nome,
+      colunaGruposInteresse: listaGruposToMap(),
+      'restricao' : restricao
     };
     if(id != null) {
       map[colunaId] = id;

@@ -13,8 +13,11 @@ bool _isAdmin;
 class LerMensagem extends StatefulWidget {
   LerMensagem(Mensagem m) {
     mensagem = m;
-    _isAdmin = SistemaLogin.instance.usuario.perfil == Usuario.PERFIL_ADMINISTRADOR ? true : false;
-    if(!_isAdmin) {
+    _isAdmin =
+        SistemaLogin.instance.usuario.perfil == Usuario.PERFIL_ADMINISTRADOR
+            ? true
+            : false;
+    if (!_isAdmin) {
       MensagemHelper.atualizarMensagem(mensagem);
     }
   }
@@ -27,36 +30,37 @@ class _LerMensagemState extends State<LerMensagem> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Mensagem"),
-        backgroundColor: Cores.corAppBarBackground,
-        actions: <Widget>[
-          _isAdmin
-              ?
-              Icon(Icons.comment,
-                      color: Cores.corIconesClaro)
-              :
-              IconButton(
-            icon: Icon(mensagem.favorita ? Icons.info : Icons.info_outline,
-                color: Cores.corIconesClaro),
-            onPressed: () {
-              setState(() {
-                mensagem.favorita = !mensagem.favorita;
-                MensagemHelper.atualizarMensagem(mensagem);
-                print("Mensagem ${mensagem.titulo} favoritada");
-              });
-            },
-          )
-        ],
-        centerTitle: true,
-      ),
+      appBar: _barraSuperior(),
       body: SingleChildScrollView(
-        child: montarMensagem(),
+        child: _montarMensagem(),
       ),
     );
   }
 
-  Widget montarMensagem() {
+  Widget _barraSuperior() {
+    return AppBar(
+      title: Text("Mensagem"),
+      backgroundColor: Cores.corAppBarBackground,
+      actions: <Widget>[
+        _isAdmin
+            ? Icon(Icons.comment, color: Cores.corIconesAppBar)
+            : IconButton(
+                icon: Icon(mensagem.favorita ? Icons.info : Icons.info_outline,
+                    color: Cores.corIconesAppBar),
+                onPressed: () {
+                  setState(() {
+                    mensagem.favorita = !mensagem.favorita;
+                    MensagemHelper.atualizarMensagem(mensagem);
+                    print("Mensagem ${mensagem.titulo} favoritada");
+                  });
+                },
+              )
+      ],
+      centerTitle: true,
+    );
+  }
+
+  Widget _montarMensagem() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
@@ -104,20 +108,19 @@ class _LerMensagemState extends State<LerMensagem> {
               ],
             )),
         Padding(
-            padding: EdgeInsets.only(left: 10, right: 10, top : 50, bottom: 10),
+            padding: EdgeInsets.only(left: 10, right: 10, top: 50, bottom: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
                 Flexible(
                     child: Text(
-                      "Interessados: ${textoListaInteressados()}",
-                      overflow:  TextOverflow.clip,
-                      style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: Cores.corTextEscuro),
-                    )),
-
+                  "Interessados: ${textoListaInteressados()}",
+                  overflow: TextOverflow.clip,
+                  style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: Cores.corTextEscuro),
+                )),
               ],
             ))
       ],
@@ -126,10 +129,10 @@ class _LerMensagemState extends State<LerMensagem> {
 
   String textoListaInteressados() {
     String retorno = "";
-    for(Grupo g in mensagem.gruposInteresse) {
+    for (Grupo g in mensagem.gruposInteresse) {
       retorno += " ${g.nome} - ";
     }
-    retorno = retorno.substring(0,retorno.length-3);
+    retorno = retorno.substring(0, retorno.length - 3);
     return retorno;
   }
 }
