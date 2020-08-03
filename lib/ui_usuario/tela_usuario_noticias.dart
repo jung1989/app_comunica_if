@@ -29,9 +29,15 @@ class _TelaUsuarioNoticiasState extends State<TelaUsuarioNoticias> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Cores.corAppBarBackground,
-        centerTitle: true,
+        centerTitle: false,
         title: Text("Notícias", style: TextStyle(color: Cores.corTextClaro)),
         actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.lightbulb_outline, color: Cores.corIconesAppBar),
+            onPressed: () {
+              Navigator.pushNamed(context, Rotas.TELA_DICAS);
+            },
+          ),
           IconButton(
             icon: Icon(Icons.settings, color: Cores.corTextClaro,),
             onPressed: () {

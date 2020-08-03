@@ -18,6 +18,7 @@ class _TelaLoginState extends State<TelaLogin> {
   String _senha;
   String _matricula;
   String _errorMessage;
+  String _confirmarSenha;
 
   bool _isLoginForm;
   bool _isLoading;
@@ -60,21 +61,27 @@ class _TelaLoginState extends State<TelaLogin> {
           }
         } else {
           /// caso esteja tentando se cadastrar no sistema
-          String id =
-              await SistemaLogin.instance.verificarMatricula(_matricula);
+          if(_senha != _confirmarSenha) {
+            _isLoading = false;
+            _errorMessage = "Senha e confirmação não são iguais";
+          }
+          else {
+            String id =
+            await SistemaLogin.instance.verificarMatricula(_matricula);
 
-          if (id.isNotEmpty) {
-            print("### Matrícula de uusário cadastrada...");
-            emailUsuario = await SistemaLogin.instance.autenticacao
-                .cadastrarUsuario(_email, _senha, id);
-            _isLoginForm = true;
-            print("### Usuário logado com email $emailUsuario...");
-          } else {
-            print("### Matrícula de uusário não cadastrada...");
-            setState(() {
-              _isLoading = false;
-              _errorMessage = "Matrícula ou SIAPE não cadastrado";
-            });
+            if (id.isNotEmpty) {
+              print("### Matrícula de uusário cadastrada...");
+              emailUsuario = await SistemaLogin.instance.autenticacao
+                  .cadastrarUsuario(_email, _senha, id);
+              _isLoginForm = true;
+              print("### Usuário logado com email $emailUsuario...");
+            } else {
+              print("### Matrícula de uusário não cadastrada...");
+              setState(() {
+                _isLoading = false;
+                _errorMessage = "Matrícula ou SIAPE não cadastrado";
+              });
+            }
           }
         }
         setState(() {
@@ -174,6 +181,7 @@ class _TelaLoginState extends State<TelaLogin> {
               inputMatricula(),
               inputEmail(),
               inputSenha(),
+              inputConfirmaSenha(),
               mensagemErro(),
               botaoEntrarCadastrar(),
               botaoAlternar(),
@@ -235,7 +243,20 @@ class _TelaLoginState extends State<TelaLogin> {
               Icons.mail,
               color: Colors.grey,
             )),
-        validator: (value) => value.isEmpty ? 'Campo orbrigatório' : null,
+        validator: (value){
+          Pattern pattern =
+              r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+          RegExp regex = new RegExp(pattern);
+          if(value.isEmpty) {
+            return 'Campo orbrigatório';
+          }
+          else {
+            if(!regex.hasMatch(value)) {
+              return 'Email inválido';
+            }
+          }
+          return null;
+        },
         onSaved: (value) => _email = value.trim(),
       ),
     );
@@ -275,6 +296,41 @@ class _TelaLoginState extends State<TelaLogin> {
     );
   }
 
+  Widget inputConfirmaSenha() {
+    return Visibility(
+      visible: !_isLoginForm,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
+        child: new TextFormField(
+          maxLines: 1,
+          obscureText: true,
+          keyboardType: TextInputType.text,
+          autofocus: false,
+          enabled: !_isLoading,
+          decoration: new InputDecoration(
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Cores.corTextMedio),
+              ),
+              //labelStyle: TextStyle(fontSize: 20, color: Cores.corTextMedio),
+              labelText: 'Confirmar senha',
+              labelStyle: TextStyle(color: Cores.corTextMedio),
+              //hintText: 'Matrícula ou SIAPE',
+              icon: new Icon(
+                Icons.lock,
+                color: Colors.grey,
+              )),
+          validator: (value) {
+            if (!_isLoginForm) {
+              return value.isEmpty ? 'Campo orbrigatório' : null;
+            }
+            return null;
+          },
+          onSaved: (value) => _confirmarSenha = value.trim(),
+        ),
+      ),
+    );
+  }
+
   Widget inputSenha() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
@@ -296,7 +352,17 @@ class _TelaLoginState extends State<TelaLogin> {
               Icons.lock,
               color: Colors.grey,
             )),
-        validator: (value) => value.isEmpty ? 'Campo obrigatório' : null,
+        validator: (value) {
+          if(value.isEmpty) {
+            return 'Campo obrigatório';
+          }
+          else {
+            if(value.length < 6){
+              return 'A senha deve conter ao menos 6 caracteres';
+            }
+          }
+          return null;
+        },
         onSaved: (value) => _senha = value.trim(),
       ),
     );

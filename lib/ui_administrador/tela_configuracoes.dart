@@ -27,6 +27,7 @@ class _TelaConfiguracoesAdministradorState extends State<TelaConfiguracoesAdmini
         child: Column(
         children: <Widget>[
           _botaoInserirUsuario(),
+          _botaoListarUsuarios(),
           _botaoInserirAdministrador(),
           _botaoInserirGrupo(),
           _botaoGerenciarDicas(),
@@ -110,6 +111,16 @@ class _TelaConfiguracoesAdministradorState extends State<TelaConfiguracoesAdmini
       onPressed: () {
         SistemaLogin().sair();
         Navigator.pushNamedAndRemoveUntil(context, Rotas.TELA_INICIAL, (route) => false);
+      },
+    );
+  }
+
+
+  Widget _botaoListarUsuarios() {
+    return FlatButton(
+      child: Text('Listar usuários', style: TextStyle(color: Cores.corTextMedio)),
+      onPressed: () {
+        Navigator.pushNamed(context, Rotas.TELA_LISTAR_USUARIOS);
       },
     );
   }

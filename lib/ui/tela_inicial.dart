@@ -15,8 +15,11 @@ class TelaInicial extends StatefulWidget {
   _TelaInicialState createState() => _TelaInicialState();
 }
 
-class _TelaInicialState extends State<TelaInicial> {
+class _TelaInicialState extends State<TelaInicial> with SingleTickerProviderStateMixin {
   Future<int> _iniciarSistema;
+
+  AnimationController _controllerAnimacao;
+  Animation _animacao;
 
   Dica _dica;
 
@@ -27,6 +30,17 @@ class _TelaInicialState extends State<TelaInicial> {
   @override
   void initState() {
     super.initState();
+
+    _controllerAnimacao = AnimationController(
+        vsync: this,
+        duration: Duration(seconds: 2)
+    );
+    _animacao = Tween(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(_controllerAnimacao);
+
+
     _iniciarSistema = iniciarSistema();
     _dica = SistemaDicas.instance.buscarDicaAleatoria();
 
@@ -39,7 +53,8 @@ class _TelaInicialState extends State<TelaInicial> {
   Future<int> iniciarSistema() async {
     print("### Iniciando sistema...");
     await SistemaLogin.instance.iniciar();
-    await Future.delayed(Duration(seconds: 10));
+    await Future.delayed(Duration(seconds: 3));
+    verificarLogin();
     setState(() {
       _visivel = true;
     });
@@ -49,24 +64,39 @@ class _TelaInicialState extends State<TelaInicial> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Uma dica para você!"),
-        backgroundColor: Cores.corAppBarBackground,
-        centerTitle: true,
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.refresh),
-            onPressed: () {
-              setState(() {
-                _dica = SistemaDicas.instance.buscarDicaAleatoria();
-              });
-            },
-          )
-        ],
-      ),
-      body: painelDica(),
-      bottomNavigationBar: barraInferior(),
+      //appBar: barraSuperior(),
+      body: painelLogo(),
+      //bottomNavigationBar: barraInferior(),
     );
+  }
+
+  Widget barraSuperior() {
+    return AppBar(
+      title: Text("Uma dica para você!"),
+      backgroundColor: Cores.corAppBarBackground,
+      centerTitle: true,
+      actions: <Widget>[
+        IconButton(
+          icon: Icon(Icons.refresh),
+          onPressed: () {
+            setState(() {
+              _dica = SistemaDicas.instance.buscarDicaAleatoria();
+            });
+          },
+        )
+      ],
+    );
+  }
+
+  Widget painelLogo() {
+    _controllerAnimacao.forward();
+    return FadeTransition(
+      opacity: _animacao,
+      child: Container(
+      child: Center(
+        child: Image.asset("imagens/logo10anos.jpeg", fit: BoxFit.fitWidth,),
+      ),
+    ));
   }
 
   Widget barraInferior() {
@@ -146,6 +176,7 @@ class _TelaInicialState extends State<TelaInicial> {
           break;
       }
     } else {
+      //Navigator.pushReplacement(context, FadeRoute(page: TelaLogin()));
       Navigator.pushReplacementNamed(context, Rotas.TELA_LOGIN);
     }
   }

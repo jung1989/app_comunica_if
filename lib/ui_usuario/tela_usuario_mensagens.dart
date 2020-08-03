@@ -78,12 +78,18 @@ class _TelaUsuarioMensagensState extends State<TelaUsuarioMensagens> {
   Widget _barraSuperior() {
     return AppBar(
       backgroundColor: Cores.corAppBarBackground,
-      centerTitle: true,
+      centerTitle: false,
       title: Text(
         "Mensagens",
         style: TextStyle(color: Cores.corTextClaro),
       ),
       actions: <Widget>[
+        IconButton(
+          icon: Icon(Icons.lightbulb_outline, color: Cores.corIconesAppBar),
+          onPressed: () {
+            Navigator.pushNamed(context, Rotas.TELA_DICAS);
+          },
+        ),
         IconButton(
           icon: Icon(Icons.sort, color: Cores.corIconesAppBar),
           onPressed: () {

@@ -12,9 +12,12 @@ import 'package:app_comunica_if/ui_administrador/inserir_mensagem.dart';
 import 'package:app_comunica_if/ui_administrador/inserir_noticia.dart';
 import 'package:app_comunica_if/ui_administrador/tela_administrador.dart';
 import 'package:app_comunica_if/ui_administrador/tela_configuracoes.dart';
+import 'package:app_comunica_if/ui_administrador/tela_importar_alunos.dart';
 import 'package:app_comunica_if/ui_administrador/tela_inserir_usuario.dart';
 import 'package:app_comunica_if/ui_administrador/tela_listar_dicas.dart';
+import 'package:app_comunica_if/ui_administrador/tela_listar_usuarios.dart';
 import 'package:app_comunica_if/ui_usuario/tela_configuracoes.dart';
+import 'package:app_comunica_if/ui_usuario/tela_dicas.dart';
 import 'package:app_comunica_if/ui_usuario/tela_inserir_dica.dart';
 import 'package:app_comunica_if/ui_usuario/tela_usuario_mensagens.dart';
 import 'package:app_comunica_if/ui_usuario/tela_usuario_noticias.dart';
@@ -32,6 +35,7 @@ class MeuApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        primaryColor: Cores.corAppBarBackground,
         fontFamily: "Raleway",
       ),
       title: "Comunica IF",
@@ -54,6 +58,9 @@ class MeuApp extends StatelessWidget {
         Rotas.TELA_REDEFINIR_SENHA: (context) => TelaRedefinirSenha(),
         Rotas.TELA_INSERIR_MENSAGEM: (context) => InserirMensagem(),
         Rotas.TELA_INSERIR_NOTICIA: (context) => InserirNoticia(),
+        Rotas.TELA_IMPORTAR_ALUNOS: (context) => TelaImportarAlunos(),
+        Rotas.TELA_LISTAR_USUARIOS: (context) => TelaListarUsuarios(),
+        Rotas.TELA_DICAS: (context) => TelaDicas(),
       },
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
@@ -64,13 +71,17 @@ class MeuApp extends StatelessWidget {
   }
 }
 
+
 class Inicial extends StatefulWidget {
   @override
   _InicialState createState() => _InicialState();
 }
 
-class _InicialState extends State<Inicial> {
+class _InicialState extends State<Inicial> with SingleTickerProviderStateMixin {
   Future _iniciarSistema;
+
+  AnimationController _controllerAnimacao;
+  Animation _animacao;
 
   ///TODO VERIFICAR MESSAGING
   //FirebaseMessaging _firebaseMessaging = new FirebaseMessaging();
@@ -78,6 +89,15 @@ class _InicialState extends State<Inicial> {
   @override
   void initState() {
     super.initState();
+    _controllerAnimacao = AnimationController(
+        vsync: this,
+        duration: Duration(seconds: 2)
+    );
+    _animacao = Tween(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(_controllerAnimacao);
+
     _iniciarSistema = tempoEspera();
     GerenciadorNotificacoes.instance.init();
   }
@@ -142,54 +162,61 @@ class _InicialState extends State<Inicial> {
       await SistemaDicas.instance.inicializar();
       await Future.delayed(Duration(seconds: 3));
       await Navigator.pushReplacementNamed(context, Rotas.TELA_INICIAL);
+      //await Navigator.pushReplacement(context, FadeRoute(page: TelaInicial()));
     } else {}
   }
 
+
+
   Widget logoIF() {
-    return Column(
-      children: <Widget>[
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.max,
-          children: <Widget>[
-            quadrado(Colors.white, true),
-            quadrado(Colors.white, true),
-            espaco(),
-            circulo(Cores.corCirculoLogo)
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.max,
-          children: <Widget>[
-            quadrado(Colors.white, true),
-            quadrado(Colors.white, false),
-            espaco(),
-            quadrado(Colors.white, true),
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.max,
-          children: <Widget>[
-            quadrado(Colors.white, true),
-            quadrado(Colors.white, true),
-            espaco(),
-            quadrado(Colors.white, true),
-          ],
-        ),
-        SizedBox(height: 20),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.max,
-          children: <Widget>[
-            Text("Comunica IF", style: GoogleFonts.teko( fontSize: 60, fontWeight: FontWeight.bold, color: Colors.white))
-          ],
-        )
+    _controllerAnimacao.forward();
+    return FadeTransition(
+      opacity: _animacao,
+      child: Column(
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            children: <Widget>[
+              quadrado(Colors.white, true),
+              quadrado(Colors.white, true),
+              espaco(),
+              circulo(Cores.corCirculoLogo)
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            children: <Widget>[
+              quadrado(Colors.white, true),
+              quadrado(Colors.white, false),
+              espaco(),
+              quadrado(Colors.white, true),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            children: <Widget>[
+              quadrado(Colors.white, true),
+              quadrado(Colors.white, true),
+              espaco(),
+              quadrado(Colors.white, true),
+            ],
+          ),
+          SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            children: <Widget>[
+              Text("Comunica IF", style: GoogleFonts.teko( fontSize: 60, fontWeight: FontWeight.bold, color: Colors.white))
+            ],
+          )
 
-      ],
+        ],
 
 
+      ),
     );
 
   }

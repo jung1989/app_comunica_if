@@ -42,11 +42,11 @@ class _TelaAdministradorState extends State<TelaAdministrador> {
   }
 
   Future<List<Mensagem>> carregarMensagens() async {
-    return await SistemaAdmin.instance.carregarMensagensPorAdministrador();
+    return await SistemaAdmin.instance.carregarMensagens();
   }
 
   Future<List<Noticia>> carregarNoticias() async {
-    return await SistemaAdmin.instance.carregarNoticiasPorAdministrador();
+    return await SistemaAdmin.instance.carregarNoticias();
   }
 
   _atualizarTela() async {
@@ -178,14 +178,14 @@ class _TelaAdministradorState extends State<TelaAdministrador> {
       child: Column(
         children: <Widget>[
           //Padding(padding: EdgeInsets.all(10), child: botaoInserirMensagem()),
-          Padding(
-              padding: EdgeInsets.only(top: 10, right: 10, left: 10, bottom: 10),
-              child: Text("Mensagens publicadas por você",
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Cores.corTextEscuro,
-                    fontWeight: FontWeight.bold,
-                  ))),
+//          Padding(
+//              padding: EdgeInsets.only(top: 10, right: 10, left: 10, bottom: 10),
+//              child: Text("Mensagens publicadas por você",
+//                  style: TextStyle(
+//                    fontSize: 20,
+//                    color: Cores.corTextEscuro,
+//                    fontWeight: FontWeight.bold,
+//                  ))),
           Expanded(child: listaMensagens())
         ],
       ),
@@ -225,14 +225,14 @@ class _TelaAdministradorState extends State<TelaAdministrador> {
       child:  Column(
         children: <Widget>[
           //Padding(padding: EdgeInsets.all(10), child: botaoInserirNoticia()),
-          Padding(
-              padding: EdgeInsets.only(top: 10, right: 10, left: 10, bottom: 10),
-              child: Text("Notícias publicadas por você",
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Cores.corTextEscuro,
-                    fontWeight: FontWeight.bold,
-                  ))),
+//          Padding(
+//              padding: EdgeInsets.only(top: 10, right: 10, left: 10, bottom: 10),
+//              child: Text("Notícias publicadas por você",
+//                  style: TextStyle(
+//                    fontSize: 20,
+//                    color: Cores.corTextEscuro,
+//                    fontWeight: FontWeight.bold,
+//                  ))),
           Expanded(child: listaNoticias())
         ],
       ),

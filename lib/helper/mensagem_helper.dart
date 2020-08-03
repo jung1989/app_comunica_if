@@ -95,7 +95,8 @@ class MensagemHelper {
             " INNER JOIN $tabelaMensagemGrupo mg ON mg.$colunaIdMensagemFK = m.$colunaId"
             " INNER JOIN $tabelaGrupoInteresse g ON mg.$colunaIdGrupoFK    = g.$colunaId"
         " WHERE m.$colunaLida = ${lidas?1:0} AND g.$colunaSelecionado = 1"
-        " GROUP BY m.$colunaId");
+        " GROUP BY m.$colunaId"
+        " ORDER BY m.$colunaDataHoraPublicacao DESC");
 
     List<Mensagem> lista = List();
     for(Map m in consulta) {
@@ -116,7 +117,8 @@ class MensagemHelper {
             " INNER JOIN $tabelaMensagemGrupo mg ON mg.$colunaIdMensagemFK = m.$colunaId"
             " INNER JOIN $tabelaGrupoInteresse g ON mg.$colunaIdGrupoFK    = g.$colunaId"
             " WHERE m.$colunaFavorita = ${favoritas?1:0} AND g.$colunaSelecionado = 1"
-            " GROUP BY m.$colunaId");
+            " GROUP BY m.$colunaId"
+            " ORDER BY m.$colunaDataHoraPublicacao DESC");
 
     List<Mensagem> lista = List();
     for(Map m in consulta) {

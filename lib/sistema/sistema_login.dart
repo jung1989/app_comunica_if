@@ -84,6 +84,13 @@ class SistemaLogin {
       usuario = Usuario.fromMap(querySnapshot.documents[0].data);
       usuario.id = querySnapshot.documents[0].documentID;
 
+      //TODO VERIFICAR ATUALIZACAO DO ULTIMO ACESSO
+      Map<String, dynamic> acesso = {
+        "ultimo_acesso" : DateTime.now().millisecondsSinceEpoch
+      };
+      DocumentReference perfilCarregado = Firestore.instance.collection("perfis").document(usuario.id);
+      await perfilCarregado.updateData(acesso);
+
       /// verificação de usuário ou administrador
       switch (usuario.perfil) {
         case Usuario.PERFIL_ADMINISTRADOR:
@@ -117,7 +124,7 @@ class SistemaLogin {
   
   /// efetua a gravação do token do aplicativo relacionado ao usuário
   gravarToken(String fcmToken) async {
-    var docRef = await Firestore.instance
+    var docRef = Firestore.instance
         .collection("tokens")
         .document(usuario.id);
     

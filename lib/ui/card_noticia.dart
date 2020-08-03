@@ -42,7 +42,7 @@ Widget noticiaCard(
                 ],
               ),
               SizedBox(
-                height: 5,
+                height: 30,
               ),
               SizedBox(
                 width: double.infinity,

@@ -2,6 +2,8 @@
 import 'package:app_comunica_if/model/usuario.dart';
 import 'package:app_comunica_if/sistema/sistema_login.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class GerenciadorNotificacoes {
 
@@ -34,6 +36,13 @@ class GerenciadorNotificacoes {
           _firebaseMessaging.subscribeToTopic('Servidores');
           _firebaseMessaging.unsubscribeFromTopic('Alunos');
         }
+        else {
+          if(perfil == Usuario.PERFIL_ADMINISTRADOR) {
+            print("### Inscrito nas notificações como servidor...");
+            _firebaseMessaging.subscribeToTopic('Servidores');
+            _firebaseMessaging.subscribeToTopic('Alunos');
+          }
+        }
       }
 
       await SistemaLogin.instance.gravarToken(fcmToken);
@@ -53,14 +62,16 @@ class GerenciadorNotificacoes {
         onMessage: (Map<String, dynamic> message) {
 
           print('on message $message');
+          return;
         },
         onResume: (Map<String, dynamic> message) {
 
           print('on resume $message');
+          return;
         },
         onLaunch: (Map<String, dynamic> message) {
-
           print('on launch $message');
+          return;
         },
       );
 
@@ -70,6 +81,18 @@ class GerenciadorNotificacoes {
 
       _initialized = true;
     }
+  }
+
+  // TODO VERIFICAR ISSO
+  void toast(String msg, Color color) {
+    Fluttertoast.showToast(
+        msg: msg,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIos: 1,
+        backgroundColor: color,
+        textColor: Colors.white,
+        fontSize: 16.0);
   }
 
 //  void enviarNotificacao(String titulo, String conteudo) {

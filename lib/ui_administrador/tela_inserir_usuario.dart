@@ -1,4 +1,5 @@
 import 'package:app_comunica_if/model/usuario.dart';
+import 'package:app_comunica_if/sistema/navegacao.dart';
 import 'package:app_comunica_if/sistema/sistema_admin.dart';
 import 'package:app_comunica_if/ui/padroes.dart';
 import 'package:flutter/material.dart';
@@ -52,7 +53,6 @@ class _TelaInserirUsuarioState extends State<TelaInserirUsuario> {
           final snack = SnackBar(
             content: Text("Usuário cadastrado!"),
             duration: Duration(seconds: 5),
-
           );
           _chaveScaffold.currentState.showSnackBar(snack);
         } else {
@@ -91,7 +91,7 @@ class _TelaInserirUsuarioState extends State<TelaInserirUsuario> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      key: _chaveScaffold,
+        key: _chaveScaffold,
         appBar: AppBar(
           backgroundColor: Cores.corAppBarBackground,
           centerTitle: true,
@@ -140,7 +140,7 @@ class _TelaInserirUsuarioState extends State<TelaInserirUsuario> {
 
   Widget _showForm() {
     return new Container(
-        padding: EdgeInsets.all(16.0),
+        padding: EdgeInsets.only(left: 16.0, right: 16.0,bottom: 16.0),
         child: new Form(
           key: _formKey,
           child: new ListView(
@@ -151,6 +151,8 @@ class _TelaInserirUsuarioState extends State<TelaInserirUsuario> {
               inputMatricula(),
               inputNome(),
               botaoCadastrar(),
+              _botaoListarUsuarios(),
+              botaoImportarAlunos(),
               mensagemErro(),
             ],
           ),
@@ -246,6 +248,53 @@ class _TelaInserirUsuarioState extends State<TelaInserirUsuario> {
             child: new Text('Cadastrar',
                 style: new TextStyle(fontSize: 20.0, color: Colors.white)),
             onPressed: validateAndSubmit,
+          ),
+        ));
+  }
+
+  Widget _botaoListarUsuarios() {
+    return new Padding(
+        padding: EdgeInsets.fromLTRB(0.0, 45.0, 0.0, 0.0),
+        child: SizedBox(
+          height: 40.0,
+          child: new RaisedButton(
+            elevation: 5.0,
+            shape: new RoundedRectangleBorder(
+                borderRadius: new BorderRadius.circular(30.0)),
+            color: Cores.corBotoes,
+            child: new Text('Listar usuários',
+                style: new TextStyle(fontSize: 20.0, color: Colors.white)),
+            onPressed: () {
+              Navigator.pushNamed(context, Rotas.TELA_LISTAR_USUARIOS);
+            }
+          ),
+        ));
+  }
+
+  Widget botaoImportarAlunos() {
+    return new Padding(
+        padding: EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 0.0),
+        child: SizedBox(
+          height: 40.0,
+          child: new FlatButton(
+            shape: new RoundedRectangleBorder(
+              borderRadius: new BorderRadius.circular(30.0),
+            ),
+            color: Cores.corBotoes,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Icon(Icons.file_upload, color: Colors.white),
+                SizedBox(
+                  width: 15,
+                ),
+                Text('Importar alunos',
+                    style: TextStyle(fontSize: 20.0, color: Colors.white))
+              ],
+            ),
+            onPressed: () async {
+              Navigator.pushNamed(context, Rotas.TELA_IMPORTAR_ALUNOS);
+            },
           ),
         ));
   }

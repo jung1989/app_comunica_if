@@ -22,6 +22,10 @@ class Autenticacao {
     AuthResult resultado = await _firebaseAuth.createUserWithEmailAndPassword(
         email: email, password: senha);
 
+    //TODO inclusão para regras do firebase, verificar funcionamento
+    await _firebaseAuth.signInWithEmailAndPassword(
+        email: email, password: senha);
+
     Map<String, dynamic> perfil = {
       "ativo" : 1,
       "email" : email,

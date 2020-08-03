@@ -35,7 +35,7 @@ class Usuario {
       'nome': nome,
       'matricula': matricula,
       'email' : email,
-      'ultimo_acesso' : ultimoAcesso.millisecondsSinceEpoch,
+      'ultimo_acesso' : ultimoAcesso == null? DateTime.fromMillisecondsSinceEpoch(0) : ultimoAcesso.millisecondsSinceEpoch,
       'ativo' : ativo?1:0,
       'perfil' : perfil,
     };

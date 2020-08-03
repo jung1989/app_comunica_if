@@ -26,5 +26,11 @@ class Rotas {
 
   static const TELA_INSERIR_MENSAGEM = "/tela_inserir_mensagem";
   static const TELA_INSERIR_NOTICIA = "/tela_inserir_noticia";
+
+  static const TELA_IMPORTAR_ALUNOS = "/tela_importar_alunos";
+
+  static const TELA_LISTAR_USUARIOS = "/tela_listar_usuarios";
+
+  static const TELA_DICAS = "/tela_dicas";
 }
 
