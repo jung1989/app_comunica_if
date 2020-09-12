@@ -65,7 +65,7 @@ class SistemaAdmin {
     }
   }
 
-  //TODO LIMPAR ESSA FUNCAO
+  /// TODO LIMPAR ESSA FUNCAO
   /// gravação de varios usuários no Firebase
   Future<Map<String, int>> gravarVariosUsuarios(List<dynamic> usuarios) async {
     int contatosArmazenados = 0;
@@ -93,6 +93,8 @@ class SistemaAdmin {
 //        }
 //      }
 //    }
+
+    /// TODO ESSE TRECHO É SÓ PARA TESTES
     if (usuarios != null) {
       for (int c = 0; c < 11; c++) {
         Usuario u = Usuario();

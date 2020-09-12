@@ -57,7 +57,6 @@ List<Widget> montarNoticia(Noticia noticia) {
                 : Image.network(
                     conteudo.texto,
                     fit: BoxFit.fitWidth,
-                    //TODO formatar imagem
                   )));
         break;
 

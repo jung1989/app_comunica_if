@@ -83,7 +83,7 @@ class GerenciadorNotificacoes {
     }
   }
 
-  // TODO VERIFICAR ISSO
+  /// toas para testes
   void toast(String msg, Color color) {
     Fluttertoast.showToast(
         msg: msg,
@@ -94,19 +94,4 @@ class GerenciadorNotificacoes {
         textColor: Colors.white,
         fontSize: 16.0);
   }
-
-//  void enviarNotificacao(String titulo, String conteudo) {
-//    String DATA =
-//        "{\"notification\": "
-//        "{\"body\": \"$conteudo\","
-//        "\"title\": \"$titulo\"}, "
-//        "\"priority\": \"high\", "
-//        "\"data\": {\"click_action\": "
-//        "\"FLUTTER_NOTIFICATION_CLICK\", "
-//        "\"id\": \"1\", \"status\": \"done\"}, \"to\": \"<FCM TOKEN>\"}";
-//
-//    post("https://fcm.googleapis.com/fcm/send",
-//        body: DATA,
-//        headers: {"Content-Type": "application/json", "Authorization": "key=<FCM SERVER KEY>"});
-//  }
 }

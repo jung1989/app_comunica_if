@@ -48,6 +48,7 @@ class _TelaUsuarioNoticiasState extends State<TelaUsuarioNoticias> {
       ),
       body: listaNoticias(),
       bottomNavigationBar: barraInferior(context),
+
     );
   }
 

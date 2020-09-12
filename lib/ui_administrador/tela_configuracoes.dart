@@ -1,6 +1,7 @@
 
 import 'package:app_comunica_if/sistema/navegacao.dart';
 import 'package:app_comunica_if/sistema/sistema_login.dart';
+import 'package:app_comunica_if/sistema/sistema_noticias_web.dart';
 import 'package:app_comunica_if/ui/padroes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -32,6 +33,7 @@ class _TelaConfiguracoesAdministradorState extends State<TelaConfiguracoesAdmini
           _botaoInserirGrupo(),
           _botaoGerenciarDicas(),
           _botaoRedefinirSenha(),
+          _botaoNoticiasWeb(),
           _botaoSair()
         ],
       ),
@@ -121,6 +123,15 @@ class _TelaConfiguracoesAdministradorState extends State<TelaConfiguracoesAdmini
       child: Text('Listar usuários', style: TextStyle(color: Cores.corTextMedio)),
       onPressed: () {
         Navigator.pushNamed(context, Rotas.TELA_LISTAR_USUARIOS);
+      },
+    );
+  }
+
+  Widget _botaoNoticiasWeb() {
+    return FlatButton(
+      child: Text('Atualizar noticias da web', style: TextStyle(color: Cores.corTextMedio)),
+      onPressed: () {
+        SistemaNoticiasWeb.instance.verificarNovasNoticias();
       },
     );
   }

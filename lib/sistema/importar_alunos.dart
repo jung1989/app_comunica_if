@@ -31,7 +31,10 @@ Future<List> _getCSVData(String path) async {
     for(int c = 0; c < cabecalhos.length; c++) {
       dados[cabecalhos[c].toString().toLowerCase()] = aluno[c].toString();
     }
-    listaMaps.add({'nome' : dados['nome'] , 'matricula' : dados['matrícula']});
+    /// prenvenção para que o relatório não seja de servidores
+    if(dados['matricula'].length > 10) {
+      listaMaps.add({'nome': dados['nome'], 'matricula': dados['matrícula']});
+    }
    }
 
   for(Map m in listaMaps) {

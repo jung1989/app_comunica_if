@@ -13,6 +13,7 @@ import 'package:app_comunica_if/ui_administrador/inserir_noticia.dart';
 import 'package:app_comunica_if/ui_administrador/tela_administrador.dart';
 import 'package:app_comunica_if/ui_administrador/tela_configuracoes.dart';
 import 'package:app_comunica_if/ui_administrador/tela_importar_alunos.dart';
+import 'package:app_comunica_if/ui_administrador/tela_inserir_noticia_web.dart';
 import 'package:app_comunica_if/ui_administrador/tela_inserir_usuario.dart';
 import 'package:app_comunica_if/ui_administrador/tela_listar_dicas.dart';
 import 'package:app_comunica_if/ui_administrador/tela_listar_usuarios.dart';
@@ -58,6 +59,7 @@ class MeuApp extends StatelessWidget {
         Rotas.TELA_REDEFINIR_SENHA: (context) => TelaRedefinirSenha(),
         Rotas.TELA_INSERIR_MENSAGEM: (context) => InserirMensagem(),
         Rotas.TELA_INSERIR_NOTICIA: (context) => InserirNoticia(),
+        Rotas.TELA_INSERIR_NOTICIA_WEB: (context) => InserirNoticiaWeb(),
         Rotas.TELA_IMPORTAR_ALUNOS: (context) => TelaImportarAlunos(),
         Rotas.TELA_LISTAR_USUARIOS: (context) => TelaListarUsuarios(),
         Rotas.TELA_DICAS: (context) => TelaDicas(),
@@ -112,7 +114,7 @@ class _InicialState extends State<Inicial> with SingleTickerProviderStateMixin {
       builder: (context, projectSnap) {
         if (projectSnap.connectionState != ConnectionState.done) {
           return Container(
-            color: Cores.corAppBarBackground,
+            color: Colors.white,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -124,7 +126,7 @@ class _InicialState extends State<Inicial> with SingleTickerProviderStateMixin {
           );
         } else {
           return Container(
-            color: Cores.corAppBarBackground,
+            color: Colors.white,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -178,38 +180,46 @@ class _InicialState extends State<Inicial> with SingleTickerProviderStateMixin {
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
-              quadrado(Colors.white, true),
-              quadrado(Colors.white, true),
+              quadrado(Cores.verde, true),
+              quadrado(Cores.verde, true),
               espaco(),
-              circulo(Cores.corCirculoLogo)
+              circulo(Colors.red)
             ],
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
-              quadrado(Colors.white, true),
-              quadrado(Colors.white, false),
+              quadrado(Cores.verde, true),
+              quadrado(Cores.verde, false),
               espaco(),
-              quadrado(Colors.white, true),
+              quadrado(Cores.verde, true),
             ],
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
-              quadrado(Colors.white, true),
-              quadrado(Colors.white, true),
+              quadrado(Cores.verde, true),
+              quadrado(Cores.verde, true),
               espaco(),
-              quadrado(Colors.white, true),
+              quadrado(Cores.verde, true),
             ],
           ),
-          SizedBox(height: 20),
+          SizedBox(height: 40),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
-              Text("Comunica IF", style: GoogleFonts.teko( fontSize: 60, fontWeight: FontWeight.bold, color: Colors.white))
+              Text("Comunica IF", style: GoogleFonts.teko( fontSize: 45, fontWeight: FontWeight.bold, color: Cores.verde))
+            ],
+          ),
+          SizedBox(height: 40),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            children: <Widget>[
+              Text("IFSul Câmpus Camaquã", style: GoogleFonts.teko( fontSize: 20, fontWeight: FontWeight.bold, color: Cores.verde))
             ],
           )
 

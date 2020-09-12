@@ -2,9 +2,12 @@ import 'package:app_comunica_if/model/mensagem.dart';
 import 'package:app_comunica_if/model/noticia.dart';
 import 'package:app_comunica_if/sistema/navegacao.dart';
 import 'package:app_comunica_if/sistema/sistema_admin.dart';
+import 'package:app_comunica_if/sistema/sistema_login.dart';
+import 'package:app_comunica_if/sistema/sistema_noticias_web.dart';
 import 'package:app_comunica_if/ui/padroes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../ui/card_mensagem.dart';
 import '../ui/card_noticia.dart';
@@ -60,59 +63,62 @@ class _TelaAdministradorState extends State<TelaAdministrador> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Cores.corAppBarBackground,
-        centerTitle: true,
-        title: Text("Área administrativa"),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.settings,
-              color: Cores.corTextClaro,
-            ),
-            onPressed: () {
-              Navigator.pushNamed(context, Rotas.TELA_CONFIG_ADMINISTRADOR);
-            },
-          )
-        ],
+      appBar:
+      AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        centerTitle: false,
+        title: Text("Área administrativa", style: GoogleFonts.teko( fontSize: 25, fontWeight: FontWeight.bold, color: Cores.verde)),
+//        actions: <Widget>[
+//          IconButton(
+//            icon: Icon(
+//              Icons.settings,
+//              color: Cores.cinza,
+//            ),
+//            onPressed: () {
+//              Navigator.pushNamed(context, Rotas.TELA_CONFIG_ADMINISTRADOR);
+//            },
+//          )
+//        ],
       ),
       body: DefaultTabController(
-        length: 2,
+        length: 3,
         child: Column(
           children: <Widget>[
             Container(
               constraints: BoxConstraints(maxHeight: 150.0),
               child: Material(
-                color: Cores.corFundo,
+                color: Colors.white,
                 child: TabBar(
-                  indicatorColor: Cores.corPrimaria,
+                  labelColor: Cores.verde,
+                  unselectedLabelColor: Cores.cinza,
+
+                  indicatorColor: Cores.verde,
                   tabs: [
                     Tab(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Icon(Icons.chat, color: Cores.corIconesClaro),
+                      icon: Icon(Icons.chat),
+                      child:
                           Text("Mensagens",
-                              style: TextStyle(color: Cores.corTextEscuro)),
-                        ],
-                      ),
+                              style: TextStyle(color:Cores.cinza, fontSize: 10)),
                     ),
                     Tab(
-                        child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Icon(Icons.description, color: Cores.corIconesClaro),
-                        Text("Notícias",
-                            style: TextStyle(color: Cores.corTextEscuro))
-                      ],
-                    )),
+                        icon: Icon(Icons.dvr),
+                        child: Text("Notícias",
+                            style: TextStyle(color: Cores.cinza, fontSize: 10))
+                    ),
+                    Tab(
+                      icon: Icon(Icons.settings),
+                        child:
+                        Text("Funções",
+                            style: TextStyle(color: Cores.cinza, fontSize: 10))
+                          ),
                   ],
                 ),
               ),
             ),
             Expanded(
               child: TabBarView(
-                children: [painelMensagens(), painelNoticias()],
+                children: [painelMensagens(), painelNoticias(), _corpo()],
               ),
             ),
           ],
@@ -174,7 +180,7 @@ class _TelaAdministradorState extends State<TelaAdministrador> {
 
   Widget painelMensagens() {
     return Container(
-      color: Cores.corFundo,
+      color: Colors.white,
       child: Column(
         children: <Widget>[
           //Padding(padding: EdgeInsets.all(10), child: botaoInserirMensagem()),
@@ -221,7 +227,7 @@ class _TelaAdministradorState extends State<TelaAdministrador> {
 
   Widget painelNoticias() {
     return Container(
-      color: Cores.corFundo,
+      color: Colors.white,
       child:  Column(
         children: <Widget>[
           //Padding(padding: EdgeInsets.all(10), child: botaoInserirNoticia()),
@@ -358,7 +364,17 @@ Widget cardNovaNoticia(BuildContext context) {
         SpeedDialChild(
           child: Icon(Icons.note_add),
           backgroundColor: Cores.corBotoes,
-          label: 'Nova notícia',
+          label: 'Notícia da web',
+          labelStyle: TextStyle(fontSize: 18.0),
+          onTap: () async {
+            await Navigator.pushNamed(context, Rotas.TELA_INSERIR_NOTICIA_WEB);
+            _atualizarTela();
+          },
+        ),
+        SpeedDialChild(
+          child: Icon(Icons.note_add),
+          backgroundColor: Cores.corBotoes,
+          label: 'Montar notícia',
           labelStyle: TextStyle(fontSize: 18.0),
           onTap: () async {
             await Navigator.pushNamed(context, Rotas.TELA_INSERIR_NOTICIA);
@@ -376,6 +392,111 @@ Widget cardNovaNoticia(BuildContext context) {
             }
         ),
       ],
+    );
+  }
+
+
+
+
+  /// configurações
+
+  Widget _corpo() {
+    return SingleChildScrollView(
+        child: Container(
+          color: Colors.white,
+          child: SizedBox(
+            width: double.infinity,
+            child: Column(
+              children: <Widget>[
+                _botaoInserirUsuario(),
+                _botaoListarUsuarios(),
+                _botaoInserirAdministrador(),
+                _botaoInserirGrupo(),
+                _botaoGerenciarDicas(),
+                _botaoRedefinirSenha(),
+                _botaoNoticiasWeb(),
+                _botaoSair()
+              ],
+            ),
+          ),
+        )
+    );
+  }
+
+
+  Widget _botaoInserirUsuario() {
+    return  FlatButton(
+      child: Text("Inserir usuário", style: TextStyle(color: Cores.corTextMedio)),
+      onPressed: () {
+        Navigator.pushNamed(context, Rotas.TELA_INSERIR_USUARIO);
+      },
+
+    );
+  }
+
+  Widget _botaoRedefinirSenha() {
+    return  FlatButton(
+      child: Text("Redefinir senha", style: TextStyle(color: Cores.corTextMedio)),
+      onPressed: () {
+        Navigator.pushNamed(context, Rotas.TELA_REDEFINIR_SENHA);
+      },
+    );
+  }
+
+  Widget _botaoInserirAdministrador() {
+    return FlatButton(
+      child: Text("Inserir administrador", style: TextStyle(color: Cores.corTextMedio)),
+      onPressed: () {
+        Navigator.pushNamed(context, Rotas.TELA_INSERIR_ADMINISTRADOR);
+      },
+    );
+  }
+
+  Widget _botaoInserirGrupo() {
+    return FlatButton(
+      child: Text("Inserir grupo", style: TextStyle(color: Cores.corTextMedio)),
+      onPressed: () {
+        Navigator.pushNamed(context, Rotas.TELA_INSERIR_GRUPO);
+      },
+    );
+  }
+
+  Widget _botaoGerenciarDicas() {
+    return FlatButton(
+      child: Text("Gerenciar dicas", style: TextStyle(color: Cores.corTextMedio)),
+      onPressed: () {
+        Navigator.pushNamed(context, Rotas.TELA_GERENCIAR_DICAS);
+      },
+    );
+  }
+
+
+  Widget _botaoSair() {
+    return FlatButton(
+      child: Text("Fazer logout do sistema", style: TextStyle(color: Colors.redAccent)),
+      onPressed: () {
+        SistemaLogin().sair();
+        Navigator.pushNamedAndRemoveUntil(context, Rotas.TELA_INICIAL, (route) => false);
+      },
+    );
+  }
+
+
+  Widget _botaoListarUsuarios() {
+    return FlatButton(
+      child: Text('Listar usuários', style: TextStyle(color: Cores.corTextMedio)),
+      onPressed: () {
+        Navigator.pushNamed(context, Rotas.TELA_LISTAR_USUARIOS);
+      },
+    );
+  }
+
+  Widget _botaoNoticiasWeb() {
+    return FlatButton(
+      child: Text('Atualizar noticias da web', style: TextStyle(color: Cores.corTextMedio)),
+      onPressed: () {
+        SistemaNoticiasWeb.instance.verificarNovasNoticias();
+      },
     );
   }
 }

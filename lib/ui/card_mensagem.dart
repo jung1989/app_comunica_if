@@ -20,7 +20,7 @@ Widget mensagemCard(
       atualizarTela();
     },
     child: Card(
-
+        elevation: 5.0,
         child: Padding(
             padding: EdgeInsets.all(10),
             child: Column(
@@ -30,7 +30,7 @@ Widget mensagemCard(
                   children: <Widget>[
                     Icon(
                       listaTemporaria[index].lida ? Icons.drafts : Icons.email,
-                      color: Cores.corIconesClaro,
+                      color: Cores.verde,
                     ),
                     SizedBox(
                       width: 10,
@@ -53,7 +53,7 @@ Widget mensagemCard(
                       child: Text(
                         listaTemporaria[index].conteudo,
                         overflow: TextOverflow.ellipsis,
-                        style: TextStyle(fontSize: 16, color: Cores.corTextMedio),
+                        style: TextStyle(fontSize: 16, color: Cores.cinza),
                       )),
                 ),
                 SizedBox(

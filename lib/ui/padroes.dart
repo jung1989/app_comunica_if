@@ -95,6 +95,9 @@ class Cores {
 
   static const corFundo  =  Color(0xFFEDEDED);
 
+  static const verde = Color(0xFF008000);
+  static const cinza = Color(0xFF191919);
+
   /// ICONES
   static const corIconesTab  =  Color(0xFF005F40);
   static const corIconesAppBar  =  Color(0xFFEDEDED);

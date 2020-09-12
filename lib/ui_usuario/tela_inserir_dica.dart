@@ -91,7 +91,6 @@ class _TelaInseirDicaState extends State<TelaInseirDica> {
             child: Image.file(
               _dica.imagem,
               fit: BoxFit.fitWidth,
-          //TODO formatar imagem
             )
         );
       }

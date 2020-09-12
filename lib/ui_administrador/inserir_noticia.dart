@@ -42,6 +42,7 @@ class _InserirNoticiaState extends State<InserirNoticia> {
   void initState() {
     noticia = Noticia();
     noticia.dataHoraPublicacao = DateTime.now();
+    noticia.linkWeb = "";
     super.initState();
   }
 
@@ -302,7 +303,6 @@ class _InserirNoticiaState extends State<InserirNoticia> {
                           : Image.file(
                               noticia.conteudos[c].imagem,
                               fit: BoxFit.fitWidth,
-                              //TODO formatar imagem
                             ))),
               c));
           break;

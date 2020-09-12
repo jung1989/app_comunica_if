@@ -23,6 +23,19 @@ class _TelaConfiguracoesUsuarioState extends State<TelaConfiguracoesUsuario> {
     );
   }
 
+  Widget CorpoConfiguracoes() {
+    return SingleChildScrollView(
+        child: SizedBox(
+          width: double.infinity,
+          child: Column(
+            children: <Widget>[
+              _botaoRedefinirSenha(),
+              _botaoSair()
+            ],
+          ),
+        ));
+  }
+
   Widget _corpo() {
     return SingleChildScrollView(
         child: SizedBox(
@@ -67,3 +80,7 @@ class _TelaConfiguracoesUsuarioState extends State<TelaConfiguracoesUsuario> {
     );
   }
 }
+
+
+
+

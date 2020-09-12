@@ -4,6 +4,7 @@ import 'package:app_comunica_if/helper/banco_de_dados.dart';
 import 'package:app_comunica_if/model/usuario.dart';
 import 'package:app_comunica_if/sistema/notificacoes.dart';
 import 'package:app_comunica_if/sistema/sistema_admin.dart';
+import 'package:app_comunica_if/sistema/sistema_noticias_web.dart';
 import 'package:app_comunica_if/sistema/sistema_usuario.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -95,7 +96,7 @@ class SistemaLogin {
       switch (usuario.perfil) {
         case Usuario.PERFIL_ADMINISTRADOR:
           SistemaAdmin.instance.login(usuario);
-
+          await SistemaNoticiasWeb.instance.verificarNovasNoticias();
           break;
         case Usuario.PERFIL_ALUNO:
         case Usuario.PERFIL_SERVIDOR:

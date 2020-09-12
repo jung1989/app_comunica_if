@@ -14,6 +14,8 @@ class Noticia {
   bool favorita = false;
   List<Conteudo> conteudos = List();
 
+  String linkWeb = "";
+
   Noticia();
 
   Noticia.fromMap(Map map) {
@@ -31,7 +33,7 @@ class Noticia {
       colunaNomeAdministrador: administrador.nome,
       colunaDataHoraPublicacao: dataHoraPublicacao.millisecondsSinceEpoch,
       colunaFavorita: favorita?1:0
-      //TODO colocar conteudos
+      /// colocar conteudos
     };
     if(id != null) {
       map[colunaId] = id;
@@ -39,17 +41,21 @@ class Noticia {
     return map;
   }
 
+  /// constrói uma notícia a partir no map obtido da consulta no Firebase
   Noticia.fromMapFirebase(Map map) {
     administrador = Usuario.construirComNome(map[colunaNomeAdministrador]);
     titulo = map[colunaTitulo];
     dataHoraPublicacao = DateTime.fromMillisecondsSinceEpoch(map[colunaDataHoraPublicacao]);
+    linkWeb = map.containsKey('web') ? map['web'] : "";
   }
 
+  /// converte a notícia para uma map para gravação no Firebase
   Map toMapFirebase() {
     Map<String, dynamic> map = {
       colunaTitulo: titulo,
       colunaNomeAdministrador: administrador.nome,
       colunaDataHoraPublicacao: dataHoraPublicacao.millisecondsSinceEpoch,
+      'web' : linkWeb,
     };
     return map;
   }
@@ -94,6 +100,7 @@ class Conteudo {
     return map;
   }
 
+  /// converte o conteúdo para uma map para gravação no Firebase
   Map toMapFireBase() {
     Map<String, dynamic> map = {
       colunaOrdem : ordem,
@@ -103,6 +110,7 @@ class Conteudo {
     return map;
   }
 
+  /// constrói um conteúdo a partir no map obtido da consulta no Firebase
   Conteudo.fromMapFirebase(Map map) {
     tipo = map[colunaTipoConteudo];
     texto = map[colunaTextoConteudo];
