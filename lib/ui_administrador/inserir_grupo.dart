@@ -88,9 +88,10 @@ class _TelaInserirGrupoState extends State<TelaInserirGrupo> {
     return new Scaffold(
         key: _chaveScaffold,
         appBar: AppBar(
+          elevation: 0,
           backgroundColor: Cores.corAppBarBackground,
-          centerTitle: true,
-          title: Text("Cadastrar grupo"),
+          centerTitle: false,
+          title: tituloAppBar("Cadastrar grupo"),
         ),
         body: Stack(
           children: <Widget>[
@@ -112,6 +113,7 @@ class _TelaInserirGrupoState extends State<TelaInserirGrupo> {
 
   Widget _showForm() {
     return new Container(
+      color: Colors.white,
         padding: EdgeInsets.all(16.0),
         child: new Form(
           key: _formKey,
@@ -187,7 +189,7 @@ class _TelaInserirGrupoState extends State<TelaInserirGrupo> {
         child: SizedBox(
           height: 40.0,
           child: new RaisedButton(
-            elevation: 5.0,
+            elevation: 0,
             shape: new RoundedRectangleBorder(
                 borderRadius: new BorderRadius.circular(30.0)),
             color: Cores.corBotoes,

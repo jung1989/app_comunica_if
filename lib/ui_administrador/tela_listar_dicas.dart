@@ -2,7 +2,7 @@
 import 'package:app_comunica_if/model/dica.dart';
 import 'package:app_comunica_if/sistema/sistema_admin.dart';
 import 'package:app_comunica_if/ui/padroes.dart';
-import 'package:app_comunica_if/ui_usuario/tela_inserir_dica.dart';
+import 'file:///C:/Repositorios/app_comunica_if/lib/ui_administrador/tela_inserir_dica.dart';
 import 'package:flutter/material.dart';
 
 class TelaListarDicas extends StatefulWidget {
@@ -37,8 +37,10 @@ class _TelaListarDicasState extends State<TelaListarDicas> {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Cores.corAppBarBackground,
-          centerTitle: true,
-          title: Text("Dicas inseridas")),
+          centerTitle: false,
+          title: tituloAppBar("Dicas inseridas"),
+          elevation: 0,
+        ),
       body: listaDicas(),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
@@ -68,12 +70,15 @@ class _TelaListarDicasState extends State<TelaListarDicas> {
             child: Text("Carregando mensagens..."),
           );
         }
-        return ListView.builder(
-            padding: EdgeInsets.all(10.0),
-            itemCount: _dicas.length,
-            itemBuilder: (context, index) {
-              return mensagemCard(context, index, _dicas);
-            });
+        return Container(
+          color: Colors.white,
+          child: ListView.builder(
+              padding: EdgeInsets.all(10.0),
+              itemCount: _dicas.length,
+              itemBuilder: (context, index) {
+                return mensagemCard(context, index, _dicas);
+              }),
+        );
       },
       future: _futureDicas,
     );
@@ -96,6 +101,7 @@ class _TelaListarDicasState extends State<TelaListarDicas> {
         });
       },
       child: Card(
+        elevation: 5,
         child: Padding(
             padding: EdgeInsets.all(10),
             child: Column(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 Widget titulo(String texto) {
   return Row(
@@ -86,21 +87,32 @@ String formatarDataHora(DateTime dataHora) {
   return "$dia/$mes/$ano $hora:$minuto";
 }
 
+Text tituloAppBar(String titulo) {
+  return Text(titulo,
+      style: GoogleFonts.teko(
+          fontSize: 25,
+          fontWeight: FontWeight.bold,
+          color: Cores.verde)
+  );
+}
+
 
 class Cores {
 
   //static const corAppBarBackground =  Color(0xFF17252A);
   //static const corAppBarBackground =  Color(0xFF3AAFA9);
-  static const corAppBarBackground =  Color(0xFF00452E);
+  //static const corAppBarBackground =  Color(0xFF00452E);
+  static const corAppBarBackground = Colors.white;
 
-  static const corFundo  =  Color(0xFFEDEDED);
+  //static const corFundo  =  Color(0xFFEDEDED);
+  static const corFundo  =  Colors.white;
 
   static const verde = Color(0xFF008000);
   static const cinza = Color(0xFF191919);
 
   /// ICONES
   static const corIconesTab  =  Color(0xFF005F40);
-  static const corIconesAppBar  =  Color(0xFFEDEDED);
+  static const corIconesAppBar  =  Color(0xFF191919);
 
   static const corFundoCards  =  Color(0xFFEDEDED);
 

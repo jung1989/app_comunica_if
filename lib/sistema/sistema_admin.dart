@@ -74,48 +74,49 @@ class SistemaAdmin {
     QuerySnapshot querySnapshot =
         await Firestore.instance.collection("perfis").getDocuments();
 
-//    if(usuarios != null) {
-//      for (Map uMap in usuarios) {
-//        Usuario u = Usuario();
-//        u.nome = uMap['nome'];
-//        u.matricula = uMap['matricula'];
-//        u.ativo = false;
-//        u.ultimoAcesso = DateTime.fromMillisecondsSinceEpoch(0);
-//        bool verifica = await verificarMatriculaJaExistenteLocal(querySnapshot, u.matricula);
-//        if (verifica) {
-//          contatosIgnorados++;
-//        } else {
-//          contatosArmazenados++;
-//          await Firestore.instance
-//              .collection("perfis")
-//              .document(uMap['matricula'])
-//              .setData(u.toMap());
-//        }
-//      }
-//    }
-
-    /// TODO ESSE TRECHO É SÓ PARA TESTES
-    if (usuarios != null) {
-      for (int c = 0; c < 11; c++) {
+    if(usuarios != null) {
+      for (Map uMap in usuarios) {
         Usuario u = Usuario();
-        u.nome = usuarios[c]['nome'];
-        u.matricula = usuarios[c]['matricula'];
+        u.nome = uMap['nome'];
+        u.matricula = uMap['matricula'];
         u.ativo = false;
         u.ultimoAcesso = DateTime.fromMillisecondsSinceEpoch(0);
         u.perfil = Usuario.PERFIL_ALUNO;
-        bool verifica = await verificarMatriculaJaExistenteLocal(
-            querySnapshot, u.matricula);
+        bool verifica = await verificarMatriculaJaExistenteLocal(querySnapshot, u.matricula);
         if (verifica) {
           contatosIgnorados++;
         } else {
           contatosArmazenados++;
           await Firestore.instance
               .collection("perfis")
-              .document(usuarios[c]['matricula'])
+              .document(uMap['matricula'])
               .setData(u.toMap());
         }
       }
     }
+
+    /// TODO ESSE TRECHO É SÓ PARA TESTES
+//    if (usuarios != null) {
+//      for (int c = 0; c < 11; c++) {
+//        Usuario u = Usuario();
+//        u.nome = usuarios[c]['nome'];
+//        u.matricula = usuarios[c]['matricula'];
+//        u.ativo = false;
+//        u.ultimoAcesso = DateTime.fromMillisecondsSinceEpoch(0);
+//        u.perfil = Usuario.PERFIL_ALUNO;
+//        bool verifica = await verificarMatriculaJaExistenteLocal(
+//            querySnapshot, u.matricula);
+//        if (verifica) {
+//          contatosIgnorados++;
+//        } else {
+//          contatosArmazenados++;
+//          await Firestore.instance
+//              .collection("perfis")
+//              .document(usuarios[c]['matricula'])
+//              .setData(u.toMap());
+//        }
+//      }
+//    }
 
     return {'aceitos': contatosArmazenados, 'recusados': contatosIgnorados};
     //print("### $contatosArmazenados contatos armazenados | "

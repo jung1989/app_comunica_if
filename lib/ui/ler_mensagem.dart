@@ -32,21 +32,25 @@ class _LerMensagemState extends State<LerMensagem> {
     return Scaffold(
       appBar: _barraSuperior(),
       body: SingleChildScrollView(
-        child: _montarMensagem(),
+        child: Container(
+          color: Colors.white,
+          child: _montarMensagem(),
+        ),
       ),
     );
   }
 
   Widget _barraSuperior() {
     return AppBar(
-      title: Text("Mensagem"),
+      title: tituloAppBar("Mensagem"),
       backgroundColor: Cores.corAppBarBackground,
+      elevation: 0,
       actions: <Widget>[
         _isAdmin
-            ? Icon(Icons.comment, color: Cores.corIconesAppBar)
+            ? Icon(Icons.comment, color: Cores.cinza)
             : IconButton(
                 icon: Icon(mensagem.favorita ? Icons.info : Icons.info_outline,
-                    color: Cores.corIconesAppBar),
+                    color: Cores.verde),
                 onPressed: () {
                   setState(() {
                     mensagem.favorita = !mensagem.favorita;
@@ -56,7 +60,7 @@ class _LerMensagemState extends State<LerMensagem> {
                 },
               )
       ],
-      centerTitle: true,
+      centerTitle: false,
     );
   }
 
@@ -64,6 +68,7 @@ class _LerMensagemState extends State<LerMensagem> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
+        SizedBox(height: 10),
         Padding(
             padding: EdgeInsets.only(top: 5, right: 10, left: 10, bottom: 5),
             child: Text(

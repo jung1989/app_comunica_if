@@ -51,12 +51,16 @@ class _InserirNoticiaState extends State<InserirNoticia> {
     return Scaffold(
       key: chaveScaffold,
       appBar: AppBar(
-        title: Text("Nova Notícia"),
+        title: tituloAppBar("Nova Notícia"),
         backgroundColor: Cores.corAppBarBackground,
-        centerTitle: true,
+        centerTitle: false,
+        elevation: 1,
       ),
       body: SingleChildScrollView(
-        child: montarPrevia(),
+        child: Container(
+          color: Colors.white,
+          child: montarPrevia()
+        ),
       ),
     );
   }
@@ -69,6 +73,7 @@ class _InserirNoticiaState extends State<InserirNoticia> {
           Column(
             children: montarPreviaNoticia(noticia),
           ),
+          SizedBox(height: 50),
           cardInserirParagrafo(),
           cardInserirLink(),
           cardInserirImagem(),
@@ -147,6 +152,7 @@ class _InserirNoticiaState extends State<InserirNoticia> {
   Widget cardInserirParagrafo() {
     TextEditingController paragrafoController = TextEditingController();
     return Card(
+      elevation: 5,
       child: Padding(
           padding: EdgeInsets.all(10),
           child: Row(
@@ -181,6 +187,7 @@ class _InserirNoticiaState extends State<InserirNoticia> {
   Widget cardInserirLink() {
     TextEditingController controller = TextEditingController();
     return Card(
+      elevation: 5,
       child: Padding(
           padding: EdgeInsets.all(10),
           child: Row(

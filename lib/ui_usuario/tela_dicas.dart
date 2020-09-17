@@ -29,9 +29,10 @@ class _TelaDicasState extends State<TelaDicas> {
 
   Widget barraSuperior() {
     return AppBar(
-      title: Text("Uma dica para você!"),
+      title: tituloAppBar("Uma dica para você!"),
       backgroundColor: Cores.corAppBarBackground,
-      centerTitle: true,
+      centerTitle: false,
+      elevation: 0,
       actions: <Widget>[
         IconButton(
           icon: Icon(Icons.refresh),
@@ -47,13 +48,16 @@ class _TelaDicasState extends State<TelaDicas> {
 
 
   Widget painelDica() {
-    return SingleChildScrollView(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: <Widget>[
-          imagemDica(),
-          //textoDica()
-        ],
+    return Container(
+      color: Colors.white,
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            imagemDica(),
+            //textoDica()
+          ],
+        ),
       ),
     );
   }

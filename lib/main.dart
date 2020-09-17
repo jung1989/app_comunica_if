@@ -19,7 +19,7 @@ import 'package:app_comunica_if/ui_administrador/tela_listar_dicas.dart';
 import 'package:app_comunica_if/ui_administrador/tela_listar_usuarios.dart';
 import 'package:app_comunica_if/ui_usuario/tela_configuracoes.dart';
 import 'package:app_comunica_if/ui_usuario/tela_dicas.dart';
-import 'package:app_comunica_if/ui_usuario/tela_inserir_dica.dart';
+import 'file:///C:/Repositorios/app_comunica_if/lib/ui_administrador/tela_inserir_dica.dart';
 import 'package:app_comunica_if/ui_usuario/tela_usuario_mensagens.dart';
 import 'package:app_comunica_if/ui_usuario/tela_usuario_noticias.dart';
 import 'package:flutter/material.dart';

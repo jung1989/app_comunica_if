@@ -32,8 +32,10 @@ class _TelaListarUsuariosState extends State<TelaListarUsuarios> {
     return Scaffold(
       appBar: AppBar(
           backgroundColor: Cores.corAppBarBackground,
-          centerTitle: true,
-          title: Text("Usuários cadastrados")),
+          centerTitle: false,
+          title: tituloAppBar("Usuários cadastrados"),
+        elevation: 0,
+      ),
       body: listaUsuarios(),
     );
   }
@@ -47,12 +49,15 @@ class _TelaListarUsuariosState extends State<TelaListarUsuarios> {
             child: Text("Carregando usuários..."),
           );
         }
-        return ListView.builder(
-            padding: EdgeInsets.all(10.0),
-            itemCount: _usuarios.length,
-            itemBuilder: (context, index) {
-              return usuarioCard(context, index, _usuarios);
-            });
+        return Container(
+          color: Colors.white,
+          child: ListView.builder(
+              padding: EdgeInsets.all(10.0),
+              itemCount: _usuarios.length,
+              itemBuilder: (context, index) {
+                return usuarioCard(context, index, _usuarios);
+              }),
+        );
       },
       future: _futureUsuarios,
     );
@@ -61,6 +66,7 @@ class _TelaListarUsuariosState extends State<TelaListarUsuarios> {
   Widget usuarioCard(
       BuildContext context, int index, List<Usuario> listaTemporaria) {
     return Card(
+      elevation: 5,
         child: Padding(
             padding: EdgeInsets.all(10),
             child: Column(children: <Widget>[

@@ -98,9 +98,10 @@ class _TelaInserirAdministradorState extends State<TelaInserirAdministrador> {
     return new Scaffold(
       key: _chaveScaffold,
         appBar: AppBar(
+          elevation: 0,
           backgroundColor: Cores.corAppBarBackground,
-          centerTitle: true,
-          title: Text("Cadastrar administrador"),
+          centerTitle: false,
+          title: tituloAppBar("Cadastrar administrador"),
         ),
         body: Stack(
           children: <Widget>[
@@ -122,6 +123,7 @@ class _TelaInserirAdministradorState extends State<TelaInserirAdministrador> {
 
   Widget _showForm() {
     return new Container(
+      color: Colors.white,
         padding: EdgeInsets.all(16.0),
         child: new Form(
           key: _formKey,
@@ -271,7 +273,7 @@ class _TelaInserirAdministradorState extends State<TelaInserirAdministrador> {
         child: SizedBox(
           height: 40.0,
           child: new RaisedButton(
-            elevation: 5.0,
+            elevation: 0,
             shape: new RoundedRectangleBorder(
                 borderRadius: new BorderRadius.circular(30.0)),
             color: Cores.corBotoes,

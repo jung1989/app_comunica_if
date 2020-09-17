@@ -83,6 +83,7 @@ List<Widget> montarNoticia(Noticia noticia) {
                   fontSize: 14, fontFamily: 'Serif', color: Cores.corTextMedio))
         ],
       )));
+  conteudos.add(SizedBox(height: 20,));
   return conteudos;
 }
 

@@ -40,12 +40,16 @@ class _InserirNoticiaWebState extends State<InserirNoticiaWeb> {
     return Scaffold(
       key: chaveScaffold,
       appBar: AppBar(
-        title: Text("Nova Notícia"),
+        title: tituloAppBar("Nova Notícia"),
         backgroundColor: Cores.corAppBarBackground,
-        centerTitle: true,
+        centerTitle: false,
+        elevation: 1,
       ),
       body: SingleChildScrollView(
-        child: montarPrevia(),
+        child:  Container(
+          color: Colors.white,
+          child: montarPrevia(),
+        ),
 
 
 

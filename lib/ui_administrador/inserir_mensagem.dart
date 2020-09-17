@@ -38,12 +38,16 @@ class _InserirMensagemState extends State<InserirMensagem> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Nova mensagem"),
+        elevation: 1,
+        title: tituloAppBar("Nova mensagem"),
         backgroundColor: Cores.corAppBarBackground,
-        centerTitle: true,
+        centerTitle: false,
       ),
       body: SingleChildScrollView(
-        child: montarMensagem(),
+        child: Container(
+          color: Colors.white,
+          child: montarMensagem(),
+        ),
       ),
     );
   }

@@ -46,19 +46,23 @@ class _TelaInseirDicaState extends State<TelaInseirDica> {
     return Scaffold(
       key: chaveScaffold,
       appBar: AppBar(
-        title: Text("Nova Dica"),
+        title: tituloAppBar("Nova Dica"),
         backgroundColor: Cores.corAppBarBackground,
-        centerTitle: true,
+        centerTitle: false,
+        elevation: 0,
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            inserirTextoDica(),
-            tituloPrevia(),
-            previaImagemDica(),
-            previaTextoDica(),
-            botaoPublicarDica(),
-          ],
+        child: Container(
+          color: Colors.white,
+          child: Column(
+            children: <Widget>[
+              inserirTextoDica(),
+              tituloPrevia(),
+              previaImagemDica(),
+              previaTextoDica(),
+              botaoPublicarDica(),
+            ],
+          ),
         ),
       ),
     );

@@ -17,7 +17,7 @@ Widget barraInferior(BuildContext context) {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                Icon(Icons.message, color: Cores.corIconesClaro),
+                Icon(Icons.message, color: Cores.verde),
                 Text("Mensagens", style: TextStyle(color: Cores.corTextEscuro))
               ],
             ),
@@ -30,7 +30,7 @@ Widget barraInferior(BuildContext context) {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  Icon(Icons.description, color: Cores.corIconesClaro),
+                  Icon(Icons.description, color: Cores.verde),
                   Text("Notícias", style: TextStyle(color: Cores.corTextEscuro))
                 ],
               ),

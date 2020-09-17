@@ -79,10 +79,10 @@ class _TelaUsuarioMensagensState extends State<TelaUsuarioMensagens> {
     return AppBar(
       backgroundColor: Cores.corAppBarBackground,
       centerTitle: false,
-      title: Text(
+      title: tituloAppBar(
         "Mensagens",
-        style: TextStyle(color: Cores.corTextClaro),
       ),
+      elevation: 0,
       actions: <Widget>[
         IconButton(
           icon: Icon(Icons.lightbulb_outline, color: Cores.corIconesAppBar),
@@ -129,11 +129,21 @@ class _TelaUsuarioMensagensState extends State<TelaUsuarioMensagens> {
             child: Material(
               color: Cores.corFundo,
               child: TabBar(
-                indicatorColor: Cores.corIconesTab,
+                labelColor: Cores.verde,
+                unselectedLabelColor: Cores.cinza,
+                indicatorColor: Cores.verde,
                 tabs: [
-                  Tab(icon: Icon(Icons.comment, color: Cores.corIconesTab)),
-                  Tab(icon: Icon(Icons.info, color: Cores.corIconesTab)),
-                  Tab(icon: Icon(Icons.archive, color: Cores.corIconesTab)),
+                  Tab(
+                    icon: Icon(Icons.comment),
+                    child: Text("Novas",
+                        style: TextStyle(color: Cores.cinza, fontSize: 10)),
+                  ),
+                  Tab(icon: Icon(Icons.info),
+                    child: Text("Importantes",
+                        style: TextStyle(color: Cores.cinza, fontSize: 10)),),
+                  Tab(icon: Icon(Icons.archive),
+                      child: Text("Arquivadas",
+                      style: TextStyle(color: Cores.cinza, fontSize: 10)),),
                 ],
               ),
             ),

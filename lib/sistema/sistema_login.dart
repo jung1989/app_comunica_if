@@ -13,7 +13,7 @@ import 'autenticacao.dart';
 
 class SistemaLogin {
 
-  static const double VERSAO = 2.0;
+  static const double VERSAO = 4.0;
 
   /// implementação do singleton
   static final SistemaLogin _instance = SistemaLogin._interno();
@@ -74,6 +74,7 @@ class SistemaLogin {
   Future<int> buscarPerfil(String email) async {
     print("### Buscando perfil do usuário... ");
 
+    print(" ### teste 2 $email...");
     autenticacao.firebaseUser = await autenticacao.getUsuario();
 
     QuerySnapshot querySnapshot = await Firestore.instance
@@ -81,9 +82,12 @@ class SistemaLogin {
         .where("email", isEqualTo: email)
         .getDocuments();
 
+
+
     if (querySnapshot.documents.length > 0) {
       usuario = Usuario.fromMap(querySnapshot.documents[0].data);
       usuario.id = querySnapshot.documents[0].documentID;
+
 
       //TODO VERIFICAR ATUALIZACAO DO ULTIMO ACESSO
       Map<String, dynamic> acesso = {
@@ -100,6 +104,7 @@ class SistemaLogin {
           break;
         case Usuario.PERFIL_ALUNO:
         case Usuario.PERFIL_SERVIDOR:
+          print(" ### logando como servidor...");
           SistemaUsuario.instance.login(usuario);
           await SistemaUsuario.instance.iniciar();
           break;

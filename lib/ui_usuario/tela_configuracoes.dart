@@ -15,8 +15,9 @@ class _TelaConfiguracoesUsuarioState extends State<TelaConfiguracoesUsuario> {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Cores.corAppBarBackground,
-          centerTitle: true,
-          title: Text("Configurações"),
+          centerTitle: false,
+          elevation: 0,
+          title: tituloAppBar("Configurações"),
         ),
         body: _corpo(),
       bottomNavigationBar: _barraInferior(),
@@ -37,16 +38,19 @@ class _TelaConfiguracoesUsuarioState extends State<TelaConfiguracoesUsuario> {
   }
 
   Widget _corpo() {
-    return SingleChildScrollView(
-        child: SizedBox(
-        width: double.infinity,
-        child: Column(
-        children: <Widget>[
-          _botaoRedefinirSenha(),
-          _botaoSair()
-        ],
-      ),
-    ));
+    return Container(
+      color: Colors.white,
+      child: SingleChildScrollView(
+          child: SizedBox(
+            width: double.infinity,
+            child: Column(
+              children: <Widget>[
+                _botaoRedefinirSenha(),
+                _botaoSair()
+              ],
+            ),
+          )),
+    );
   }
 
 

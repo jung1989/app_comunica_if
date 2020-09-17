@@ -17,11 +17,15 @@ class _GruposInteresseState extends State<GruposInteresse> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Grupos de interesse"),
+        title: tituloAppBar("Grupos de interesse"),
         backgroundColor: Cores.corAppBarBackground,
-        centerTitle: true,
+        centerTitle: false,
+        elevation: 0,
       ),
-      body:  listaGrupos(),
+      body:  Container(
+        color: Colors.white,
+        child: listaGrupos(),
+      ),
 
     );
   }

@@ -28,21 +28,25 @@ class _TelaImportarAlunosState extends State<TelaImportarAlunos> {
   }
 
   Widget _corpo() {
-    return SingleChildScrollView(
+    return Container(
+        color: Colors.white,
+        child: SingleChildScrollView(
       padding: EdgeInsets.all(10),
-        child: SizedBox(
-          width: double.infinity,
-          child: Column(
-            children: <Widget>[
-              _infoGerarXLS(),
-              _infoDownloadXLS(),
-              _infoConverterArquivo(),
-              _infoCarregarArquivo(),
-              _inforResultado(),
-              _botaoImportarAlunos()
-            ],
-          ),
-        )
+        child:  SizedBox(
+            width: double.infinity,
+            child: Column(
+              children: <Widget>[
+                _infoGerarXLS(),
+                _infoDownloadXLS(),
+                _infoConverterArquivo(),
+                _infoCarregarArquivo(),
+                _inforResultado(),
+                _botaoImportarAlunos()
+              ],
+            ),
+          )
+        ),
+
     );
   }
 
@@ -139,8 +143,9 @@ class _TelaImportarAlunosState extends State<TelaImportarAlunos> {
   Widget _barraSuperior() {
     return AppBar(
       backgroundColor: Cores.corAppBarBackground,
-      centerTitle: true,
-      title: Text("Importar alunos"),
+      centerTitle: false,
+      title: tituloAppBar("Importar alunos"),
+      elevation: 1,
     );
   }
 

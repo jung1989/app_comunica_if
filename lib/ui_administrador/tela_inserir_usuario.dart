@@ -94,8 +94,9 @@ class _TelaInserirUsuarioState extends State<TelaInserirUsuario> {
         key: _chaveScaffold,
         appBar: AppBar(
           backgroundColor: Cores.corAppBarBackground,
-          centerTitle: true,
-          title: Text("Cadastrar usuário"),
+          centerTitle: false,
+          title: tituloAppBar("Cadastrar usuário"),
+          elevation: 0,
         ),
         body: Stack(
           children: <Widget>[
@@ -140,6 +141,7 @@ class _TelaInserirUsuarioState extends State<TelaInserirUsuario> {
 
   Widget _showForm() {
     return new Container(
+      color: Colors.white,
         padding: EdgeInsets.only(left: 16.0, right: 16.0,bottom: 16.0),
         child: new Form(
           key: _formKey,
@@ -241,7 +243,7 @@ class _TelaInserirUsuarioState extends State<TelaInserirUsuario> {
         child: SizedBox(
           height: 40.0,
           child: new RaisedButton(
-            elevation: 5.0,
+            elevation: 0,
             shape: new RoundedRectangleBorder(
                 borderRadius: new BorderRadius.circular(30.0)),
             color: Cores.corBotoes,
@@ -258,7 +260,7 @@ class _TelaInserirUsuarioState extends State<TelaInserirUsuario> {
         child: SizedBox(
           height: 40.0,
           child: new RaisedButton(
-            elevation: 5.0,
+            elevation: 0,
             shape: new RoundedRectangleBorder(
                 borderRadius: new BorderRadius.circular(30.0)),
             color: Cores.corBotoes,

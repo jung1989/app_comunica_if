@@ -35,9 +35,10 @@ class _LerNoticiaState extends State<LerNoticia> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Notícia"),
+        title: tituloAppBar("Notícia"),
         backgroundColor: Cores.corAppBarBackground,
-        centerTitle: true,
+        centerTitle: false,
+        elevation: 0,
       ),
       body: SingleChildScrollView(
         child: FutureBuilder(
@@ -48,9 +49,12 @@ class _LerNoticiaState extends State<LerNoticia> {
                 child: Text("Carregando conteúdos..."),
               );
             }
-            return Column(
-                children:
-                montarNoticia(noticia)
+            return Container(
+              color: Colors.white,
+              child:  Column(
+                  children:
+                  montarNoticia(noticia)
+              ),
             );
           },
           future: _futureConteudos,

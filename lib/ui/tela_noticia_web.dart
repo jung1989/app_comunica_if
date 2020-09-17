@@ -2,6 +2,7 @@
 
 import 'dart:async';
 
+import 'package:app_comunica_if/ui/padroes.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -26,7 +27,7 @@ class _TelaNoticiaWebState extends State<TelaNoticiaWeb> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Notícia web"),
+        title: tituloAppBar("Notícia web"),
       ),
       body: WebView(
         javascriptMode: JavascriptMode.unrestricted,

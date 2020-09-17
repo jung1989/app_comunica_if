@@ -28,9 +28,10 @@ class _TelaUsuarioNoticiasState extends State<TelaUsuarioNoticias> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
         backgroundColor: Cores.corAppBarBackground,
         centerTitle: false,
-        title: Text("Notícias", style: TextStyle(color: Cores.corTextClaro)),
+        title: tituloAppBar("Notícias"),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.lightbulb_outline, color: Cores.corIconesAppBar),
@@ -39,7 +40,7 @@ class _TelaUsuarioNoticiasState extends State<TelaUsuarioNoticias> {
             },
           ),
           IconButton(
-            icon: Icon(Icons.settings, color: Cores.corTextClaro,),
+            icon: Icon(Icons.settings, color: Cores.corIconesAppBar,),
             onPressed: () {
               Navigator.pushNamed(context, Rotas.TELA_CONFIG_USUARIO);
             },

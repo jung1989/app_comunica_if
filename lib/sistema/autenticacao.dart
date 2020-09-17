@@ -20,7 +20,7 @@ class Autenticacao {
   Future<String> cadastrarUsuario(String email, String senha, String id) async {
     //TODO arrumar para solicitar cadastro
     AuthResult resultado = await _firebaseAuth.createUserWithEmailAndPassword(
-        email: email, password: senha);
+        email: email.toLowerCase(), password: senha);
 
     //TODO inclusão para regras do firebase, verificar funcionamento
     await _firebaseAuth.signInWithEmailAndPassword(
